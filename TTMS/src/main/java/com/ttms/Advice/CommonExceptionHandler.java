@@ -1,7 +1,6 @@
 package com.ttms.Advice;
 
 import com.ttms.Exception.TTMSException;
-import com.ttms.TTMSApplication;
 import com.ttms.Vo.ExceptionResult;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
