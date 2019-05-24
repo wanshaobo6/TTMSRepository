@@ -1,0 +1,10 @@
+server:
+  port: 80
+spring:
+  application:
+    name: TTMS
+  datasource:
+    url: jdbc:mysql///ttms
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
