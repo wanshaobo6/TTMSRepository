@@ -15,7 +15,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(TTMSException.class)
     public ResponseEntity<ExceptionResult> handleException(TTMSException e) {
-        val em = e.getExceptionEnum();
+        val em = e.getExceptionEnum();  //status :403  message
         return ResponseEntity.status(em.getStatus()).body(new ExceptionResult(em));
     }
 }
