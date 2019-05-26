@@ -200,7 +200,10 @@ public class SysMenusService {
     **/
     public void deleteUserById( Integer id){
        int i =  this.sysUserMapper.deleteByPrimaryKey(id);
-       if(i != 0 ){
+       if(StringUtils.isBlank(String.valueOf(id))){
+           throw  new TTMSException(ExceptionEnum.NOT_FOUND_ID);
+       }
+       if(i != 1 ){
            throw new TTMSException(ExceptionEnum.USER_DELETE_FAIL);
        }
     }

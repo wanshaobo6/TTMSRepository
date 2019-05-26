@@ -15,7 +15,8 @@ public enum ExceptionEnum {
     UNAME_ERROR(500,"用户名密码错误"),
     NOT_FOUND_LIST(404,"查询用户失败"),
     NOT_FOUND_USER(404,"查询用户不存在"),
-    USER_DELETE_FAIL(500,"查询用户失败")
+    USER_DELETE_FAIL(500,"用户删除失败"),
+    NOT_FOUND_ID(404,"你要删除的id不存在")
 
     ;
     private int status;

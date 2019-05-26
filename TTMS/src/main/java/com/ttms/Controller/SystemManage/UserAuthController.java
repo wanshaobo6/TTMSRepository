@@ -46,4 +46,17 @@ public class UserAuthController {
     return ResponseEntity.ok().body(user);
     }
 
+    /*
+     *功能描述：根据id删除用户
+     *@author罗占
+     *@Description
+     *Date17:01 2019/5/26
+     *Param
+     *return
+     **/
+    @DeleteMapping("/usermanage/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable("id") Integer id){
+        this.sysMenusService.deleteUserById(id);
+        return ResponseEntity.ok().body(null);
+    }
  }
