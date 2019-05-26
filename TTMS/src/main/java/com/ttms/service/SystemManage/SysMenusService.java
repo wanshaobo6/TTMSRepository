@@ -1,22 +1,37 @@
 package com.ttms.service.SystemManage;
 
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.SysMenus;
+import com.ttms.Entity.SysRoleMenus;
+import com.ttms.Entity.SysRoles;
+import com.ttms.Enum.ExceptionEnum;
+import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.SysMenusMapper;
+import com.ttms.Mapper.SysRoleMenusMapper;
+import com.ttms.Mapper.SysRolesMapper;
+import com.ttms.utils.PageResult;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-
+import java.util.*;
 
 @Service
 public class SysMenusService {
     @Autowired
     private SysMenusMapper sysMenusMapper;
+
+    @Autowired
+    private SysRolesMapper sysRolesMapper;
+
+    @Autowired
+    private SysRoleMenusMapper sysRoleMenusMapper;
     
     /**
      * 功能描述: <br>根据pid查询sysmenu
@@ -135,5 +150,86 @@ public class SysMenusService {
         }
         permissionBuffer.setCharAt(permissionBuffer.length()-1,']');
         urlPermissionsMapping.put(urlBuffer.toString(),permissionBuffer.toString());
+    }
+
+    /**
+    * 功能描述: 查询所有角色
+    * 〈〉
+    * @Param: []
+    * @Return: java.util.List<com.ttms.Entity.SysRoles>
+    * @Author: 吴彬
+    * @Date: 15:49 15:49
+     */
+    public List<SysRoles> getAllRoles() {
+        List<SysRoles> list = this.sysRolesMapper.selectAll();
+        if(CollectionUtils.isEmpty(list)){
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_ROLERS);
+        }
+        return list;
+    }
+    /**
+    * @Description:    分页查询所有角色
+    * @param
+    * @Author:         吴彬
+    * @UpdateRemark:   修改内容
+    * @Version:        1.0
+    */
+    public PageResult<SysRoles> getRolesByPage(Integer page, Integer rows, String name) {
+        PageHelper.startPage(page, rows);
+        Example e=new Example(SysRoles.class);
+        if(StringUtils.isNotBlank(name)){
+            e.createCriteria().andLike(name, "%"+name+"%");
+        }
+        List<SysRoles> sysRoles = this.sysRolesMapper.selectByExample(e);
+        if(CollectionUtils.isEmpty(sysRoles)){
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_ROLERS);
+        }
+
+        PageInfo<SysRoles> list=new PageInfo<>(sysRoles);
+        PageResult<SysRoles> result = new PageResult<SysRoles>();
+        result.setItems(list.getList());
+        result.setTotal(list.getTotal());
+        result.setTotalPage(list.getPages());
+        return result;
+    }
+    /**
+    * 功能描述:添加角色和分配权限
+    * 〈〉
+    * @Param: [name, note, menuIds, username]
+    * @Return: void
+    * @Author: 吴彬
+    * @Date: 17:32 17:32
+     */
+    @Transactional
+    public void AddRole(String name, String note, List<Integer> menuIds, String username) {
+          //添加角色
+        SysRoles role=new SysRoles();
+        role.setName(name);
+        role.setNote(note);
+        role.setCreatedtime(new Date());
+        role.setCreateduser(username);
+        role.setModifiedtime(null);
+        int i = this.sysRolesMapper.insert(role);
+        if(i!=1){
+            throw new TTMSException(ExceptionEnum.INSERT_ROLERS_FILE);
+        }
+        //添加角色和菜单的关联表
+        addRoleAndMenus(role,menuIds);
+
+    }
+
+    private void addRoleAndMenus(SysRoles role, List<Integer> menuIds) {
+        SysRoleMenus roleMenus=null;
+        for (Integer id : menuIds) {
+            roleMenus=new SysRoleMenus();
+            String s = String.valueOf(role.getId());
+            roleMenus.setRoleId(Integer.parseInt(s));
+            roleMenus.setMenuId(id);
+            int i = this.sysRoleMenusMapper.insert(roleMenus);
+            if(i!=1){
+                throw new TTMSException(ExceptionEnum.INSERT_ROLERS_MENUS_FILE);
+            }
+
+        }
     }
 }
