@@ -38,15 +38,15 @@ public class ShiroConfig {
            *     但是这个设置方法是需要每个参数满足才算通过，相当于hasAllRoles()方法。
          */
           /*关闭拦截器*/
-//        Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
-//        permissionMap.put("/error/*","anon");
-//        //登陆无须拦截
-//        //过滤路径映射
-//        for (Map.Entry entry:permissionMap.entrySet()) {
-//            log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
-//        }
+      Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
+       permissionMap.put("/error/*","anon");
+        //登陆无须拦截
+        //过滤路径映射
+       for (Map.Entry entry:permissionMap.entrySet()) {
+           log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
+       }
         /*授权拦截后 ， 自动跳到为授权拦截页面*/
-       shiroFilterFactoryBean.setFilterChainDefinitionMap(null);
+       shiroFilterFactoryBean.setFilterChainDefinitionMap(permissionMap);
         return shiroFilterFactoryBean;
     }
     /*创建DefaultWebSecurityManager*/

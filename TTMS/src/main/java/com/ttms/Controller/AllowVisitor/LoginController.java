@@ -53,6 +53,7 @@ public class LoginController {
         try {
             subject.login(usernamePasswordToken);    //只要没有任何异常则表示登录成功
             //查询用户能访问到的菜单并返回
+            System.out.println("111"+(SysUser) SecurityUtils.getSubject().getPrincipal());
             return ResponseEntity.ok(null);
         }catch (Exception e) {
             //用户名不存在

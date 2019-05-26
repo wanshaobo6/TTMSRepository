@@ -14,6 +14,7 @@ import com.ttms.Mapper.SysRoleMenusMapper;
 import com.ttms.Mapper.SysRolesMapper;
 import com.ttms.Mapper.SysUserMapper;
 import com.ttms.TTMSApplication;
+import com.ttms.utils.CodecUtils;
 import com.ttms.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
@@ -287,7 +289,7 @@ public class SysMenusService {
         role.setModifiedtime(null);
         int i = this.sysRolesMapper.insert(role);
         if(i!=1){
-            throw new TTMSException(ExceptionEnum.INSERT_ROLERS_FILE);
+            throw new TTMSException(ExceptionEnum.INSERT_ROLERS_FAIL);
         }
         //添加角色和菜单的关联表
         addRoleAndMenus(role,menuIds);
@@ -295,17 +297,99 @@ public class SysMenusService {
     }
 
     private void addRoleAndMenus(SysRoles role, List<Integer> menuIds) {
-        SysRoleMenus roleMenus=null;
+        SysRoleMenus roleMenus = null;
         for (Integer id : menuIds) {
-            roleMenus=new SysRoleMenus();
+            roleMenus = new SysRoleMenus();
             String s = String.valueOf(role.getId());
             roleMenus.setRoleId(Integer.parseInt(s));
             roleMenus.setMenuId(id);
             int i = this.sysRoleMenusMapper.insert(roleMenus);
-            if(i!=1){
-                throw new TTMSException(ExceptionEnum.INSERT_ROLERS_MENUS_FILE);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.INSERT_ROLERS_FAIL);
             }
 
         }
     }
+
+        /**
+         * 功能描述: 新增用户
+         * 〈〉
+         * @Param: [user]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/26 17:40
+         */
+        public void addSysUser( String username,  String image,
+                                String password,  String mail,
+                                String  phonenumber) {
+            SysUser user = new SysUser();
+            user.setUsername(username);
+            user.setImage(image);
+            user.setSalt(CodecUtils.generateSalt());
+            password = CodecUtils.md5Hex(password, user.getSalt());
+            user.setPassword(password);
+            user.setEmail(mail);
+            user.setMobile(phonenumber);
+            user.setValid((byte) 0);
+            Date now = new Date();
+            user.setCreatedtime(now);
+            user.setModifiedtime(now);
+            //设置修改用户
+            int i = this.sysUserMapper.insert(user);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
+            }
+        }
+
+        /**
+         * 功能描述: 修改用户
+         * 〈〉
+         * @Param: [id]
+         * @Return: com.ttms.Entity.SysUser
+         * @Author: lhf
+         * @Date: 2019/5/26 19:39
+         */
+        public void updateUserById(SysUser sysUser) {
+            int count = this.sysUserMapper.updateByPrimaryKey(sysUser);
+            if (count == 1) {
+                throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
+            }
+        }
+
+        /**
+         * 功能描述: 启用和禁用用户
+         * 〈〉
+         * @Param: [id]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/26 17:40
+         */
+        public void validOrInvalid(Integer id) {
+            SysUser user = findUserById(id);
+            System.out.println("user = " + user);
+       /* int vid = ;
+        vid = vid ^ 1;*/
+            //vid = 1- vid;
+            user.setValid((byte) (user.getValid() ^ 1));
+            int i = this.sysUserMapper.updateByPrimaryKey(user);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.USER_VALID_MODIFY_ERROR);
+            }
+        }
+
+        /**
+         * 功能描述: 查找用户
+         * 〈〉
+         * @Param: [id]
+         * @Return: com.ttms.Entity.SysUser
+         * @Author: lhf
+         * @Date: 2019/5/26 17:41
+         */
+        public SysUser findUserById(Integer id) {
+            SysUser user = this.sysUserMapper.selectByPrimaryKey(id);
+            if (user == null) {
+                throw new TTMSException(ExceptionEnum.USER_NOT_EXIST);
+            }
+            return user;
+        }
 }
