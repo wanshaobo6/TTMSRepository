@@ -19,11 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-
+import java.util.*;
 
 @Service
 public class SysMenusService {
@@ -31,7 +27,7 @@ public class SysMenusService {
     private SysMenusMapper sysMenusMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
-    
+
     /**
      * 功能描述: <br>根据pid查询sysmenu
      * 〈〉
@@ -151,14 +147,14 @@ public class SysMenusService {
         urlPermissionsMapping.put(urlBuffer.toString(),permissionBuffer.toString());
     }
     /*功能描述
-    *@author罗占
-    *@Description
-    *Date15:09 2019/5/26
-    *Param
-    *return
-    **/
+     *@author罗占
+     *@Description
+     *Date15:09 2019/5/26
+     *Param
+     *return
+     **/
     public PageResult<SysUser> queryUserByPage(Integer page,Integer rows,String name){
-       PageHelper.startPage(page,rows);
+        PageHelper.startPage(page,rows);
         Example example = new Example(SysUser.class);
         if(StringUtils.isNotBlank(name)){
             example.createCriteria().andLike("name","%"+name+"%");
@@ -177,13 +173,13 @@ public class SysMenusService {
     }
 
     /*
-    *功能描述：根据id查询用户
-    *@author罗占
-    *@Description
-    *Date15:36 2019/5/26
-    *Param
-    *return
-    **/
+     *功能描述：根据id查询用户
+     *@author罗占
+     *@Description
+     *Date15:36 2019/5/26
+     *Param
+     *return
+     **/
     public SysUser getUserById(Integer id){
         SysUser user = sysUserMapper.selectByPrimaryKey(id);
         if(user == null){
@@ -210,17 +206,98 @@ public class SysMenusService {
             return null;
     }
     /*
-    *功能描述：删除用户
-    *@author罗占
-    *@Description
-    *Date16:50 2019/5/26
-    *Param
-    *return
-    **/
+     *功能描述：删除用户
+     *@author罗占
+     *@Description
+     *Date16:50 2019/5/26
+     *Param
+     *return
+     **/
     public void deleteUserById( Integer id){
-       int i =  this.sysUserMapper.deleteByPrimaryKey(id);
-       if(i != 0 ){
-           throw new TTMSException(ExceptionEnum.USER_DELETE_FAIL);
-       }
+        int i =  this.sysUserMapper.deleteByPrimaryKey(id);
+        if(i != 0 ){
+            throw new TTMSException(ExceptionEnum.USER_DELETE_FAIL);
+        }
+    }
+
+    /**
+     * 功能描述: 查询所有角色
+     * 〈〉
+     * @Param: []
+     * @Return: java.util.List<com.ttms.Entity.SysRoles>
+     * @Author: 吴彬
+     * @Date: 15:49 15:49
+     */
+    public List<SysRoles> getAllRoles() {
+        List<SysRoles> list = this.sysRolesMapper.selectAll();
+        if(CollectionUtils.isEmpty(list)){
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_ROLERS);
+        }
+        return list;
+    }
+    /**
+     * @Description:    分页查询所有角色
+     * @param
+     * @Author:         吴彬
+     * @UpdateRemark:   修改内容
+     * @Version:        1.0
+     */
+    public PageResult<SysRoles> getRolesByPage(Integer page, Integer rows, String name) {
+        PageHelper.startPage(page, rows);
+        Example e=new Example(SysRoles.class);
+        if(StringUtils.isNotBlank(name)){
+            e.createCriteria().andLike(name, "%"+name+"%");
+        }
+        List<SysRoles> sysRoles = this.sysRolesMapper.selectByExample(e);
+        if(CollectionUtils.isEmpty(sysRoles)){
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_ROLERS);
+        }
+
+        PageInfo<SysRoles> list=new PageInfo<>(sysRoles);
+        PageResult<SysRoles> result = new PageResult<SysRoles>();
+        result.setItems(list.getList());
+        result.setTotal(list.getTotal());
+        result.setTotalPage(list.getPages());
+        return result;
+    }
+    /**
+     * 功能描述:添加角色和分配权限
+     * 〈〉
+     * @Param: [name, note, menuIds, username]
+     * @Return: void
+     * @Author: 吴彬
+     * @Date: 17:32 17:32
+     */
+    @Transactional
+    public void AddRole(String name, String note, List<Integer> menuIds, String username) {
+        //添加角色
+        SysRoles role=new SysRoles();
+        role.setName(name);
+        role.setNote(note);
+        role.setCreatedtime(new Date());
+        role.setCreateduser(username);
+        role.setModifiedtime(null);
+        int i = this.sysRolesMapper.insert(role);
+        if(i!=1){
+            throw new TTMSException(ExceptionEnum.INSERT_ROLERS_FILE);
+        }
+        //添加角色和菜单的关联表
+        addRoleAndMenus(role,menuIds);
+
+    }
+
+    private void addRoleAndMenus(SysRoles role, List<Integer> menuIds) {
+        SysRoleMenus roleMenus=null;
+        for (Integer id : menuIds) {
+            roleMenus=new SysRoleMenus();
+            String s = String.valueOf(role.getId());
+            roleMenus.setRoleId(Integer.parseInt(s));
+            roleMenus.setMenuId(id);
+            int i = this.sysRoleMenusMapper.insert(roleMenus);
+            if(i!=1){
+                throw new TTMSException(ExceptionEnum.INSERT_ROLERS_MENUS_FILE);
+            }
+
+        }
     }
 }

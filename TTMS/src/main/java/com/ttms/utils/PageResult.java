@@ -3,8 +3,11 @@ package com.ttms.utils;
 import java.util.List;
 
 public class PageResult<T> {
+    //总记录数
     private long total;
+    //总页数
     private long totalPage;
+    //总条目
     private List<T> items;
 
     public PageResult() {
