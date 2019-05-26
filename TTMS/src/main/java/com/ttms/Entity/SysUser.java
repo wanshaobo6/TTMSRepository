@@ -1,5 +1,6 @@
 package com.ttms.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class SysUser {
 
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String image;

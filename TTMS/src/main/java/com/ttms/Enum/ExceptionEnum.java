@@ -3,12 +3,15 @@ package com.ttms.Enum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public enum ExceptionEnum {
-    NOT_AUTHORITY(403,"您没有得到授权"),
+    USER_UNLOGIN(403,"您没有登陆"),
+    NOT_AUTHORITY(403,"您没有权限访问"),
+    SYSTEM_ERROR(555,"系统错误，请正确访问"),
     UNAME_ERROR(500,"用户名密码错误"),
 
     ;
