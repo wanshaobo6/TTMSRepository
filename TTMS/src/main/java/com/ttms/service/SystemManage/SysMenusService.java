@@ -9,6 +9,7 @@ import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.SysMenusMapper;
 import com.ttms.Mapper.SysUserMapper;
+import com.ttms.TTMSApplication;
 import com.ttms.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,7 +165,7 @@ public class SysMenusService {
         }
         List<SysUser> list = sysUserMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(list)){
-            throw new TTMSException(ExceptionEnum.NOT_FOUND_LIST);
+            throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
         }
         PageInfo<SysUser> pageInfo = new PageInfo<>(list);
         System.out.println(pageInfo.getList());
@@ -186,9 +187,27 @@ public class SysMenusService {
     public SysUser getUserById(Integer id){
         SysUser user = sysUserMapper.selectByPrimaryKey(id);
         if(user == null){
-            throw new TTMSException(ExceptionEnum.NOT_FOUND_USER);
+            throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
         }
         return user;
+    }
+
+    /**
+     * 功能描述: <br>根据用户名查询用户
+     * 〈〉
+     * @Param: [username]
+     * @Return: com.ttms.Entity.SysUser
+     * @Author: 万少波
+     * @Date: 2019/5/26 17:39
+     */
+    public SysUser getUserByUserName(String username){
+        SysUser sysUser = new SysUser();
+        sysUser.setUsername(username);
+        List<SysUser> users = sysUserMapper.select(sysUser);
+        if(!CollectionUtils.isEmpty(users))
+            return users.get(0);
+        else
+            return null;
     }
     /*
     *功能描述：删除用户

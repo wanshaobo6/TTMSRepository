@@ -8,5 +8,6 @@ spring:
     username: root
     password: 12345a
     driver-class-name: com.mysql.jdbc.Driver
-
-
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
