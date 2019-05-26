@@ -1,6 +1,6 @@
 package com.ttms.Shiro;
 
-import com.ttms.service.SysMenusService;
+import com.ttms.service.SystemManage.SysMenusService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -8,11 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
-import javax.servlet.Filter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @SuppressWarnings("ALL")
