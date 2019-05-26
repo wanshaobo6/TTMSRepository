@@ -1,7 +1,7 @@
 package com.ttms.Controller;
 
 import com.ttms.Entity.SysMenus;
-import com.ttms.service.SysMenusService;
+import com.ttms.service.SystemManage.SysMenusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

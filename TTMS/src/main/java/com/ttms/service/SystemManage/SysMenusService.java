@@ -1,4 +1,4 @@
-package com.ttms.service;
+package com.ttms.service.SystemManage;
 
 
 import com.ttms.Entity.SysMenus;
