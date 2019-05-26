@@ -29,7 +29,7 @@ public class UserRealm extends AuthorizingRealm {
         //获取认证后传过来的值
         Object principal = subject.getPrincipal();
         //doSomesThing
-        info.addStringPermission("user:add");
+        info.addStringPermission("sysmanage:sysconfig");
         return info;
     }
 

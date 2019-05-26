@@ -12,13 +12,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+
 @Service
 public class SysMenusService {
     @Autowired
     private SysMenusMapper sysMenusMapper;
+    
     /**
-     *根据pid查询sysmenu
-     * @return
+     * 功能描述: <br>根据pid查询sysmenu
+     * 〈〉
+     * @Param: [id]
+     * @Return: java.util.List<com.ttms.Entity.SysMenus>
+     * @Author: 万少波
+     * @Date: 2019/5/26 12:50
      */
     public List<SysMenus> getSysMenusByPid(int id){
         SysMenus sysMenus = new SysMenus();
@@ -38,9 +44,12 @@ public class SysMenusService {
     }
 
     /**
-     * 递归查询子菜单
-     * @param sysMenuList
-     * @return
+     * 功能描述: <br> 递归查询子菜单
+     * 〈〉
+     * @Param: [sysMenuList]
+     * @Return: java.util.List<com.ttms.Entity.SysMenus>
+     * @Author: 万少波
+     * @Date: 2019/5/26 12:50
      */
     public List<SysMenus> getSysMensByPidRecursive(List<SysMenus> sysMenuList){
         if(sysMenuList == null || sysMenuList.size() ==0)
@@ -53,7 +62,12 @@ public class SysMenusService {
     }
 
     /**
-     * 获取所有拦截的url 和 需要给的permission
+     * 功能描述: <br>获取所有拦截的url 和 需要给的permission
+     * 〈〉
+     * @Param: []
+     * @Return: java.util.Map<java.lang.String,java.lang.String>
+     * @Author: 万少波
+     * @Date: 2019/5/26 12:46
      */
     public Map<String,String> getUrlPermissionMapping(){
         List<SysMenus> sysMenuTree = getSysMenusTree();
@@ -64,12 +78,14 @@ public class SysMenusService {
         return urlPermissionsMapping;
     }
 
+
     /**
-     * 递归获取url --> Mapping映射s
-     * @param urlPermissionsMapping
-     * @param urlStack
-     * @param permissionStack
-     * @param sysMenusList
+     * 功能描述: <br>递归获取url --> Mapping映射s
+     * 〈〉
+     * @Param: [urlPermissionsMapping, urlStack, permissionStack, sysMenusList]
+     * @Return: void
+     * @Author: 万少波
+     * @Date: 2019/5/26 12:50
      */
     public void getUrlPermissionMappingRecursive(Map<String,String> urlPermissionsMapping ,
                                                  Stack<String> urlStack ,
@@ -90,16 +106,19 @@ public class SysMenusService {
                 //当前不为子结点
                 getUrlPermissionMappingRecursive(urlPermissionsMapping,urlStack,permissionStack,childMenus);
             }
+            //urlStack 和 permissionStack 出栈
             urlStack.pop();
             permissionStack.pop();
         }
     }
 
     /**
-     * 添加url permission到Map
-     * @param urlPermissionsMapping
-     * @param urlStack
-     * @param permissionStack
+     * 功能描述: <br>添加url permission到Map
+     * 〈〉
+     * @Param: [urlPermissionsMapping, urlStack, permissionStack]
+     * @Return: void
+     * @Author: 万少波
+     * @Date: 2019/5/26 12:50
      */
     private void addUrlPermissionMapping(Map<String, String> urlPermissionsMapping, Stack<String> urlStack, Stack<String> permissionStack) {
         StringBuffer urlBuffer = new StringBuffer();
@@ -107,10 +126,14 @@ public class SysMenusService {
             urlBuffer.append("/"+surl);
         }
         urlBuffer.append("/*");
+
+
         StringBuffer permissionBuffer = new StringBuffer();
+        permissionBuffer.append("perms[");
         for (String spermission: permissionStack) {
             permissionBuffer.append(spermission+":");
         }
-        urlPermissionsMapping.put(urlBuffer.toString(),permissionBuffer.substring(0,permissionBuffer.length()-1));
+        permissionBuffer.setCharAt(permissionBuffer.length()-1,']');
+        urlPermissionsMapping.put(urlBuffer.toString(),permissionBuffer.toString());
     }
 }
