@@ -145,11 +145,11 @@ public class SysMenusService {
         for (String surl: urlStack) {
             urlBuffer.append("/"+surl);
         }
-        urlBuffer.append("/*");
+        urlBuffer.append("/**");
 
 
         StringBuffer permissionBuffer = new StringBuffer();
-        permissionBuffer.append("perms[");
+        permissionBuffer.append("authc,perms[");
         for (String spermission: permissionStack) {
             permissionBuffer.append(spermission+":");
         }
