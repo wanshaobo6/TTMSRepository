@@ -3,7 +3,6 @@ package com.ttms.Enum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -16,11 +15,13 @@ public enum ExceptionEnum {
     USER_NOT_FOUND(404,"查询用户不存在"),
     USER_DELETE_FAIL(500,"查询用户失败"),
     NOT_FOUND_ROLERS(500,"查询角色失败"),
-    INSERT_ROLERS_FILE(500,"新增角色失败"),
-    INSERT_ROLERS_MENUS_FILE(500,"新增角色菜单失败"),
+    INSERT_ROLERS_FAIL(500,"新增角色失败"),
+    USER_ADD_FAILURE(500,"添加失败"),
+    USER_UPDATE_FAILURE(500,"更新失败"),
+    USER_NOT_EXIST(404,"用户不存在"),
+    USER_VALID_MODIFY_ERROR(500,"用户启动状态更新失败"),
+
     ;
     private int status;
     private String message;
-
-
 }

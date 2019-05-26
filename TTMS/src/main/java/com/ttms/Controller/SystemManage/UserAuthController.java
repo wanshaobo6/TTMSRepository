@@ -3,13 +3,15 @@ package com.ttms.Controller.SystemManage;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.SystemManage.SysMenusService;
+import com.ttms.utils.CodecUtils;
 import com.ttms.utils.PageResult;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 //系统管理->用户权限模块
@@ -18,6 +20,7 @@ import java.util.List;
 public class UserAuthController {
     @Autowired
     private SysMenusService sysMenusService;
+
 
     /*功能描述：分页查询已注册的用户
      *@author罗占
@@ -91,5 +94,38 @@ public class UserAuthController {
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
         this.sysMenusService.AddRole(name,note,menuIds,user.getUsername());
         return ResponseEntity.ok().body(null);
+    }
+
+    @PostMapping("/usermanage")
+    public ResponseEntity<Void> addSysUser(@RequestParam  String username,@RequestParam String image,
+                                              @RequestParam String password,@RequestParam String mail,
+                                              @RequestParam String  phonenumber){
+        this.sysMenusService.addSysUser(username,image, password,mail,phonenumber);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+
+    @PutMapping("/usermanage/{id}")
+    public ResponseEntity<SysUser> updateUserById(@PathVariable("id") Integer id,
+                                                  String username,String image,String password,String mail,
+                                                  String phonenumber){
+        SysUser user = new SysUser();
+        user.setUsername(username);
+        user.setImage(image);
+        user.setPassword(password);
+        user.setEmail(mail);
+        user.setModifiedtime(new Date());
+        SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        user.setModifieduser(curUser.getUsername());
+        sysMenusService.updateUserById(user);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+
+
+    @GetMapping("/usermanage/valid/{id}")
+    public ResponseEntity<Void> validOrInvalid(@PathVariable("id") Integer id){
+        sysMenusService.validOrInvalid(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
