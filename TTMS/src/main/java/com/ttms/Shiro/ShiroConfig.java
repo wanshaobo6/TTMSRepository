@@ -22,11 +22,12 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         /*设置安全管理器*/
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("/login.html");
+        shiroFilterFactoryBean.setLoginUrl("/anno/unlogin");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/anno/unahthority");
           /**
          * Shiro内置过滤器
          *   常用过滤器:
-         *      anno:无序认证可以访问
+         *      anon:无序认证可以访问
          *      authc：必须认证才可以访问
          *      user:必须rememberme才能访问
          *      perms: 该资源必须得到授权
@@ -36,14 +37,16 @@ public class ShiroConfig {
            *      参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，当有多个参数时，例如/admins/user/**=roles["admin,guest"]
            *     但是这个设置方法是需要每个参数满足才算通过，相当于hasAllRoles()方法。
          */
-        Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
-        //登陆无须拦截
-        //过滤路径映射
-        for (Map.Entry entry:permissionMap.entrySet()) {
-            log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
-        }
+          /*关闭拦截器*/
+//        Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
+//        permissionMap.put("/error/*","anon");
+//        //登陆无须拦截
+//        //过滤路径映射
+//        for (Map.Entry entry:permissionMap.entrySet()) {
+//            log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
+//        }
         /*授权拦截后 ， 自动跳到为授权拦截页面*/
-       shiroFilterFactoryBean.setFilterChainDefinitionMap(permissionMap);
+       shiroFilterFactoryBean.setFilterChainDefinitionMap(null);
         return shiroFilterFactoryBean;
     }
     /*创建DefaultWebSecurityManager*/

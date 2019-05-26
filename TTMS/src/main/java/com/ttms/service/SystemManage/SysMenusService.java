@@ -4,20 +4,18 @@ package com.ttms.service.SystemManage;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.SysMenus;
-import com.ttms.Entity.SysRoleMenus;
-import com.ttms.Entity.SysRoles;
+import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.SysMenusMapper;
-import com.ttms.Mapper.SysRoleMenusMapper;
-import com.ttms.Mapper.SysRolesMapper;
+import com.ttms.Mapper.SysUserMapper;
 import com.ttms.utils.PageResult;
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
@@ -26,13 +24,9 @@ import java.util.*;
 public class SysMenusService {
     @Autowired
     private SysMenusMapper sysMenusMapper;
-
     @Autowired
-    private SysRolesMapper sysRolesMapper;
+    private SysUserMapper sysUserMapper;
 
-    @Autowired
-    private SysRoleMenusMapper sysRoleMenusMapper;
-    
     /**
      * 功能描述: <br>根据pid查询sysmenu
      * 〈〉
@@ -151,14 +145,69 @@ public class SysMenusService {
         permissionBuffer.setCharAt(permissionBuffer.length()-1,']');
         urlPermissionsMapping.put(urlBuffer.toString(),permissionBuffer.toString());
     }
+    /*功能描述
+     *@author罗占
+     *@Description
+     *Date15:09 2019/5/26
+     *Param
+     *return
+     **/
+    public PageResult<SysUser> queryUserByPage(Integer page,Integer rows,String name){
+        PageHelper.startPage(page,rows);
+        Example example = new Example(SysUser.class);
+        if(StringUtils.isNotBlank(name)){
+            example.createCriteria().andLike("name","%"+name+"%");
+        }
+        List<SysUser> list = sysUserMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_LIST);
+        }
+        PageInfo<SysUser> pageInfo = new PageInfo<>(list);
+        System.out.println(pageInfo.getList());
+        PageResult<SysUser> result=new PageResult<>();
+        result.setTotal(pageInfo.getTotal());
+        result.setTotalPage(pageInfo.getPages());
+        result.setItems(pageInfo.getList());
+        return result;
+    }
+
+    /*
+     *功能描述：根据id查询用户
+     *@author罗占
+     *@Description
+     *Date15:36 2019/5/26
+     *Param
+     *return
+     **/
+    public SysUser getUserById(Integer id){
+        SysUser user = sysUserMapper.selectByPrimaryKey(id);
+        if(user == null){
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_USER);
+        }
+        return user;
+    }
+    /*
+     *功能描述：删除用户
+     *@author罗占
+     *@Description
+     *Date16:50 2019/5/26
+     *Param
+     *return
+     **/
+    public void deleteUserById( Integer id){
+        int i =  this.sysUserMapper.deleteByPrimaryKey(id);
+        if(i != 0 ){
+            throw new TTMSException(ExceptionEnum.USER_DELETE_FAIL);
+        }
+    }
 
     /**
-    * 功能描述: 查询所有角色
-    * 〈〉
-    * @Param: []
-    * @Return: java.util.List<com.ttms.Entity.SysRoles>
-    * @Author: 吴彬
-    * @Date: 15:49 15:49
+     * 功能描述: 查询所有角色
+     * 〈〉
+     * @Param: []
+     * @Return: java.util.List<com.ttms.Entity.SysRoles>
+     * @Author: 吴彬
+     * @Date: 15:49 15:49
      */
     public List<SysRoles> getAllRoles() {
         List<SysRoles> list = this.sysRolesMapper.selectAll();
@@ -168,12 +217,12 @@ public class SysMenusService {
         return list;
     }
     /**
-    * @Description:    分页查询所有角色
-    * @param
-    * @Author:         吴彬
-    * @UpdateRemark:   修改内容
-    * @Version:        1.0
-    */
+     * @Description:    分页查询所有角色
+     * @param
+     * @Author:         吴彬
+     * @UpdateRemark:   修改内容
+     * @Version:        1.0
+     */
     public PageResult<SysRoles> getRolesByPage(Integer page, Integer rows, String name) {
         PageHelper.startPage(page, rows);
         Example e=new Example(SysRoles.class);
@@ -193,16 +242,16 @@ public class SysMenusService {
         return result;
     }
     /**
-    * 功能描述:添加角色和分配权限
-    * 〈〉
-    * @Param: [name, note, menuIds, username]
-    * @Return: void
-    * @Author: 吴彬
-    * @Date: 17:32 17:32
+     * 功能描述:添加角色和分配权限
+     * 〈〉
+     * @Param: [name, note, menuIds, username]
+     * @Return: void
+     * @Author: 吴彬
+     * @Date: 17:32 17:32
      */
     @Transactional
     public void AddRole(String name, String note, List<Integer> menuIds, String username) {
-          //添加角色
+        //添加角色
         SysRoles role=new SysRoles();
         role.setName(name);
         role.setNote(note);
