@@ -4,6 +4,7 @@ import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.PageResult;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -47,9 +48,6 @@ public class UserAuthController {
         SysUser user = sysMenusService.getUserById(id);
         return ResponseEntity.ok().body(user);
     }
-    @Autowired
-    private SysMenusService sysMenusService;
-
     /**
      * @Description:    查询所有角色
      * @param

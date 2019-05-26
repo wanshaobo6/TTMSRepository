@@ -4,10 +4,14 @@ package com.ttms.service.SystemManage;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.SysMenus;
+import com.ttms.Entity.SysRoleMenus;
+import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.SysMenusMapper;
+import com.ttms.Mapper.SysRoleMenusMapper;
+import com.ttms.Mapper.SysRolesMapper;
 import com.ttms.Mapper.SysUserMapper;
 import com.ttms.TTMSApplication;
 import com.ttms.utils.PageResult;
@@ -15,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import tk.mybatis.mapper.entity.Example;
@@ -27,7 +32,10 @@ public class SysMenusService {
     private SysMenusMapper sysMenusMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
-
+    @Autowired
+    private SysRoleMenusMapper sysRoleMenusMapper;
+    @Autowired
+    private SysRolesMapper sysRolesMapper;
     /**
      * 功能描述: <br>根据pid查询sysmenu
      * 〈〉

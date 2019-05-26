@@ -45,7 +45,7 @@ public class LoginController {
         SysUser currUser = sysMenusService.getUserByUserName(username);
         //如果没有该用户则一定登录失败
         if(currUser == null)
-            throw new TTMSException(ExceptionEnum.UNAME_OR_PASSWORD_ERROR);
+            throw new TTMSException(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         myThreadLocal.setTempUser(currUser);
         password = CodecUtils.md5Hex(password, currUser.getSalt());
         //封装用户名和密码
@@ -56,7 +56,7 @@ public class LoginController {
             return ResponseEntity.ok(null);
         }catch (Exception e) {
             //用户名不存在
-            throw new TTMSException(ExceptionEnum.UNAME_OR_PASSWORD_ERROR);
+            throw new TTMSException(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         }
     }
 }
