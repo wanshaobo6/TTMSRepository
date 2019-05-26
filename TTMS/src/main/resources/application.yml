@@ -1,10 +1,11 @@
 server:
-  port: 80
+  port: 8080
 spring:
   application:
     name: TTMS
   datasource:
-    url: jdbc:mysql///ttms
+    url: jdbc:mysql://114.115.204.56:3306/ttms?useUnicode=true&characterEncoding=utf-8
     username: root
-    password: 12345
+    password: 12345a
     driver-class-name: com.mysql.jdbc.Driver
+
