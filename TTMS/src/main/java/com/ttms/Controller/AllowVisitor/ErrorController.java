@@ -1,4 +1,4 @@
-package com.ttms.Controller;
+package com.ttms.Controller.AllowVisitor;
 
 import com.ttms.Entity.SysMenus;
 import com.ttms.Enum.ExceptionEnum;
