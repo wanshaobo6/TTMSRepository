@@ -1,11 +1,22 @@
 package com.ttms.service.SystemManage;
 
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.SysMenus;
+import com.ttms.Entity.SysUser;
+import com.ttms.Enum.ExceptionEnum;
+import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.SysMenusMapper;
+import com.ttms.Mapper.SysUserMapper;
+import com.ttms.utils.PageResult;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +28,8 @@ import java.util.Stack;
 public class SysMenusService {
     @Autowired
     private SysMenusMapper sysMenusMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
     
     /**
      * 功能描述: <br>根据pid查询sysmenu
@@ -135,5 +148,60 @@ public class SysMenusService {
         }
         permissionBuffer.setCharAt(permissionBuffer.length()-1,']');
         urlPermissionsMapping.put(urlBuffer.toString(),permissionBuffer.toString());
+    }
+    /*功能描述
+    *@author罗占
+    *@Description
+    *Date15:09 2019/5/26
+    *Param
+    *return
+    **/
+    public PageResult<SysUser> queryUserByPage(Integer page,Integer rows,String name){
+       PageHelper.startPage(page,rows);
+        Example example = new Example(SysUser.class);
+        if(StringUtils.isNotBlank(name)){
+            example.createCriteria().andLike("name","%"+name+"%");
+        }
+        List<SysUser> list = sysUserMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_LIST);
+        }
+        PageInfo<SysUser> pageInfo = new PageInfo<>(list);
+        System.out.println(pageInfo.getList());
+        PageResult<SysUser> result=new PageResult<>();
+        result.setTotal(pageInfo.getTotal());
+        result.setTotalPage(pageInfo.getPages());
+        result.setItems(pageInfo.getList());
+        return result;
+    }
+
+    /*
+    *功能描述：根据id查询用户
+    *@author罗占
+    *@Description
+    *Date15:36 2019/5/26
+    *Param
+    *return
+    **/
+    public SysUser getUserById(Integer id){
+        SysUser user = sysUserMapper.selectByPrimaryKey(id);
+        if(user == null){
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_USER);
+        }
+        return user;
+    }
+    /*
+    *功能描述：删除用户
+    *@author罗占
+    *@Description
+    *Date16:50 2019/5/26
+    *Param
+    *return
+    **/
+    public void deleteUserById( Integer id){
+       int i =  this.sysUserMapper.deleteByPrimaryKey(id);
+       if(i != 0 ){
+           throw new TTMSException(ExceptionEnum.USER_DELETE_FAIL);
+       }
     }
 }
