@@ -21,9 +21,9 @@ public class SysRoles {
 
     private Date modifiedtime;
 
-    private int createduser;
+    private int createduserId;
 
-    private String modifieduser;
+    private int modifieduserId;
 
     @Transient
     private SysMenus sysMenus;

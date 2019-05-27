@@ -115,9 +115,9 @@ public class UserAuthController {
         user.setEmail(mail);
         user.setModifiedtime(new Date());
         SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        user.setModifieduser(curUser.getUsername());
-        sysMenusService.updateUserById(user);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        user.setCreateduserid(curUser.getId());
+        sysMenusService.updateUserById(curUser);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 
