@@ -13,6 +13,7 @@ import com.ttms.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -390,17 +391,17 @@ public class SysMenusService {
             }
         }
 
-        /**
-         * 功能描述: 修改用户
-         * 〈〉
-         * @Param: [id]
-         * @Return: com.ttms.Entity.SysUser
-         * @Author: lhf
-         * @Date: 2019/5/26 19:39
-         */
+    /**
+     * 功能描述: 修改用户
+     * 〈〉
+     * @Param: [id]
+     * @Return: com.ttms.Entity.SysUser
+     * @Author: lhf
+     * @Date: 2019/5/26 19:39
+     */
         public void updateUserById(SysUser user) {
             int count = this.sysUserMapper.updateByPrimaryKey(user);
-            if (count !=1 ) {
+            if (count != 1) {
                 throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
             }
         }

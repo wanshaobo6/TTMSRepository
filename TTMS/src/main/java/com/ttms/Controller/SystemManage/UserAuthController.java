@@ -1,6 +1,7 @@
 package com.ttms.Controller.SystemManage;
 
 import com.ttms.Entity.SysDepartment;
+import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.SystemManage.SysMenusService;
@@ -97,6 +98,19 @@ public class UserAuthController {
     }
 
     /**
+     * 功能描述: <br>
+     * 〈〉查询并返回所有的菜单树
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysMenus>>
+     * @Author: 万少波
+     * @Date: 2019/5/27 15:03
+     */
+    @GetMapping("/rolemanage/tree")
+    public ResponseEntity<List<SysMenus>> getMenusTree(){
+       return ResponseEntity.ok(sysMenusService.getSysMenusTree());
+    }
+
+    /**
      * 功能描述: 新增用户
      * 〈〉
      * @Param: [username, image, password, mail, phonenumber]
@@ -152,7 +166,7 @@ public class UserAuthController {
         sysMenusService.validOrInvalid(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-    
+
     /**
      * 功能描述: 新增部门
      * 〈〉
@@ -162,11 +176,8 @@ public class UserAuthController {
      * @Date: 2019/5/27 15:01
      */
     @PostMapping("/organparam/add/dartment")
-    public ResponseEntity<Void> addDepartment(@RequestParam String departmentName,
-                                              @RequestParam String departmentCode,
-                                              @RequestParam String departmentNote,
-                                              @RequestParam(required = false , defaultValue = "0") int parentId){
-        this.sysMenusService.addDepartment(departmentName,departmentCode,departmentNote,parentId);
+    public ResponseEntity<Void> addDepartment(SysDepartment sysdepartment){
+        this.sysMenusService.addDepartment(sysdepartment);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

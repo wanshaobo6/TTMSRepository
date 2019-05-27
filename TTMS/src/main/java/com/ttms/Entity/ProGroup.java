@@ -8,31 +8,29 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
-@Table(name = "sys_department")
+@Table(name = "pro_group")
 @Data
-public class SysDepartment {
+public class ProGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String departmentname;
+    private String groupname;
 
-    private String departmentcode;
+    private Integer projectid;
 
-    private Integer parentid;
+    private Integer chargeuserid;
 
-    private Byte isparent;
+    private String groupnote;
 
-    private Byte valid;
-
-    private String note;
-
-    private Date modifiytime;
+    private Byte invalid;
 
     private Date createtime;
 
-    private Integer modifyuserid;
+    private Date updatetime;
 
     private Integer createuserid;
+
+    private Integer updateuserid;
 
 }
