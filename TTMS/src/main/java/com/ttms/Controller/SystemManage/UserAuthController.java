@@ -96,6 +96,14 @@ public class UserAuthController {
         return ResponseEntity.ok().body(null);
     }
 
+    /**
+     * 功能描述: 新增用户
+     * 〈〉
+     * @Param: [username, image, password, mail, phonenumber]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: lhf
+     * @Date: 2019/5/27 15:03
+     */
     @PostMapping("/usermanage")
     public ResponseEntity<Void> addSysUser(@RequestParam  String username,@RequestParam String image,
                                               @RequestParam String password,@RequestParam String mail,
@@ -104,16 +112,25 @@ public class UserAuthController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-
+    /**
+     * 功能描述: 修改用户
+     * 〈〉
+     * @Param: [id, username, image, password, mail, phonenumber]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: lhf
+     * @Date: 2019/5/27 15:03
+     */
     @PutMapping("/usermanage/{id}")
     public ResponseEntity<Void> updateUserById(@PathVariable("id") Integer id,
                                                   String username,String image,String password,String mail,
                                                   String phonenumber){
         SysUser user = new SysUser();
+        user.setId(id);
         user.setUsername(username);
         user.setImage(image);
         user.setPassword(password);
         user.setEmail(mail);
+        user.setMobile(phonenumber);
         user.setModifiedtime(new Date());
         SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         user.setCreateduserid(curUser.getId());
@@ -122,16 +139,34 @@ public class UserAuthController {
     }
 
 
-
+    /**
+     * 功能描述: 启用和禁用用户
+     * 〈〉
+     * @Param: [id]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: lhf
+     * @Date: 2019/5/27 15:02
+     */
     @GetMapping("/usermanage/valid/{id}")
     public ResponseEntity<Void> validOrInvalid(@PathVariable("id") Integer id){
         sysMenusService.validOrInvalid(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
+    
+    /**
+     * 功能描述: 新增部门
+     * 〈〉
+     * @Param: [sysdepartment]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: lhf
+     * @Date: 2019/5/27 15:01
+     */
     @PostMapping("/organparam/add/dartment")
-    public ResponseEntity<Void> addDepartment(SysDepartment sysdepartment){
-        this.sysMenusService.addDepartment(sysdepartment);
+    public ResponseEntity<Void> addDepartment(@RequestParam String departmentName,
+                                              @RequestParam String departmentCode,
+                                              @RequestParam String departmentNote,
+                                              @RequestParam(required = false , defaultValue = "0") int parentId){
+        this.sysMenusService.addDepartment(departmentName,departmentCode,departmentNote,parentId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
