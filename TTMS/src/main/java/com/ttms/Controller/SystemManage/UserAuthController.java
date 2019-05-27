@@ -1,5 +1,6 @@
 package com.ttms.Controller.SystemManage;
 
+import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.SystemManage.SysMenusService;
@@ -93,6 +94,19 @@ public class UserAuthController {
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
         this.sysMenusService.AddRole(name,note,menuIds,user.getId());
         return ResponseEntity.ok().body(null);
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉查询并返回所有的菜单树
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysMenus>>
+     * @Author: 万少波
+     * @Date: 2019/5/27 15:03
+     */
+    @GetMapping("/rolemanage/tree")
+    public ResponseEntity<List<SysMenus>> getMenusTree(){
+       return ResponseEntity.ok(sysMenusService.getSysMenusTree());
     }
 
     @PostMapping("/usermanage")
