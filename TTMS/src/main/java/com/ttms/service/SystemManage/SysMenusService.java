@@ -451,11 +451,11 @@ public class SysMenusService {
          * @Author: lhf
          * @Date: 2019/5/27 14:44
          */
-        public void addDepartment(String departmentName,  String departmentNCode,
+        public void addDepartment(String departmentName,  String departmentCode,
                                   String departmentNote,int parentId) {
             SysDepartment department = new SysDepartment();
             department.setDepartmentname(departmentName);
-            department.setDepartmentcode(departmentNCode);
+            department.setDepartmentcode(departmentCode);
             department.setNote(departmentNote);
             department.setParentid(parentId);
             department.setIsparent((byte) (parentId == 0 ? 1:0));
