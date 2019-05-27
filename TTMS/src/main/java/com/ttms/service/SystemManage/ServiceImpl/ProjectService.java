@@ -92,4 +92,9 @@ public class ProjectService implements IProjectService {
     public Void enableProject(Integer pid) {
         return null;
     }
+
+    @Override
+    public void getAllGroups() {
+
+    }
 }

@@ -23,7 +23,7 @@ public class ProGroup {
 
     private String groupnote;
 
-    private Byte invalid;
+    private Byte valid;
 
     private Date createtime;
 
