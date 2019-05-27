@@ -117,7 +117,7 @@ public class UserAuthController {
         user.setModifiedtime(new Date());
         SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         user.setCreateduserid(curUser.getId());
-        sysMenusService.updateUserById(curUser);
+        sysMenusService.updateUserById(user);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
