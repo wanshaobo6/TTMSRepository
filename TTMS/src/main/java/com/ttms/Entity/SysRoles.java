@@ -21,7 +21,7 @@ public class SysRoles {
 
     private Date modifiedtime;
 
-    private String createduser;
+    private int createduser;
 
     private String modifieduser;
 

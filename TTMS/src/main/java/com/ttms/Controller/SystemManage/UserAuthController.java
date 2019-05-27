@@ -92,7 +92,7 @@ public class UserAuthController {
     public ResponseEntity<Void> AddRole(@RequestParam("name") String name , @RequestParam(required = false,name = "note") String note , @RequestParam(name = "menuIds") List<Integer> menuIds, HttpSession session){
         session.getAttribute("user");
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        this.sysMenusService.AddRole(name,note,menuIds,user.getUsername());
+        this.sysMenusService.AddRole(name,note,menuIds,user.getId());
         return ResponseEntity.ok().body(null);
     }
 
@@ -116,7 +116,7 @@ public class UserAuthController {
         user.setEmail(mail);
         user.setModifiedtime(new Date());
         SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        user.setModifieduser(curUser.getUsername());
+        user.setModifieduserid(curUser.getId());
         sysMenusService.updateUserById(user);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
