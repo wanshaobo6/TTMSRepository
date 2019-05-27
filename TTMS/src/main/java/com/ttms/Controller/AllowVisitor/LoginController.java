@@ -9,6 +9,7 @@ import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.CodecUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -55,6 +56,9 @@ public class LoginController {
             //查询用户能访问到的菜单并返回
             System.out.println("111"+(SysUser) SecurityUtils.getSubject().getPrincipal());
             return ResponseEntity.ok(null);
+        }catch (LockedAccountException e) {
+            //该账户已被锁定
+            throw new TTMSException(ExceptionEnum.USER_ACCOUNT_LOCK);
         }catch (Exception e) {
             //用户名不存在
             throw new TTMSException(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
