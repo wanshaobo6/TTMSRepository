@@ -23,8 +23,8 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         /*设置安全管理器*/
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("/anno/unlogin");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/anno/unahthority");
+        shiroFilterFactoryBean.setLoginUrl("/anon/unlogin");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/anon/unauthority");
           /**
          * Shiro内置过滤器
          *   常用过滤器:
@@ -39,16 +39,17 @@ public class ShiroConfig {
            *     但是这个设置方法是需要每个参数满足才算通过，相当于hasAllRoles()方法。
          */
           /*关闭拦截器*/
-//      Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
-//        //登陆无须拦截
-//        //过滤路径映射
-//        permissionMap.put("/login","anon");
-//       for (Map.Entry entry:permissionMap.entrySet()) {
-//           log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
-//       }
-        HashMap<String,String> permissionMap = new HashMap();
+        Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
+        //登陆无须拦截
+        //过滤路径映射
+       permissionMap.put("/login","anon");
+       for (Map.Entry entry:permissionMap.entrySet()) {
+           log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
+      }
+     //   HashMap<String,String> permissionMap = new HashMap();
         permissionMap.put("/login","anon");
-        permissionMap.put("/**","authc");
+        permissionMap.put("/anon/unlogin","anon");
+        permissionMap.put("/anon/unahthority","anon");
         /*授权拦截后 ， 自动跳到为授权拦截页面*/
        shiroFilterFactoryBean.setFilterChainDefinitionMap(permissionMap);
         return shiroFilterFactoryBean;

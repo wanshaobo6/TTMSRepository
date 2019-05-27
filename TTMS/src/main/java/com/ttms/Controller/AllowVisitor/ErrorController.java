@@ -13,7 +13,7 @@ import java.util.List;
 
 //  此中方法shiro不能拦截
 @RestController
-@RequestMapping("/error")
+@RequestMapping("/anon")
 public class ErrorController {
     @Autowired
     SysMenusService sysMenusService;

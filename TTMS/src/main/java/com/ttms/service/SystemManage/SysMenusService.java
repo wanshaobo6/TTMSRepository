@@ -3,16 +3,11 @@ package com.ttms.service.SystemManage;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ttms.Entity.SysMenus;
-import com.ttms.Entity.SysRoleMenus;
-import com.ttms.Entity.SysRoles;
-import com.ttms.Entity.SysUser;
+import com.ttms.Config.MenuIdPermsMap;
+import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
-import com.ttms.Mapper.SysMenusMapper;
-import com.ttms.Mapper.SysRoleMenusMapper;
-import com.ttms.Mapper.SysRolesMapper;
-import com.ttms.Mapper.SysUserMapper;
+import com.ttms.Mapper.*;
 import com.ttms.utils.CodecUtils;
 import com.ttms.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +24,8 @@ import java.util.*;
 @Service
 public class SysMenusService {
     @Autowired
+    private SysUserRolesMapper sysUserRolesMapper;
+    @Autowired
     private SysMenusMapper sysMenusMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -36,6 +33,11 @@ public class SysMenusService {
     private SysRoleMenusMapper sysRoleMenusMapper;
     @Autowired
     private SysRolesMapper sysRolesMapper;
+    @Autowired
+    private SysDepartmentMapper sysDepartmentMapper;
+
+    @Autowired
+    private MenuIdPermsMap menuIdPermsMap;
     /**
      * 功能描述: <br>根据pid查询sysmenu
      * 〈〉
@@ -112,6 +114,7 @@ public class SysMenusService {
         if(CollectionUtils.isEmpty(sysMenusList))
             return;
         for (SysMenus sysMenu : sysMenusList) {
+            //获取一级分类id-perms Mapping
             //获取子菜单
             List<SysMenus> childMenus = sysMenu.getChildMenus();
             //将当前子菜单urlStack 和 permissionStack 压栈
@@ -119,14 +122,39 @@ public class SysMenusService {
             permissionStack.push(sysMenu.getPermission());
             if(CollectionUtils.isEmpty(childMenus)){
                 //当前为子结点  /添加映射
+                menuIdPermsMap.put(sysMenu.getId(),currPermsInStack(permissionStack,true));
                 addUrlPermissionMapping(urlPermissionsMapping , urlStack , permissionStack);
             }else{
                 //当前不为子结点
+                menuIdPermsMap.put(sysMenu.getId(),currPermsInStack(permissionStack,false));
                 getUrlPermissionMappingRecursive(urlPermissionsMapping,urlStack,permissionStack,childMenus);
             }
             //urlStack 和 permissionStack 出栈
             urlStack.pop();
             permissionStack.pop();
+        }
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉       根据是否是叶子结点生成对应的perms
+     * @Param: [permissionStack, isLeaf]
+     * @Return: java.lang.String
+     * @Author: 万少波
+     * @Date: 2019/5/27 13:53
+     */
+    private String currPermsInStack(Stack<String> permissionStack ,boolean isLeaf){
+
+        StringBuffer permissionBuffer = new StringBuffer();
+        for (String spermission: permissionStack) {
+            permissionBuffer.append(spermission+":");
+        }
+        if(isLeaf){
+            //如果是叶子结点
+            return permissionBuffer.substring(0,permissionBuffer.length()-1);
+        }else{
+            //如果不是叶子结点
+            return permissionBuffer.append("*").toString();
         }
     }
 
@@ -153,6 +181,27 @@ public class SysMenusService {
         }
         permissionBuffer.setCharAt(permissionBuffer.length()-1,']');
         urlPermissionsMapping.put(urlBuffer.toString(),permissionBuffer.toString());
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉   根据用户id查询能访问的所有菜单
+     * @Param: [id]
+     * @Return: java.util.List<com.ttms.Entity.SysMenus>
+     * @Author: 万少波
+     * @Date: 2019/5/27 14:01
+     */
+    public List<SysMenus> getMenusListByUserId(int roleid){
+        return sysRoleMenusMapper.getMenusListByRoleId(roleid);
+    }
+
+    public SysUserRoles getSysUserRolesByUserId(int userid){
+        SysUserRoles sysUserRoles = new SysUserRoles();
+        sysUserRoles.setUserId(userid);
+        List<SysUserRoles> result = sysUserRolesMapper.select(sysUserRoles);
+        if(CollectionUtils.isEmpty(result))
+            throw new TTMSException(ExceptionEnum.SYSTEM_ERROR);
+        return result.get(0);
     }
     /*功能描述
      *@author罗占
@@ -277,13 +326,13 @@ public class SysMenusService {
      * @Date: 17:32 17:32
      */
     @Transactional
-    public void AddRole(String name, String note, List<Integer> menuIds, String username) {
+    public void AddRole(String name, String note, List<Integer> menuIds, int create_userid) {
         //添加角色
         SysRoles role=new SysRoles();
         role.setName(name);
         role.setNote(note);
         role.setCreatedtime(new Date());
-        role.setCreateduser(username);
+        role.setCreateduserId(create_userid);
         role.setModifiedtime(null);
         int i = this.sysRolesMapper.insert(role);
         if(i!=1){
@@ -347,19 +396,7 @@ public class SysMenusService {
          * @Author: lhf
          * @Date: 2019/5/26 19:39
          */
-        public void updateUserById(@PathVariable("id") Integer id,
-                                   String username,String image,String password,String mail,
-                                   String phonenumber) {
-            SysUser user = new SysUser();
-            user.setId(id);
-            user.setUsername(username);
-            user.setImage(image);
-            user.setPassword(password);
-            user.setEmail(mail);
-            user.setMobile(phonenumber);
-            user.setModifiedtime(new Date());
-            SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-            user.setModifieduser(curUser.getUsername());
+        public void updateUserById(SysUser user) {
             int count = this.sysUserMapper.updateByPrimaryKey(user);
             if (count != 1) {
                 throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
@@ -401,5 +438,31 @@ public class SysMenusService {
                 throw new TTMSException(ExceptionEnum.USER_NOT_EXIST);
             }
             return user;
+        }
+
+        /**
+         * 功能描述: 新增部门
+         * 〈〉
+         * @Param: [sysdepartment]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/27 14:44
+         */
+        public void addDepartment(SysDepartment sysdepartment) {
+            SysDepartment department = new SysDepartment();
+            department.setDepartmentname(sysdepartment.getDepartmentname());
+            department.setDepartmentcode(sysdepartment.getDepartmentcode());
+            department.setParentid(sysdepartment.getParentid());
+            department.setIsparent(sysdepartment.getIsparent());
+            department.setValid((byte) 0);
+            department.setNote(sysdepartment.getNote());
+            department.setModifiytime(sysdepartment.getModifiytime());
+            department.setCreatetime(sysdepartment.getCreatetime());
+            department.setModifiytime(sysdepartment.getModifiytime());
+            department.setCreateuserid(sysdepartment.getCreateuserid());
+            int i = this.sysDepartmentMapper.insert(department);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
+            }
         }
 }

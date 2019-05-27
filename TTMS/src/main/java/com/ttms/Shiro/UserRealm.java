@@ -1,6 +1,8 @@
 package com.ttms.Shiro;
 
+import com.ttms.Config.MenuIdPermsMap;
 import com.ttms.Config.MyThreadLocal;
+import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.CodecUtils;
@@ -14,27 +16,39 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 //ShiroConfig中已加入了Spring容器
 public class UserRealm extends AuthorizingRealm {
     @Autowired
     private MyThreadLocal myThreadLocal;
 
+    @Autowired
+    private MenuIdPermsMap menuIdPermsMap;
+
+    @Autowired
+    private SysMenusService sysMenusService;
+
     /*执行授权逻辑*/
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println(" 执行授权逻辑 " );
+        System.out.println(" 执行授权逻辑  给与全部权限 " );
         /*给资源进行授权*/
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        Set set = new HashSet<String>();
-        set.add("admin");
-        info.setRoles(set);
         //获得当前用户
         Subject subject = SecurityUtils.getSubject();
         //获取认证后传过来的值
-        Object principal = subject.getPrincipal();
-        //doSomesThing
-        info.addStringPermission("sysmanage:sysconfig");
+        SysUser curUser = (SysUser)subject.getPrincipal();
+        //封装当前用户所有权限
+        List<SysMenus> allowMenuList = sysMenusService.
+                getMenusListByUserId(sysMenusService.getSysUserRolesByUserId(curUser.getId()).getRoleId());
+        Set<String> permses = allowMenuList.stream().map(
+                sysMenus -> {return menuIdPermsMap.get(sysMenus.getId());}
+                ).collect(Collectors.toSet());
+        System.out.println(curUser.getUsername()+"在"+permses.toString()+"放行");
+        info.addStringPermissions(permses);
         return info;
     }
 
