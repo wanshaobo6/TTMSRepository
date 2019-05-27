@@ -120,8 +120,8 @@ public class UserAuthController {
      */
     @PostMapping("/usermanage")
     public ResponseEntity<Void> addSysUser(@RequestParam  String username,@RequestParam String image,
-                                              @RequestParam String password,@RequestParam String mail,
-                                              @RequestParam String  phonenumber){
+                                           @RequestParam String password,@RequestParam String mail,
+                                           @RequestParam String  phonenumber){
         this.sysMenusService.addSysUser(username,image, password,mail,phonenumber);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -136,8 +136,8 @@ public class UserAuthController {
      */
     @PutMapping("/usermanage/{id}")
     public ResponseEntity<Void> updateUserById(@PathVariable("id") Integer id,
-                                                  String username,String image,String password,String mail,
-                                                  String phonenumber){
+                                               String username,String image,String password,String mail,
+                                               String phonenumber){
         SysUser user = new SysUser();
         user.setId(id);
         user.setUsername(username);
@@ -180,5 +180,36 @@ public class UserAuthController {
                                               @RequestParam String departmentNote,@RequestParam int parentId){
         this.sysMenusService.addDepartment(departmentName,departmentCode,departmentNote,parentId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    /*
+     *功能描述：分页查询所有机构
+     *@author罗占
+     *@Description
+     *Date12:43 2019/5/27
+     *Param
+     *return
+     **/
+    @GetMapping("/organparam/page")
+    public ResponseEntity<PageResult<SysDepartment>> queryDepartment(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                     @RequestParam(value = "rows", defaultValue = "5") Integer rows,
+                                                                     @RequestParam(value = "departmentname", required = false) String  departmentname,
+                                                                     @RequestParam(value = "valid", required = false,defaultValue = "true")Boolean valid){
+
+        PageResult<SysDepartment> result = this.sysMenusService.queryDepartment(page, rows, departmentname, valid);
+        return ResponseEntity.ok(result);
+    }
+
+    /*
+     *功能描述：禁用和启用部门
+     *@author罗占
+     *@Description
+     *Date14:41 2019/5/27
+     *Param
+     *return
+     **/
+    @PutMapping("/organparam/valid/{id}")
+    public ResponseEntity<Void> updateDepartmentValidOrInvalid(@PathVariable("id" ) Integer id){
+        this.sysMenusService.updateDepartmentValidOrInvalid(id);
+        return ResponseEntity.ok().body(null);
     }
 }

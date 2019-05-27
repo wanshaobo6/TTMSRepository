@@ -77,19 +77,30 @@ public class ProjectService implements IProjectService {
 
 
     @Override
-    public Void editProject(ProProject project) {
-        return null;
+    public Void editProject(ProProject project) { return null;
     }
 
 
     @Override
     public Void prohibitProject(Integer pid) {
-        return null;
+        operProject(pid);
+        return  null;
     }
 
 
     @Override
     public Void enableProject(Integer pid) {
-        return null;
+     operProject(pid);
+     return  null;
+}
+
+    public void operProject(Integer pid) {
+        ProProject project = this.proProjectMapper.selectByPrimaryKey(pid);
+        project.setValid((byte) (project.getValid() ^ 1));
+        int i = this.proProjectMapper.updateByPrimaryKey(project);
+        if (i != 1) {
+            throw new TTMSException(ExceptionEnum.OPERATION_FAILURE);
+        }
+
     }
 }

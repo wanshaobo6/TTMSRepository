@@ -21,8 +21,13 @@ public enum ExceptionEnum {
     USER_NOT_EXIST(404,"用户不存在"),
     USER_VALID_MODIFY_ERROR(500,"用户启动状态更新失败"),
     USER_ACCOUNT_LOCK(500,"账户已被锁定"),
-    DEPARTMENT_ADD_FAILURE(500,"部门添加失败"),
+    NOT_FOUND_DEPARTMENT(500,"部门不存在"),
+    DEPARTMENT_VALID_MODIFY_ERROR(500,"部门启用禁用状态更新失败"),
+    OPERATION_FAILURE(500,"操作失败"),
+    DEPARTMENT_ADD_FAILURE(500,"添加失败"),
+    DEPARTMENT_EDIT_FAILURE(500,"修改部门失败"),
     DEPARTMENT_NOT_FOUND(404,"部门不存在")
+
     ;
     private int status;
     private String message;
