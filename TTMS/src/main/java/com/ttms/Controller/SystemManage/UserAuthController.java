@@ -1,5 +1,6 @@
 package com.ttms.Controller.SystemManage;
 
+import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
@@ -139,6 +140,12 @@ public class UserAuthController {
     @GetMapping("/usermanage/valid/{id}")
     public ResponseEntity<Void> validOrInvalid(@PathVariable("id") Integer id){
         sysMenusService.validOrInvalid(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @PostMapping("/organparam/add/dartment")
+    public ResponseEntity<Void> addDepartment(SysDepartment sysdepartment){
+        this.sysMenusService.addDepartment(sysdepartment);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

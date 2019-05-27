@@ -35,6 +35,8 @@ public class SysMenusService {
     private SysRoleMenusMapper sysRoleMenusMapper;
     @Autowired
     private SysRolesMapper sysRolesMapper;
+    @Autowired
+    private SysDepartmentMapper sysDepartmentMapper;
 
     @Autowired
     private MenuIdPermsMap menuIdPermsMap;
@@ -440,4 +442,29 @@ public class SysMenusService {
             return user;
         }
 
+        /**
+         * 功能描述: 新增部门
+         * 〈〉
+         * @Param: [sysdepartment]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/27 14:44
+         */
+        public void addDepartment(SysDepartment sysdepartment) {
+            SysDepartment department = new SysDepartment();
+            department.setDepartmentname(sysdepartment.getDepartmentname());
+            department.setDepartmentcode(sysdepartment.getDepartmentcode());
+            department.setParentid(sysdepartment.getParentid());
+            department.setIsparent(sysdepartment.getIsparent());
+            department.setValid((byte) 0);
+            department.setNote(sysdepartment.getNote());
+            department.setModifiytime(sysdepartment.getModifiytime());
+            department.setCreatetime(sysdepartment.getCreatetime());
+            department.setModifiytime(sysdepartment.getModifiytime());
+            department.setCreateuserid(sysdepartment.getCreateuserid());
+            int i = this.sysDepartmentMapper.insert(department);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
+            }
+        }
 }
