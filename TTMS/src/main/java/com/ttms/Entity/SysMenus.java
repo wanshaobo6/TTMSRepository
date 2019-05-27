@@ -31,9 +31,9 @@ public class SysMenus {
 
     private Date modifiedtime;
 
-    private String createduser;
+    private int createduserid;
 
-    private String modifieduser;
+    private int modifieduserid;
 
     @Transient
     private List<SysMenus> childMenus;

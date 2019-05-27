@@ -91,7 +91,7 @@ public class UserAuthController {
     public ResponseEntity<Void> AddRole(@RequestParam("name") String name , @RequestParam(required = false,name = "note") String note , @RequestParam(name = "menuIds") List<Integer> menuIds, HttpSession session){
         session.getAttribute("user");
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        this.sysMenusService.AddRole(name,note,menuIds,user.getUsername());
+        this.sysMenusService.AddRole(name,note,menuIds,user.getId());
         return ResponseEntity.ok().body(null);
     }
 
@@ -108,7 +108,15 @@ public class UserAuthController {
     public ResponseEntity<Void> updateUserById(@PathVariable("id") Integer id,
                                                   String username,String image,String password,String mail,
                                                   String phonenumber){
-        this.sysMenusService.updateUserById(id,username,image, password,mail,phonenumber);
+        SysUser user = new SysUser();
+        user.setUsername(username);
+        user.setImage(image);
+        user.setPassword(password);
+        user.setEmail(mail);
+        user.setModifiedtime(new Date());
+        SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        user.setCreateduserid(curUser.getId());
+        sysMenusService.updateUserById(curUser);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
