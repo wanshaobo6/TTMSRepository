@@ -106,19 +106,11 @@ public class UserAuthController {
 
 
     @PutMapping("/usermanage/{id}")
-    public ResponseEntity<SysUser> updateUserById(@PathVariable("id") Integer id,
+    public ResponseEntity<Void> updateUserById(@PathVariable("id") Integer id,
                                                   String username,String image,String password,String mail,
                                                   String phonenumber){
-        SysUser user = new SysUser();
-        user.setUsername(username);
-        user.setImage(image);
-        user.setPassword(password);
-        user.setEmail(mail);
-        user.setModifiedtime(new Date());
-        SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        user.setModifieduser(curUser.getUsername());
-        sysMenusService.updateUserById(user);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        this.sysMenusService.updateUserById(id,username,image, password,mail,phonenumber);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 

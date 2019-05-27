@@ -13,17 +13,15 @@ import com.ttms.Mapper.SysMenusMapper;
 import com.ttms.Mapper.SysRoleMenusMapper;
 import com.ttms.Mapper.SysRolesMapper;
 import com.ttms.Mapper.SysUserMapper;
-import com.ttms.TTMSApplication;
 import com.ttms.utils.CodecUtils;
 import com.ttms.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
@@ -349,9 +347,21 @@ public class SysMenusService {
          * @Author: lhf
          * @Date: 2019/5/26 19:39
          */
-        public void updateUserById(SysUser sysUser) {
-            int count = this.sysUserMapper.updateByPrimaryKey(sysUser);
-            if (count == 1) {
+        public void updateUserById(@PathVariable("id") Integer id,
+                                   String username,String image,String password,String mail,
+                                   String phonenumber) {
+            SysUser user = new SysUser();
+            user.setId(id);
+            user.setUsername(username);
+            user.setImage(image);
+            user.setPassword(password);
+            user.setEmail(mail);
+            user.setMobile(phonenumber);
+            user.setModifiedtime(new Date());
+            SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+            user.setModifieduser(curUser.getUsername());
+            int count = this.sysUserMapper.updateByPrimaryKey(user);
+            if (count != 1) {
                 throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
             }
         }
