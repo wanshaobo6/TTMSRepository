@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("ALL")
@@ -38,13 +39,16 @@ public class ShiroConfig {
            *     但是这个设置方法是需要每个参数满足才算通过，相当于hasAllRoles()方法。
          */
           /*关闭拦截器*/
-      Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
-       permissionMap.put("/error/*","anon");
-        //登陆无须拦截
-        //过滤路径映射
-       for (Map.Entry entry:permissionMap.entrySet()) {
-           log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
-       }
+//      Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
+//        //登陆无须拦截
+//        //过滤路径映射
+//        permissionMap.put("/login","anon");
+//       for (Map.Entry entry:permissionMap.entrySet()) {
+//           log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
+//       }
+        HashMap<String,String> permissionMap = new HashMap();
+        permissionMap.put("/login","anon");
+        permissionMap.put("/**","authc");
         /*授权拦截后 ， 自动跳到为授权拦截页面*/
        shiroFilterFactoryBean.setFilterChainDefinitionMap(permissionMap);
         return shiroFilterFactoryBean;
