@@ -22,7 +22,7 @@ public enum ExceptionEnum {
     USER_VALID_MODIFY_ERROR(500,"用户启动状态更新失败"),
     USER_ACCOUNT_LOCK(500,"账户已被锁定"),
     DEPARTMENT_ADD_FAILURE(500,"部门添加失败"),
-
+    DEPARTMENT_NOT_FOUND(404,"部门不存在")
     ;
     private int status;
     private String message;

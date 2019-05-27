@@ -176,8 +176,9 @@ public class UserAuthController {
      * @Date: 2019/5/27 15:01
      */
     @PostMapping("/organparam/add/dartment")
-    public ResponseEntity<Void> addDepartment(SysDepartment sysdepartment){
-        this.sysMenusService.addDepartment(sysdepartment);
+    public ResponseEntity<Void> addDepartment(@RequestParam String departmentName, @RequestParam String departmentNCode,
+                                              @RequestParam String departmentNote,@RequestParam int parentId){
+        this.sysMenusService.addDepartment(departmentName,departmentNCode,departmentNote,parentId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
