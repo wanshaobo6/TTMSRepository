@@ -20,6 +20,7 @@ public enum ExceptionEnum {
     USER_UPDATE_FAILURE(500,"更新失败"),
     USER_NOT_EXIST(404,"用户不存在"),
     USER_VALID_MODIFY_ERROR(500,"用户启动状态更新失败"),
+    USER_ACCOUNT_LOCK(500,"账户已被锁定"),
 
     ;
     private int status;
