@@ -3,16 +3,10 @@ package com.ttms.service.SystemManage;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ttms.Entity.SysMenus;
-import com.ttms.Entity.SysRoleMenus;
-import com.ttms.Entity.SysRoles;
-import com.ttms.Entity.SysUser;
+import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
-import com.ttms.Mapper.SysMenusMapper;
-import com.ttms.Mapper.SysRoleMenusMapper;
-import com.ttms.Mapper.SysRolesMapper;
-import com.ttms.Mapper.SysUserMapper;
+import com.ttms.Mapper.*;
 import com.ttms.utils.CodecUtils;
 import com.ttms.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +30,8 @@ public class SysMenusService {
     private SysRoleMenusMapper sysRoleMenusMapper;
     @Autowired
     private SysRolesMapper sysRolesMapper;
+    @Autowired
+    private SysDepartmentMapper sysDepartmentMapper;
     /**
      * 功能描述: <br>根据pid查询sysmenu
      * 〈〉
@@ -401,5 +397,31 @@ public class SysMenusService {
                 throw new TTMSException(ExceptionEnum.USER_NOT_EXIST);
             }
             return user;
+        }
+
+        /**
+         * 功能描述: 新增部门
+         * 〈〉
+         * @Param: [sysdepartment]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/27 14:44
+         */
+        public void addDepartment(SysDepartment sysdepartment) {
+            SysDepartment department = new SysDepartment();
+            department.setDepartmentname(sysdepartment.getDepartmentname());
+            department.setDepartmentcode(sysdepartment.getDepartmentcode());
+            department.setParentid(sysdepartment.getParentid());
+            department.setIsparent(sysdepartment.getIsparent());
+            department.setValid((byte) 0);
+            department.setNote(sysdepartment.getNote());
+            department.setModifiytime(sysdepartment.getModifiytime());
+            department.setCreatetime(sysdepartment.getCreatetime());
+            department.setModifiytime(sysdepartment.getModifiytime());
+            department.setCreateuserid(sysdepartment.getCreateuserid());
+            int i = this.sysDepartmentMapper.insert(department);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
+            }
         }
 }
