@@ -13,12 +13,10 @@ import com.ttms.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
@@ -35,6 +33,8 @@ public class SysMenusService {
     private SysRoleMenusMapper sysRoleMenusMapper;
     @Autowired
     private SysRolesMapper sysRolesMapper;
+    @Autowired
+    private SysDepartmentMapper sysDepartmentMapper;
 
     @Autowired
     private MenuIdPermsMap menuIdPermsMap;
@@ -326,13 +326,13 @@ public class SysMenusService {
      * @Date: 17:32 17:32
      */
     @Transactional
-    public void AddRole(String name, String note, List<Integer> menuIds, int OperuserId) {
+    public void AddRole(String name, String note, List<Integer> menuIds, int create_userid) {
         //添加角色
         SysRoles role=new SysRoles();
         role.setName(name);
         role.setNote(note);
         role.setCreatedtime(new Date());
-        role.setCreateduserId(OperuserId);
+        role.setCreateduserId(create_userid);
         role.setModifiedtime(null);
         int i = this.sysRolesMapper.insert(role);
         if(i!=1){
@@ -388,20 +388,20 @@ public class SysMenusService {
             }
         }
 
-    /**
-     * 功能描述: 修改用户
-     * 〈〉
-     * @Param: [id]
-     * @Return: com.ttms.Entity.SysUser
-     * @Author: lhf
-     * @Date: 2019/5/26 19:39
-     */
+        /**
+         * 功能描述: 修改用户
+         * 〈〉
+         * @Param: [id]
+         * @Return: com.ttms.Entity.SysUser
+         * @Author: lhf
+         * @Date: 2019/5/26 19:39
+         */
         public void updateUserById(SysUser user) {
             int count = this.sysUserMapper.updateByPrimaryKey(user);
             if (count != 1) {
-            throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
+                throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
+            }
         }
-    }
 
         /**
          * 功能描述: 启用和禁用用户
@@ -438,5 +438,31 @@ public class SysMenusService {
                 throw new TTMSException(ExceptionEnum.USER_NOT_EXIST);
             }
             return user;
+        }
+
+        /**
+         * 功能描述: 新增部门
+         * 〈〉
+         * @Param: [sysdepartment]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/27 14:44
+         */
+        public void addDepartment(SysDepartment sysdepartment) {
+            SysDepartment department = new SysDepartment();
+            department.setDepartmentname(sysdepartment.getDepartmentname());
+            department.setDepartmentcode(sysdepartment.getDepartmentcode());
+            department.setParentid(sysdepartment.getParentid());
+            department.setIsparent(sysdepartment.getIsparent());
+            department.setValid((byte) 0);
+            department.setNote(sysdepartment.getNote());
+            department.setModifiytime(sysdepartment.getModifiytime());
+            department.setCreatetime(sysdepartment.getCreatetime());
+            department.setModifiytime(sysdepartment.getModifiytime());
+            department.setCreateuserid(sysdepartment.getCreateuserid());
+            int i = this.sysDepartmentMapper.insert(department);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
+            }
         }
 }
