@@ -13,12 +13,15 @@ import com.ttms.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 @Service
@@ -388,14 +391,14 @@ public class SysMenusService {
             }
         }
 
-        /**
-         * 功能描述: 修改用户
-         * 〈〉
-         * @Param: [id]
-         * @Return: com.ttms.Entity.SysUser
-         * @Author: lhf
-         * @Date: 2019/5/26 19:39
-         */
+    /**
+     * 功能描述: 修改用户
+     * 〈〉
+     * @Param: [id]
+     * @Return: com.ttms.Entity.SysUser
+     * @Author: lhf
+     * @Date: 2019/5/26 19:39
+     */
         public void updateUserById(SysUser user) {
             int count = this.sysUserMapper.updateByPrimaryKey(user);
             if (count != 1) {
@@ -448,21 +451,25 @@ public class SysMenusService {
          * @Author: lhf
          * @Date: 2019/5/27 14:44
          */
-        public void addDepartment(SysDepartment sysdepartment) {
+        public void addDepartment(String departmentName,  String departmentCode,
+                                  String departmentNote,int parentId) {
             SysDepartment department = new SysDepartment();
-            department.setDepartmentname(sysdepartment.getDepartmentname());
-            department.setDepartmentcode(sysdepartment.getDepartmentcode());
-            department.setParentid(sysdepartment.getParentid());
-            department.setIsparent(sysdepartment.getIsparent());
-            department.setValid((byte) 0);
-            department.setNote(sysdepartment.getNote());
-            department.setModifiytime(sysdepartment.getModifiytime());
-            department.setCreatetime(sysdepartment.getCreatetime());
-            department.setModifiytime(sysdepartment.getModifiytime());
-            department.setCreateuserid(sysdepartment.getCreateuserid());
+            department.setDepartmentname(departmentName);
+            department.setDepartmentcode(departmentCode);
+            department.setNote(departmentNote);
+            department.setParentid(parentId);
+            department.setIsparent((byte) (parentId == 0 ? 1:0));
+            department.setValid((byte) 1);
+            //获取当前用户
+            SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+            Date now = new Date();
+            department.setModifiytime(now);
+            department.setModifyuserid(curUser.getId());
+            department.setCreateuserid(curUser.getId());
+            department.setCreatetime(now);
             int i = this.sysDepartmentMapper.insert(department);
             if (i != 1) {
-                throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
+                throw new TTMSException(ExceptionEnum.DEPARTMENT_ADD_FAILURE);
             }
         }
 }

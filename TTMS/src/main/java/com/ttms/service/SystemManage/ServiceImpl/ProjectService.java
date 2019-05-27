@@ -48,7 +48,7 @@ public class ProjectService implements IProjectService {
         departExample.createCriteria().andEqualTo("departmentname", departName);
         List<SysDepartment> departList = this.sysDepartmentMapper.selectByExample(departExample);
         if(CollectionUtils.isEmpty(departList)){
-            throw new TTMSException(ExceptionEnum.NOT_FOUND_DEPARTMENT);
+            throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_FOUND);
         }
         SysDepartment sysDepartment = departList.get(0);
         Integer departmentId = sysDepartment.getId();

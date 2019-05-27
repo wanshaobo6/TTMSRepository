@@ -1,6 +1,7 @@
 package com.ttms.Controller.SystemManage;
 
 import com.ttms.Entity.SysDepartment;
+import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.SystemManage.SysMenusService;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 //系统管理->用户权限模块
@@ -95,6 +97,27 @@ public class UserAuthController {
         return ResponseEntity.ok().body(null);
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈〉查询并返回所有的菜单树
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysMenus>>
+     * @Author: 万少波
+     * @Date: 2019/5/27 15:03
+     */
+    @GetMapping("/rolemanage/tree")
+    public ResponseEntity<List<SysMenus>> getMenusTree(){
+       return ResponseEntity.ok(sysMenusService.getSysMenusTree());
+    }
+
+    /**
+     * 功能描述: 新增用户
+     * 〈〉
+     * @Param: [username, image, password, mail, phonenumber]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: lhf
+     * @Date: 2019/5/27 15:03
+     */
     @PostMapping("/usermanage")
     public ResponseEntity<Void> addSysUser(@RequestParam  String username,@RequestParam String image,
                                               @RequestParam String password,@RequestParam String mail,
@@ -103,16 +126,25 @@ public class UserAuthController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-
+    /**
+     * 功能描述: 修改用户
+     * 〈〉
+     * @Param: [id, username, image, password, mail, phonenumber]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: lhf
+     * @Date: 2019/5/27 15:03
+     */
     @PutMapping("/usermanage/{id}")
     public ResponseEntity<Void> updateUserById(@PathVariable("id") Integer id,
                                                   String username,String image,String password,String mail,
                                                   String phonenumber){
         SysUser user = new SysUser();
+        user.setId(id);
         user.setUsername(username);
         user.setImage(image);
         user.setPassword(password);
         user.setEmail(mail);
+        user.setMobile(phonenumber);
         user.setModifiedtime(new Date());
         SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         user.setCreateduserid(curUser.getId());
@@ -121,16 +153,32 @@ public class UserAuthController {
     }
 
 
-
+    /**
+     * 功能描述: 启用和禁用用户
+     * 〈〉
+     * @Param: [id]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: lhf
+     * @Date: 2019/5/27 15:02
+     */
     @GetMapping("/usermanage/valid/{id}")
     public ResponseEntity<Void> validOrInvalid(@PathVariable("id") Integer id){
         sysMenusService.validOrInvalid(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    /**
+     * 功能描述: 新增部门
+     * 〈〉
+     * @Param: [sysdepartment]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: lhf
+     * @Date: 2019/5/27 15:01
+     */
     @PostMapping("/organparam/add/dartment")
-    public ResponseEntity<Void> addDepartment(SysDepartment sysdepartment){
-        this.sysMenusService.addDepartment(sysdepartment);
+    public ResponseEntity<Void> addDepartment(@RequestParam String departmentName, @RequestParam String departmentCode,
+                                              @RequestParam String departmentNote,@RequestParam int parentId){
+        this.sysMenusService.addDepartment(departmentName,departmentCode,departmentNote,parentId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
