@@ -1,8 +1,6 @@
 package com.ttms.Mapper;
 
 import com.ttms.Entity.SysDepartment;
-import com.ttms.Entity.SysUser;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
