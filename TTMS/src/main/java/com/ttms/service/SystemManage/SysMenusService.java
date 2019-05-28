@@ -392,7 +392,7 @@ public class SysMenusService {
             Date now = new Date();
             user.setCreatedtime(now);
             user.setModifiedtime(now);
-            //设置修改用户
+            //设置新增用户
             int i = this.sysUserMapper.insert(user);
             if (i != 1) {
                 throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
@@ -407,11 +407,12 @@ public class SysMenusService {
      * @Author: lhf
      * @Date: 2019/5/26 19:39
      */
-        public void updateUserById(SysUser user) {
+        public SysUser updateUserById(SysUser user) {
             int count = this.sysUserMapper.updateByPrimaryKey(user);
             if (count != 1) {
                 throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
             }
+            return user;
         }
 
         /**
