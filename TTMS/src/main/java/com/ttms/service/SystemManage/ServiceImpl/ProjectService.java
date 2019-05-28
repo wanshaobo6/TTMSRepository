@@ -93,8 +93,5 @@ public class ProjectService implements IProjectService {
         return null;
     }
 
-    @Override
-    public void getAllGroups() {
 
-    }
 }
