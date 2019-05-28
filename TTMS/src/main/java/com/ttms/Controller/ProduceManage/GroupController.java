@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/producemanage/project")
+@RequestMapping("/producemanage/project/group")
 public class GroupController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class GroupController {
      * @Author: lhf
      * @Date: 2019/5/28 8:59
      */
-    @PutMapping("/group")
+    @PutMapping
     public ResponseEntity<Void> updateGroup(@RequestParam int groupId, @RequestParam String groupName, @RequestParam int belongProjectId,
                                             @RequestParam int chargeUserId, @RequestParam String groupNote){
         this.groupService.updateGroup(groupId,groupName,belongProjectId,chargeUserId,groupNote);
@@ -37,7 +37,7 @@ public class GroupController {
      * @Author: lhf
      * @Date: 2019/5/28 14:37
      */
-    @GetMapping("/group/validorinvalid/{pid}")
+    @GetMapping("/validorinvalid/{pid}")
     public ResponseEntity<Void> pathvariable(@PathVariable("pid") Integer pid){
         groupService.pathvariable(pid);
         return ResponseEntity.status(HttpStatus.OK).body(null);
