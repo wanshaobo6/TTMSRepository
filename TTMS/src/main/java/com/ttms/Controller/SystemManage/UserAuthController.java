@@ -6,6 +6,7 @@ import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.PageResult;
+import org.apache.catalina.User;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -135,9 +136,9 @@ public class UserAuthController {
      * @Date: 2019/5/27 15:03
      */
     @PutMapping("/usermanage/{id}")
-    public ResponseEntity<Void> updateUserById(@PathVariable("id") Integer id,
-                                                  String username,String image,String password,String mail,
-                                                  String phonenumber){
+    public ResponseEntity<SysUser> updateUserById(@PathVariable("id") Integer id,
+                                               String username, String image, String password, String mail,
+                                               String phonenumber){
         SysUser user = new SysUser();
         user.setId(id);
         user.setUsername(username);
@@ -149,7 +150,7 @@ public class UserAuthController {
         SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         user.setCreateduserid(curUser.getId());
         sysMenusService.updateUserById(user);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
 
