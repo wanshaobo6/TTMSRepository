@@ -19,11 +19,9 @@ public class ProGroup {
 
     private Integer projectid;
 
-    private String projectName;
+    private String projectname;
 
     private Integer chargeuserid;
-
-    private String chargeUserMobile;
 
     private String groupnote;
 

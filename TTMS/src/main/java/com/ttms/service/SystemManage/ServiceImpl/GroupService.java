@@ -8,6 +8,7 @@ import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
+import com.ttms.Mapper.SysUserMapper;
 import com.ttms.service.SystemManage.IGroupService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class GroupService implements IGroupService {
     private ProProjectMapper proProjectMapper;
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
     /**
      * 功能描述: 修改团信息
      * 〈〉
@@ -43,6 +46,7 @@ public class GroupService implements IGroupService {
         if(projectInDb == null) {
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
+        proGroup.setProjectname(projectInDb.getProjectname());
         proGroup.setProjectid(belongProjectId);
         //判断用户是不是属于产品部
         List<String> curDepartmentStaffIds = sysDepartmentMapper.
@@ -55,9 +59,7 @@ public class GroupService implements IGroupService {
         //获取当前用户
         SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         Date now = new Date();
-        proGroup.setCreateuserid(curUser.getId());
         proGroup.setUpdateuserid(curUser.getId());
-        proGroup.setCreatetime(now);
         proGroup.setUpdatetime(now);
 
         int i = this.proGroupMapper.updateByPrimaryKeySelective(proGroup);
