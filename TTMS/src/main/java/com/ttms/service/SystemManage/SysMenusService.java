@@ -392,7 +392,7 @@ public class SysMenusService {
             Date now = new Date();
             user.setCreatedtime(now);
             user.setModifiedtime(now);
-            //设置修改用户
+            //设置新增用户
             int i = this.sysUserMapper.insert(user);
             if (i != 1) {
                 throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);

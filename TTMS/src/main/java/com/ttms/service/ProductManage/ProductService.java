@@ -66,4 +66,21 @@ public class ProductService {
         }
     }
 
+    /**
+     * 功能描述: 启动禁用团状态
+     * 〈〉
+     * @Param: [pid]
+     * @Return: void
+     * @Author: lhf
+     * @Date: 2019/5/28 14:38
+     */
+    public void pathvariable(Integer pid) {
+        ProGroup proGroup = proGroupMapper.selectByPrimaryKey(pid);
+        proGroup.setValid((byte) (proGroup.getValid() ^ 1));
+        int i = this.proGroupMapper.updateByPrimaryKeySelective(proGroup);
+        if (i != 1) {
+            throw new TTMSException(ExceptionEnum.GROUP_VALID_MODIFY_ERROR);
+        }
+    }
+
 }
