@@ -22,5 +22,5 @@ public interface IProjectService {
     Void enableProject(Integer pid);
 
 
-
+    void getAllGroups();
 }
