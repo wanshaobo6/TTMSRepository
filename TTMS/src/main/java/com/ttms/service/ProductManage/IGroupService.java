@@ -1,4 +1,4 @@
-package com.ttms.service.SystemManage;
+package com.ttms.service.ProductManage;
 
 
 public interface IGroupService {

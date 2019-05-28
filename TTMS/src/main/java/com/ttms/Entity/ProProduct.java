@@ -19,7 +19,15 @@ public class ProProduct {
 
     private Integer groupid;
 
-    private Integer productcatid;
+    private Integer productcatid1;
+
+    private Integer productcatid2;
+
+    private Integer productcatid3;
+
+    private int projectId;
+
+    private  String projectName;
 
     private String productname;
 
