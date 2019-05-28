@@ -29,8 +29,6 @@ public class ProjectService implements IProjectService {
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
 
-    @Autowired
-    private ProGroupMapper proGroupMapper;
     /**
     * 功能描述: <br>
     * 〈〉多条件组合查询
@@ -97,7 +95,9 @@ public class ProjectService implements IProjectService {
         return null;
     }
 
-    @Override
+
+
+
     public  List<GroupManageVo> getAllGroups(String groupName, String projectName, int valid , int page , int rows) {
         //开启分页助手
         PageHelper.startPage(page,rows);

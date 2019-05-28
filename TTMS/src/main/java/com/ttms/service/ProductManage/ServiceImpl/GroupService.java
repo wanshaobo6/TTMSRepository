@@ -12,6 +12,7 @@ import com.ttms.Mapper.SysUserMapper;
 import com.ttms.service.ProductManage.IGroupService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,8 +26,6 @@ public class GroupService implements IGroupService {
     private ProProjectMapper proProjectMapper;
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
-    @Autowired
-    private SysUserMapper sysUserMapper;
     /**
      * 功能描述: 修改团信息
      * 〈〉
@@ -76,7 +75,7 @@ public class GroupService implements IGroupService {
      * @Author: lhf
      * @Date: 2019/5/28 14:38
      */
-    public void pathvariable(Integer pid) {
+    public void ValidOrInvalidGroup(Integer pid) {
         ProGroup proGroup = proGroupMapper.selectByPrimaryKey(pid);
         proGroup.setValid((byte) (proGroup.getValid() ^ 1));
         int i = this.proGroupMapper.updateByPrimaryKeySelective(proGroup);

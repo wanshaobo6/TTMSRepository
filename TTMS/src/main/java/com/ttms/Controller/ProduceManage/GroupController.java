@@ -1,5 +1,6 @@
 package com.ttms.Controller.ProduceManage;
 
+import com.ttms.Entity.SysUser;
 import com.ttms.Vo.GroupManageVo;
 import com.ttms.service.ProductManage.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/producemanage/project/group")
+@RequestMapping("/producemanage/group/groupmanage")
 public class GroupController {
 
     @Autowired
@@ -42,7 +43,7 @@ public class GroupController {
      */
     @GetMapping("/validorinvalid/{pid}")
     public ResponseEntity<Void> pathvariable(@PathVariable("pid") Integer pid){
-        groupService.pathvariable(pid);
+        groupService.ValidOrInvalidGroup(pid);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -50,5 +51,4 @@ public class GroupController {
     public ResponseEntity<List<GroupManageVo>> getAllGroupsByConditionAndPage(){
         return null;
     }
-
 }
