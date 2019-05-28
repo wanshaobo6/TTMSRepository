@@ -11,7 +11,7 @@ import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.*;
 import com.ttms.utils.CodecUtils;
 import com.ttms.utils.JsonUtils;
-import com.ttms.utils.PageResult;
+import com.ttms.Vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 @Service

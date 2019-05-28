@@ -1,7 +1,7 @@
 package com.ttms.service.SystemManage;
 
 import com.ttms.Entity.ProProject;
-import com.ttms.utils.PageResult;
+import com.ttms.Vo.PageResult;
 
 public interface IProjectService {
 

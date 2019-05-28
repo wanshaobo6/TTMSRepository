@@ -9,7 +9,7 @@ import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
 import com.ttms.service.SystemManage.IProjectService;
-import com.ttms.utils.PageResult;
+import com.ttms.Vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class ProjectService implements IProjectService {
     * 功能描述: <br>
     * 〈〉多条件组合查询
     * @Param: [page, rows, project, departName]
-    * @Return: com.ttms.utils.PageResult<com.ttms.Entity.ProProject>
+    * @Return: com.ttms.Vo.PageResult<com.ttms.Entity.ProProject>
     * @Author: 吴彬
     * @Date: 15:51 15:51
      */
@@ -95,6 +95,6 @@ public class ProjectService implements IProjectService {
 
     @Override
     public void getAllGroups() {
-        
+
     }
 }
