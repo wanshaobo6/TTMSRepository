@@ -369,35 +369,35 @@ public class SysMenusService {
         }
     }
 
-    /**
-     * 功能描述: 新增用户
-     * 〈〉
-     * @Param: [user]
-     * @Return: void
-     * @Author: lhf
-     * @Date: 2019/5/26 17:40
-     */
-    public void addSysUser( String username,  String image,
-                            String password,  String mail,
-                            String  phonenumber) {
-        SysUser user = new SysUser();
-        user.setUsername(username);
-        user.setImage(image);
-        user.setSalt(CodecUtils.generateSalt());
-        password = CodecUtils.md5Hex(password, user.getSalt());
-        user.setPassword(password);
-        user.setEmail(mail);
-        user.setMobile(phonenumber);
-        user.setValid((byte) 0);
-        Date now = new Date();
-        user.setCreatedtime(now);
-        user.setModifiedtime(now);
-        //设置修改用户
-        int i = this.sysUserMapper.insert(user);
-        if (i != 1) {
-            throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
+        /**
+         * 功能描述: 新增用户
+         * 〈〉
+         * @Param: [user]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/26 17:40
+         */
+        public void addSysUser( String username,  String image,
+                                String password,  String mail,
+                                String  phonenumber) {
+            SysUser user = new SysUser();
+            user.setUsername(username);
+            user.setImage(image);
+            user.setSalt(CodecUtils.generateSalt());
+            password = CodecUtils.md5Hex(password, user.getSalt());
+            user.setPassword(password);
+            user.setEmail(mail);
+            user.setMobile(phonenumber);
+            user.setValid((byte) 0);
+            Date now = new Date();
+            user.setCreatedtime(now);
+            user.setModifiedtime(now);
+            //设置新增用户
+            int i = this.sysUserMapper.insert(user);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
+            }
         }
-    }
 
     /**
      * 功能描述: 修改用户
@@ -407,140 +407,78 @@ public class SysMenusService {
      * @Author: lhf
      * @Date: 2019/5/26 19:39
      */
-    public void updateUserById(SysUser user) {
-        int count = this.sysUserMapper.updateByPrimaryKey(user);
-        if (count != 1) {
-            throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
+        public SysUser updateUserById(SysUser user) {
+            int count = this.sysUserMapper.updateByPrimaryKey(user);
+            if (count != 1) {
+                throw new TTMSException(ExceptionEnum.USER_UPDATE_FAILURE);
+            }
+            return user;
         }
-    }
 
-    /**
-     * 功能描述: 启用和禁用用户
-     * 〈〉
-     * @Param: [id]
-     * @Return: void
-     * @Author: lhf
-     * @Date: 2019/5/26 17:40
-     */
-    public void validOrInvalid(Integer id) {
-        SysUser user = findUserById(id);
-        System.out.println("user = " + user);
+        /**
+         * 功能描述: 启用和禁用用户
+         * 〈〉
+         * @Param: [id]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/26 17:40
+         */
+        public void validOrInvalid(Integer id) {
+            SysUser user = findUserById(id);
+            System.out.println("user = " + user);
        /* int vid = ;
         vid = vid ^ 1;*/
-        //vid = 1- vid;
-        user.setValid((byte) (user.getValid() ^ 1));
-        int i = this.sysUserMapper.updateByPrimaryKey(user);
-        if (i != 1) {
-            throw new TTMSException(ExceptionEnum.USER_VALID_MODIFY_ERROR);
-        }
-    }
-
-    /**
-     * 功能描述: 查找用户
-     * 〈〉
-     * @Param: [id]
-     * @Return: com.ttms.Entity.SysUser
-     * @Author: lhf
-     * @Date: 2019/5/26 17:41
-     */
-    public SysUser findUserById(Integer id) {
-        SysUser user = this.sysUserMapper.selectByPrimaryKey(id);
-        if (user == null) {
-            throw new TTMSException(ExceptionEnum.USER_NOT_EXIST);
-        }
-        return user;
-    }
-
-    /**
-     * 功能描述: 新增部门
-     * 〈〉
-     * @Param: [sysdepartment]
-     * @Return: void
-     * @Author: lhf
-     * @Date: 2019/5/27 14:44
-     */
-    public void addDepartment(String departmentName,  String departmentCode,
-                              String departmentNote,int parentId) {
-        SysDepartment department = new SysDepartment();
-        department.setDepartmentname(departmentName);
-        department.setDepartmentcode(departmentCode);
-        department.setNote(departmentNote);
-        department.setParentid(parentId);
-        department.setIsparent((byte) (parentId == 0 ? 1:0));
-        department.setValid((byte) 1);
-        //获取当前用户
-        SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        Date now = new Date();
-        department.setModifiytime(now);
-        department.setModifyuserid(curUser.getId());
-        department.setCreateuserid(curUser.getId());
-        department.setCreatetime(now);
-        int i = this.sysDepartmentMapper.insert(department);
-        if (i != 1) {
-            throw new TTMSException(ExceptionEnum.DEPARTMENT_ADD_FAILURE);
-        }
-    }
-    /*
-     *功能描述：分页查询所有机构
-     *@author罗占
-     *@Description
-     *Date11:08 2019/5/27
-     *Param
-     *return
-     **/
-    public PageResult<SysDepartment> queryDepartment(Integer page, Integer rows, String  departmentname, Boolean valid){
-        PageHelper.startPage(page,rows);
-        Example example = new Example(SysDepartment.class);
-        Example.Criteria  criteria = example.createCriteria();
-        criteria.andEqualTo("valid",valid);
-        if(StringUtils.isNotEmpty(departmentname)){
-            criteria.andLike("departmentname","%"+departmentname+"%");
-        }
-        List<SysDepartment> list = this.sysDepartmentMapper.selectByExample(example);
-        PageInfo<SysDepartment> pageInfo = new PageInfo<>(list);
-        PageResult<SysDepartment> result = new PageResult<>();
-        result.setTotal(pageInfo.getTotal());
-        result.setTotalPage(pageInfo.getPages());
-        result.setItems(pageInfo.getList());
-        return result;
-    }
-
-    /*
-     *功能描述：禁用和启用部门
-     *@author罗占
-     *@Description
-     *Date14:25 2019/5/27
-     *Param
-     *return
-     **/
-    public void updateDepartmentValidOrInvalid(Integer id){
-        SysDepartment sysDepartment = sysDepartmentMapper.selectByPrimaryKey(id);
-        sysDepartment.setValid((byte)(sysDepartment.getValid() ^ 1));
-        int i = this.sysDepartmentMapper.updateByPrimaryKey(sysDepartment);
-        if(i !=1){
-            throw new TTMSException(ExceptionEnum.DEPARTMENT_VALID_MODIFY_ERROR);
+            //vid = 1- vid;
+            user.setValid((byte) (user.getValid() ^ 1));
+            int i = this.sysUserMapper.updateByPrimaryKey(user);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.USER_VALID_MODIFY_ERROR);
+            }
         }
 
-    }
-    /*
-     *功能描述：修改部门
-     *@author罗占
-     *@Description
-     *Date16:52 2019/5/27
-     *Param
-     *return
-     **/
-    public void updateDepartment(SysDepartment department,SysUser user){
-        SysDepartment sysDepartment = this.sysDepartmentMapper.selectByPrimaryKey(department.getId());
-        //判断需要修改的部门是否为父部门
-        sysDepartment.setModifiytime(new Date());
-        sysDepartment.setModifyuserid(user.getId());
-        int i = this.sysDepartmentMapper.updateByPrimaryKey(sysDepartment);
-        if(i!=1){
-            throw new TTMSException(ExceptionEnum.DEPARTMENT_EDIT_FAILURE);
+        /**
+         * 功能描述: 查找用户
+         * 〈〉
+         * @Param: [id]
+         * @Return: com.ttms.Entity.SysUser
+         * @Author: lhf
+         * @Date: 2019/5/26 17:41
+         */
+        public SysUser findUserById(Integer id) {
+            SysUser user = this.sysUserMapper.selectByPrimaryKey(id);
+            if (user == null) {
+                throw new TTMSException(ExceptionEnum.USER_NOT_EXIST);
+            }
+            return user;
         }
 
-    }
-
+        /**
+         * 功能描述: 新增部门
+         * 〈〉
+         * @Param: [sysdepartment]
+         * @Return: void
+         * @Author: lhf
+         * @Date: 2019/5/27 14:44
+         */
+        public void addDepartment(String departmentName,  String departmentCode,
+                                  String departmentNote,int parentId) {
+            SysDepartment department = new SysDepartment();
+            department.setDepartmentname(departmentName);
+            department.setDepartmentcode(departmentCode);
+            department.setNote(departmentNote);
+            department.setParentid(parentId);
+            department.setIsparent((byte) (parentId == 0 ? 1:0));
+            department.setValid((byte) 1);
+            //获取当前用户
+            SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+            Date now = new Date();
+            department.setModifiytime(now);
+            department.setModifyuserid(curUser.getId());
+            department.setCreateuserid(curUser.getId());
+            department.setCreatetime(now);
+            int i = this.sysDepartmentMapper.insert(department);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.DEPARTMENT_ADD_FAILURE);
+            }
+        }
 }
-
