@@ -7,6 +7,9 @@ public interface IGroupService {
 
         void pathvariable(Integer pid);
 
+        //创建团
+    void createGroup(String groupName,Integer belongProjectId, Integer chargeUserId, String groupNote);
+
 
 
 }

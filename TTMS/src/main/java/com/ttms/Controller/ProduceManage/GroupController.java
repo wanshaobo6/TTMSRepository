@@ -1,7 +1,10 @@
 package com.ttms.Controller.ProduceManage;
 
+import com.ttms.Enum.ExceptionEnum;
+import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.GroupManageVo;
 import com.ttms.service.ProductManage.IGroupService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/producemanage/project/group")
+@RestController
+@RequestMapping("/producemanage/group")
 public class GroupController {
 
     @Autowired
@@ -51,4 +54,19 @@ public class GroupController {
         return null;
     }
 
+    /*
+     *功能描述：创建团功能
+     *@author罗占
+     *@Description
+     *Date15:40 2019/5/28
+     *Param
+     *return
+     **/
+    @PostMapping("/groupmanage")
+    public ResponseEntity<Void> createGroup(  String groupName, Integer belongProjectId,
+                                             Integer chargeUserId,  String groupNote){
+        this.groupService.createGroup(groupName,belongProjectId,chargeUserId,groupNote);
+        return ResponseEntity.ok().body(null);
+
+    }
 }

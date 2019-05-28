@@ -10,6 +10,7 @@ import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
 import com.ttms.Mapper.SysUserMapper;
 import com.ttms.service.ProductManage.IGroupService;
+import com.ttms.service.SystemManage.SysMenusService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class GroupService implements IGroupService {
     private SysDepartmentMapper sysDepartmentMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
+    @Autowired
+    private SysMenusService sysMenusService;
     /**
      * 功能描述: 修改团信息
      * 〈〉
@@ -82,6 +85,49 @@ public class GroupService implements IGroupService {
         int i = this.proGroupMapper.updateByPrimaryKeySelective(proGroup);
         if (i != 1) {
             throw new TTMSException(ExceptionEnum.GROUP_VALID_MODIFY_ERROR);
+        }
+    }
+
+    /*
+    *功能描述：创建团
+    *@author罗占
+    *@Description
+    *Date15:35 2019/5/28
+    *Param[groupName, belongProjectI, chargeUserId, groupNote]
+    *returnvoid
+    **/
+    @Override
+    public void createGroup(String groupName, Integer belongProjectId, Integer chargeUserId, String groupNote) {
+            ProGroup proGroup = new ProGroup();
+
+        proGroup.setGroupname(groupName);
+        //判断当前项目是不是存在
+        //查询belongProjectId是否为空，为空抛异常
+        ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
+        if(projectInDb == null) {
+            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+        }
+        proGroup.setProjectid(belongProjectId);
+        proGroup.setProjectname(projectInDb.getProjectname());
+        //判断用户是不是属于产品部
+        List<String> curDepartmentStaffIds = sysDepartmentMapper.
+                getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
+        if(!curDepartmentStaffIds.contains(String.valueOf(chargeUserId)))
+            throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
+        proGroup.setChargeuserid(chargeUserId);
+        proGroup.setGroupnote(groupNote);
+        proGroup.setValid((byte)1);
+        //获取当前用户
+        SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        Date now = new Date();
+        proGroup.setCreateuserid(curUser.getId());
+        proGroup.setUpdateuserid(curUser.getId());
+        proGroup.setCreatetime(now);
+        proGroup.setUpdatetime(now);
+
+        int i = this.proGroupMapper.insert(proGroup);
+        if (i != 1) {
+            throw new TTMSException(ExceptionEnum.GROUP_ADD_FAILURE);
         }
     }
 
