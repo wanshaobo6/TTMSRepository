@@ -1,11 +1,14 @@
 package com.ttms.Controller.ProduceManage;
 
-import com.ttms.service.SystemManage.IGroupService;
+import com.ttms.Vo.GroupManageVo;
+import com.ttms.service.ProductManage.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/producemanage/project")
@@ -41,6 +44,11 @@ public class GroupController {
     public ResponseEntity<Void> pathvariable(@PathVariable("pid") Integer pid){
         groupService.pathvariable(pid);
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<GroupManageVo>> getAllGroupsByConditionAndPage(){
+        return null;
     }
 
 }

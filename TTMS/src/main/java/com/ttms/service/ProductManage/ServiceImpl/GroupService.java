@@ -1,4 +1,4 @@
-package com.ttms.service.SystemManage.ServiceImpl;
+package com.ttms.service.ProductManage.ServiceImpl;
 
 import com.ttms.Entity.ProGroup;
 import com.ttms.Entity.ProProject;
@@ -9,7 +9,7 @@ import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
 import com.ttms.Mapper.SysUserMapper;
-import com.ttms.service.SystemManage.IGroupService;
+import com.ttms.service.ProductManage.IGroupService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
