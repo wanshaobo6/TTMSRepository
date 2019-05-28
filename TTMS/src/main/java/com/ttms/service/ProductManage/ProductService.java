@@ -12,7 +12,6 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.List;
 
@@ -36,19 +35,18 @@ public class ProductService {
     public void updateGroup(int groupId ,String groupName, int belongProjectId,
                             int chargeUserId, String groupNote){
         ProGroup proGroup = new ProGroup();
-        ProProject proProject = new ProProject();
         proGroup.setId(groupId);
         proGroup.setGroupname(groupName);
         //判断当前项目是不是存在
         //查询belongProjectId是否为空，为空抛异常
-        ProProject projrctInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
-        if(projrctInDb == null) {
+        ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
+        if(projectInDb == null) {
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
         proGroup.setProjectid(belongProjectId);
         //判断用户是不是属于产品部
         List<String> curDepartmentStaffIds = sysDepartmentMapper.
-                getAllStaffIdsOfDepartment(projrctInDb.getDepartmentid());
+                getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
         if(!curDepartmentStaffIds.contains(String.valueOf(chargeUserId)))
             throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
         proGroup.setChargeuserid(chargeUserId);
@@ -61,7 +59,6 @@ public class ProductService {
         proGroup.setUpdateuserid(curUser.getId());
         proGroup.setCreatetime(now);
         proGroup.setUpdatetime(now);
-        //Integer departmentid = proProject.getDepartmentid();
 
         int i = this.proGroupMapper.updateByPrimaryKeySelective(proGroup);
         if (i != 1) {
