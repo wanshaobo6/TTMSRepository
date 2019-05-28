@@ -1,10 +1,8 @@
 package com.ttms.Controller.ProduceManage;
 
-import com.ttms.Enum.ExceptionEnum;
-import com.ttms.Exception.TTMSException;
+import com.ttms.Entity.SysUser;
 import com.ttms.Vo.GroupManageVo;
 import com.ttms.service.ProductManage.IGroupService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/producemanage/group")
+@Controller
+@RequestMapping("/producemanage/group/groupmanage")
 public class GroupController {
 
     @Autowired
@@ -45,7 +43,7 @@ public class GroupController {
      */
     @GetMapping("/validorinvalid/{pid}")
     public ResponseEntity<Void> pathvariable(@PathVariable("pid") Integer pid){
-        groupService.pathvariable(pid);
+        groupService.ValidOrInvalidGroup(pid);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -62,7 +60,7 @@ public class GroupController {
      *Param
      *return
      **/
-    @PostMapping("/groupmanage")
+    @PostMapping
     public ResponseEntity<Void> createGroup(  String groupName, Integer belongProjectId,
                                              Integer chargeUserId,  String groupNote){
         this.groupService.createGroup(groupName,belongProjectId,chargeUserId,groupNote);

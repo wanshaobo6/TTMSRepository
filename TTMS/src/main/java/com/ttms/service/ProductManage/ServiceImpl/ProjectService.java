@@ -96,4 +96,13 @@ public class ProjectService implements IProjectService {
     }
 
 
+
+
+    public  List<GroupManageVo> getAllGroups(String groupName, String projectName, int valid , int page , int rows) {
+        //开启分页助手
+        PageHelper.startPage(page,rows);
+        //查询出满足条件的
+        return null;
+    }
+
 }
