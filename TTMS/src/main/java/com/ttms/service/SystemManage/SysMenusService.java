@@ -6,22 +6,21 @@ import com.github.pagehelper.PageInfo;
 import com.ttms.Config.MenuIdPermsMap;
 import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
+import com.ttms.Enum.RedisKeyPrefixEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.*;
 import com.ttms.utils.CodecUtils;
-import com.ttms.utils.PageResult;
+import com.ttms.utils.JsonUtils;
+import com.ttms.Vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 @Service
@@ -38,6 +37,8 @@ public class SysMenusService {
     private SysRolesMapper sysRolesMapper;
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     private MenuIdPermsMap menuIdPermsMap;
@@ -57,12 +58,19 @@ public class SysMenusService {
     }
 
     /**
-     * 查询sysMenus树
+     * 查询sysMenus树  缓存中存在就现在缓存中找
      * @return
      */
     public List<SysMenus> getSysMenusTree(){
-        List<SysMenus> parentSysMenus = getSysMenusByPid(0);
-        getSysMensByPidRecursive(parentSysMenus);
+        List<SysMenus> parentSysMenus = null;
+        String parentSysMenusStr = redisTemplate.opsForValue().get(RedisKeyPrefixEnum.SYSMENUS_TREE.val());
+        if(StringUtils.isEmpty(parentSysMenusStr)) {
+            parentSysMenus = getSysMenusByPid(0);
+            getSysMensByPidRecursive(parentSysMenus);
+            //将查询到的菜单项存入redis
+            redisTemplate.opsForValue().set(RedisKeyPrefixEnum.SYSMENUS_TREE.val(), JsonUtils.serialize(parentSysMenus));
+        }else
+            parentSysMenus = JsonUtils.parseList(parentSysMenusStr,SysMenus.class);
         return parentSysMenus;
     }
 

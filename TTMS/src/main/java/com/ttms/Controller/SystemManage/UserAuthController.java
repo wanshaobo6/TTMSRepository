@@ -1,12 +1,10 @@
 package com.ttms.Controller.SystemManage;
 
-import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.PageResult;
-import org.apache.catalina.User;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
