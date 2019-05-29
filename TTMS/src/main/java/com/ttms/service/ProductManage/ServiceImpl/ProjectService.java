@@ -1,35 +1,34 @@
-package com.ttms.service.SystemManage.ServiceImpl;
+package com.ttms.service.ProductManage.ServiceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
-import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
+import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
+import com.ttms.Vo.GroupManageVo;
+import com.ttms.service.ProductManage.IProjectService;
 import com.ttms.Vo.PageResult;
-import com.ttms.Vo.ProjectVo;
-import com.ttms.service.SystemManage.IProjectService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class ProjectService implements IProjectService {
+
     @Autowired
     private ProProjectMapper proProjectMapper;
 
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
+
     /**
      * 功能描述: <br>
      * 〈〉多条件组合查询
@@ -39,7 +38,7 @@ public class ProjectService implements IProjectService {
      * @Date: 15:51 15:51
      */
     @Override
-    public PageResult<ProjectVo> queryProjectByPage(Integer page, Integer rows, ProProject project, String departName) {
+    public PageResult<ProProject> queryProjectByPage(Integer page,Integer rows,ProProject project,String departName ) {
         PageHelper.startPage(page, rows);
         Example example=new Example(ProProject.class);
         Example.Criteria criteria = example.createCriteria();
@@ -73,6 +72,7 @@ public class ProjectService implements IProjectService {
         result.setItems(info.getList());
         return result;
     }
+
 
     //根据部门名称查询部门
     private SysDepartment getSysDepartment(String departName,Integer departId) {
@@ -136,7 +136,6 @@ public class ProjectService implements IProjectService {
         }
         return null;
     }
-
     /**
      * 功能描述: <br>
      * 〈〉根据id查询项目和部门
@@ -168,4 +167,11 @@ public class ProjectService implements IProjectService {
     public void getAllGroups() {
 
     }
-}
+
+
+    public  List<GroupManageVo> getAllGroups(String groupName, String projectName, int valid , int page , int rows) {
+        //开启分页助手
+        PageHelper.startPage(page,rows);
+        //查询出满足条件的
+        return null;
+    }

@@ -1,14 +1,18 @@
 package com.ttms.Controller.ProduceManage;
 
-import com.ttms.service.SystemManage.IGroupService;
+import com.ttms.Entity.SysUser;
+import com.ttms.Vo.GroupManageVo;
+import com.ttms.service.ProductManage.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
-@RequestMapping("/producemanage/project")
+@RequestMapping("/producemanage/group/groupmanage")
 public class GroupController {
 
     @Autowired
@@ -22,7 +26,7 @@ public class GroupController {
      * @Author: lhf
      * @Date: 2019/5/28 8:59
      */
-    @PutMapping("/group")
+    @PutMapping
     public ResponseEntity<Void> updateGroup(@RequestParam int groupId, @RequestParam String groupName, @RequestParam int belongProjectId,
                                             @RequestParam int chargeUserId, @RequestParam String groupNote){
         this.groupService.updateGroup(groupId,groupName,belongProjectId,chargeUserId,groupNote);
@@ -37,10 +41,44 @@ public class GroupController {
      * @Author: lhf
      * @Date: 2019/5/28 14:37
      */
-    @GetMapping("/group/validorinvalid/{pid}")
+    @GetMapping("/validorinvalid/{pid}")
     public ResponseEntity<Void> pathvariable(@PathVariable("pid") Integer pid){
-        groupService.pathvariable(pid);
+        groupService.ValidOrInvalidGroup(pid);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<GroupManageVo>> getAllGroupsByConditionAndPage(){
+        return null;
+    }
+
+    /*
+     *功能描述：创建团功能
+     *@author罗占
+     *@Description
+     *Date15:40 2019/5/28
+     *Param
+     *return
+     **/
+    @PostMapping
+    public ResponseEntity<Void> createGroup(  String groupName, Integer belongProjectId,
+                                             Integer chargeUserId,  String groupNote){
+        this.groupService.createGroup(groupName,belongProjectId,chargeUserId,groupNote);
+        return ResponseEntity.ok().body(null);
+
+    }
+
+    /*
+    *功能描述：根据项目id查找其部门下所有职员
+    *@author罗占
+    *@Description
+    *Date9:47 2019/5/29
+    *Param[projectId]
+    *returnorg.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysUser>>
+    **/
+    @GetMapping("/getAllStaffInDep")
+    public ResponseEntity<List<SysUser>> getprojectinfo(@RequestParam(value = "projectId",required = true) Integer  projectId){
+       List<SysUser> users  = this.groupService.getAllStaffInDep(projectId);
+       return ResponseEntity.ok().body(users);
+    }
 }

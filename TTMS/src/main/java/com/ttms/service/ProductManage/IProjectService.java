@@ -1,4 +1,4 @@
-package com.ttms.service.SystemManage;
+package com.ttms.service.ProductManage;
 
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysUser;
@@ -24,9 +24,5 @@ public interface IProjectService {
 
     //对某个项目启用修改valid的值
     Void enableProject(Integer pid);
-
-
-    void getAllGroups();
-
 
 }
