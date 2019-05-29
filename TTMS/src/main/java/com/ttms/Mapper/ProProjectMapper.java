@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface ProProjectMapper extends Mapper<ProProject> {
     @Select("SELECT j.*,d.departmentname FROM pro_project j INNER  JOIN sys_department d ON d.`id`=j.departmentId")
-    public List<ProjectVo> selectProjectAndDepartment();
+    public List<ProjectVo> selectAllProjectAndDepartment();
 
-    @Select("select j.*,d.departmentname from pro_project j inner join sys_department d on d.`id`=j.departmentId and j.departmentId=#{dId}")
-    public ProjectVo selectProjectAndDepartment(@Param("dId") Integer dId);
 }

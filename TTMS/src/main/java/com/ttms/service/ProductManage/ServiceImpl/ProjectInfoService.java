@@ -1,27 +1,33 @@
 package com.ttms.service.ProductManage.ServiceImpl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
+import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
 import com.ttms.Vo.GroupManageVo;
+import com.ttms.Vo.ProjectVo;
 import com.ttms.service.ProductManage.IProjectService;
 import com.ttms.Vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
-public class ProjectService implements IProjectService {
+public class ProjectInfoService implements IProjectService {
 
     @Autowired
     private ProProjectMapper proProjectMapper;
@@ -29,49 +35,6 @@ public class ProjectService implements IProjectService {
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
 
-    /**
-     * 功能描述: <br>
-     * 〈〉多条件组合查询
-     * @Param: [page, rows, project, departName]
-     * @Return: com.ttms.Vo.PageResult<com.ttms.Entity.ProProject>
-     * @Author: 吴彬
-     * @Date: 15:51 15:51
-     */
-    @Override
-    public PageResult<ProProject> queryProjectByPage(Integer page,Integer rows,ProProject project,String departName ) {
-        PageHelper.startPage(page, rows);
-        Example example=new Example(ProProject.class);
-        Example.Criteria criteria = example.createCriteria();
-        if(StringUtils.isNotBlank(project.getProjectnumber())){
-            criteria.andLike("projectNumber","%"+project.getProjectnumber()+"%");
-        }else if(StringUtils.isNotBlank(project.getProjectname())){
-            criteria.andLike("projectName","%"+project.getProjectname()+"%");
-        }
-        SysDepartment sysDepartment = getSysDepartment(departName,null);
-        Integer departmentId = sysDepartment.getId();
-        if(StringUtils.isNotBlank(String.valueOf(departmentId))){
-            criteria .andEqualTo("departmentId", departmentId);
-        }else if(project.getStarttime()!=null){
-            criteria.andEqualTo("startTime", project.getStarttime());
-        }else if(project.getEndtime()!=null){
-            criteria.andEqualTo("endTime", project.getEndtime());
-        }
-
-        List<ProProject> list = this.proProjectMapper.selectByExample(example);
-        List<ProjectVo> projectVoList=new ArrayList<>();
-        for (ProProject proProject : list) {
-            SysDepartment sysDepartment1 = getSysDepartment(null, project.getDepartmentid());
-            ProjectVo projectVo=new ProjectVo();
-            projectVo.setDpartname(sysDepartment1.getDepartmentname());
-            projectVoList.add(projectVo);
-        }
-        PageInfo<ProjectVo> info=new PageInfo<>(projectVoList);
-        PageResult<ProjectVo> result=new PageResult<>();
-        result.setTotalPage(info.getPages());
-        result.setTotal(info.getTotal());
-        result.setItems(info.getList());
-        return result;
-    }
 
 
     //根据部门名称查询部门
@@ -85,7 +48,7 @@ public class ProjectService implements IProjectService {
         }
         List<SysDepartment> departList = this.sysDepartmentMapper.selectByExample(departExample);
         if (CollectionUtils.isEmpty(departList)) {
-            throw new TTMSException(ExceptionEnum.NOT_FOUND_DEPARTMENT);
+            throw new TTMSException(ExceptionEnum.GROUP_NOT_FOUND);
         }
         return departList.get(0);
     }
@@ -99,7 +62,6 @@ public class ProjectService implements IProjectService {
      * @Date: 15:57 15:57
      */
     @Override
-    @Transactional
     public Void addProject(ProProject project, SysUser user, String departName) {
         project.setCreatetime(new Date());
         project.setCreateuserid(user.getId());
@@ -109,7 +71,7 @@ public class ProjectService implements IProjectService {
         project.setValid((byte)1);
         int i = this.proProjectMapper.insert(project);
         if(i!=1){
-            throw new TTMSException(ExceptionEnum.NOT_AUTHORITY);
+            throw new TTMSException(ExceptionEnum.PROJECT_INSERT_FAIL);
         }
         return null;
     }
@@ -132,25 +94,9 @@ public class ProjectService implements IProjectService {
         project.setValid((byte)1);
         int i = this.proProjectMapper.updateByPrimaryKeySelective(project);
         if(i!=1){
-            throw new TTMSException(ExceptionEnum.EDIT_PROJECT_FILE);
+            throw new TTMSException(ExceptionEnum.PROJECT_UPDATE_FAIL);
         }
         return null;
-    }
-    /**
-     * 功能描述: <br>
-     * 〈〉根据id查询项目和部门
-     * @Param: [id]
-     * @Return: com.ttms.Vo.ProjectVo
-     * @Author: 吴彬
-     * @Date: 19:32 19:32
-     */
-    @Override
-    public ProjectVo queryProProjectByid(Integer id) {
-        ProjectVo proProject = this.proProjectMapper.selectProjectAndDepartment(id);
-        if(proProject==null){
-            throw new TTMSException(ExceptionEnum.QUERY_PROJECT_FILE);
-        }
-        return proProject;
     }
 
     @Override
@@ -164,14 +110,41 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public void getAllGroups() {
-
-    }
-
-
-    public  List<GroupManageVo> getAllGroups(String groupName, String projectName, int valid , int page , int rows) {
-        //开启分页助手
+    public PageResult<ProProject> getAllProjectByPage(String projectNumber, String projectName, int departmentid,
+                                                      Date startTime, Date endTime, int valid, int page, int rows) {
+        //分页
         PageHelper.startPage(page,rows);
-        //查询出满足条件的
-        return null;
+        //查询条件
+        Example example = new Example(ProProject.class);
+        Example.Criteria criteria = example.createCriteria();
+        if(!StringUtils.isEmpty(projectNumber)){
+            criteria.andLike("projectnumber","%"+projectNumber+"%");
+        }
+        if(!StringUtils.isEmpty(projectName)){
+            criteria.andLike("projectname","%"+projectName+"%");
+        }
+        if(departmentid != -1){
+            criteria.andEqualTo("departmentid",departmentid);
+        }
+        if(startTime != null ){
+            criteria.andGreaterThan("starttime",startTime);
+        }
+        if(endTime != null ){
+            criteria.andLessThan("endtime",endTime);
+        }
+        if(valid != -1){
+            criteria.andEqualTo("valid",valid);
+        }
+        //查询
+        List<ProProject> proProjects = proProjectMapper.selectByExample(example);
+        //创建返回结果
+        PageResult<ProProject> result = new PageResult<>();
+        PageInfo<ProProject> pageInfo = new PageInfo<>(proProjects);
+        result.setItems(proProjects);
+        result.setTotal(pageInfo.getTotal());
+        result.setTotalPage(pageInfo.getPages());
+        return result;
     }
+
+
+}

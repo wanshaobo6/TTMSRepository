@@ -2,10 +2,7 @@ package com.ttms.Entity;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Table(name = "pro_project")
@@ -36,4 +33,8 @@ public class ProProject {
     private Integer createuserid;
 
     private Integer updateuserid;
+
+    //部门名临时数据
+    @Transient
+    private String departmentName;
 }

@@ -5,11 +5,9 @@ import com.ttms.Entity.SysUser;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProjectVo;
 
+import java.util.Date;
+
 public interface IProjectService {
-
-    //分页查询所有项目多条件组合查询 项目编号，名称，归属部门，起始日期--结束日期.状态
-    PageResult<ProjectVo> queryProjectByPage(Integer page,Integer rows,ProProject project,String departName);
-
 
     //新增项目 表单提交的数据有 项目编号 . 名称 起始日期--结束日期. 部门(部门需要根据输入的)，备注 没有的数据自己设置
     Void addProject(ProProject project, SysUser user, String departName);
@@ -17,12 +15,12 @@ public interface IProjectService {
     //类似新增
     Void editProject(ProProject project,String departName);
 
-     ProjectVo queryProProjectByid(Integer id);
-
     //对某个项目禁用修改valid的值
     Void prohibitProject(Integer pid);
 
     //对某个项目启用修改valid的值
     Void enableProject(Integer pid);
 
+    PageResult<ProProject> getAllProjectByPage(String projectNumber, String projectName, int departmentid,
+                                               Date startTime, Date endTime, int valid, int page, int rows);
 }

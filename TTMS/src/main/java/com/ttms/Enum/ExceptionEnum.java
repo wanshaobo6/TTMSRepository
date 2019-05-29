@@ -35,8 +35,9 @@ public enum ExceptionEnum {
     GROUP_VALID_MODIFY_ERROR(500,"团启动状态更新失败"),
     PROJECTNAME_NOT_EMPTY(500,"团启动状态更新失败"),
     GROUPNAME_NOT_EMPTY(500,"团名不能为空"),
-    PROJECTID_NOT_FOUND(500,"ID不存在")
-
+    PROJECTID_NOT_FOUND(500,"ID不存在"),
+    PROJECT_UPDATE_FAIL(500,"项目更新失败"),
+    PROJECT_INSERT_FAIL(500,"项目新增失败")
     ;
     private int status;
     private String message;
