@@ -1,7 +1,9 @@
 package com.ttms.service.ProductManage.ServiceImpl;
 
+
 import com.ttms.Entity.ProGroup;
 import com.ttms.Entity.ProProject;
+import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
@@ -10,13 +12,17 @@ import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
 import com.ttms.Mapper.SysUserMapper;
 import com.ttms.service.ProductManage.IGroupService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupService implements IGroupService {
@@ -26,6 +32,8 @@ public class GroupService implements IGroupService {
     private ProProjectMapper proProjectMapper;
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
     /**
      * 功能描述: 修改团信息
      * 〈〉
@@ -83,7 +91,6 @@ public class GroupService implements IGroupService {
             throw new TTMSException(ExceptionEnum.GROUP_VALID_MODIFY_ERROR);
         }
     }
-
     /*
     *功能描述：创建团
     *@author罗占
@@ -127,4 +134,41 @@ public class GroupService implements IGroupService {
         }
     }
 
-}
+
+    /*
+    *功能描述：根据项目id查找其部门下所有职员
+    *@author罗占
+    *@Description
+    *Date9:01 2019/5/29
+    *Param[projectId]
+    *returnjava.util.List<com.ttms.Entity.SysUser>
+    **/
+    public List<SysUser> getAllStaffInDep(Integer projectId){
+        //判断id是否存在
+        if(StringUtils.isEmpty(String.valueOf(projectId))){
+            throw new TTMSException(ExceptionEnum.PROJECTID_NOT_FOUND);
+        }
+
+        ProProject project = this.proProjectMapper.selectByPrimaryKey(projectId);
+         if(project==null){
+                 throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+
+         }
+        List<String> curDepartmentStaffIds = sysDepartmentMapper.
+                getAllStaffIdsOfDepartment( project.getDepartmentid());
+         if (CollectionUtils.isEmpty(curDepartmentStaffIds))
+         {
+             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+
+         }
+        List<Long> list=new ArrayList<>();
+        for (String staffId : curDepartmentStaffIds) {
+            list.add(Long.parseLong(staffId));
+        }
+
+        List<SysUser> users = this.sysUserMapper.selectByIdList(list);
+        return users;
+        }
+    }
+
+

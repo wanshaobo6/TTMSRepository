@@ -19,14 +19,20 @@ public enum ExceptionEnum {
     USER_ADD_FAILURE(500,"添加失败"),
     USER_UPDATE_FAILURE(500,"更新失败"),
     USER_NOT_EXIST(404,"用户不存在"),
+    USERNAEME_NOT_EMPTY(500,"负责人不能为空"),
     USER_VALID_MODIFY_ERROR(500,"用户启动状态更新失败"),
     USER_ACCOUNT_LOCK(500,"账户已被锁定"),
     DEPARTMENT_ADD_FAILURE(500,"部门添加失败"),
     DEPARTMENT_NOT_FOUND(404,"部门不存在"),
     GROUP_UPDATE_FAILURE(500,"团信息修改失败"),
+    GROUP_ADD_FAILURE(500,"创建团失败"),
     PROJECT_NOT_EXIST(404,"项目不存在"),
     USER_NOT_BELONG_PRODUCT_DEP(403,"用户不属于产品部"),
     GROUP_VALID_MODIFY_ERROR(500,"团启动状态更新失败"),
+    PROJECTNAME_NOT_EMPTY(500,"团启动状态更新失败"),
+    GROUPNAME_NOT_EMPTY(500,"团名不能为空"),
+    PROJECTID_NOT_FOUND(500,"ID不存在")
+
     ;
     private int status;
     private String message;

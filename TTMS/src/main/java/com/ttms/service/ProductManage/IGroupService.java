@@ -15,7 +15,8 @@ public interface IGroupService {
 
         //创建团
     void createGroup(String groupName,Integer belongProjectId, Integer chargeUserId, String groupNote);
-
+    //根据项目id查找其部门下所有职员
+    List<SysUser> getAllStaffInDep(Integer projectId);
 
 
 }

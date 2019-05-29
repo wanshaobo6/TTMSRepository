@@ -67,4 +67,18 @@ public class GroupController {
         return ResponseEntity.ok().body(null);
 
     }
+
+    /*
+    *功能描述：根据项目id查找其部门下所有职员
+    *@author罗占
+    *@Description
+    *Date9:47 2019/5/29
+    *Param[projectId]
+    *returnorg.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysUser>>
+    **/
+    @GetMapping("/groupmanage/getAllStaffInDep")
+    public ResponseEntity<List<SysUser>> getprojectinfo(@RequestParam(value = "projectId",required = true) Integer  projectId){
+       List<SysUser> users  = this.groupService.getAllStaffInDep(projectId);
+       return ResponseEntity.ok().body(users);
+    }
 }
