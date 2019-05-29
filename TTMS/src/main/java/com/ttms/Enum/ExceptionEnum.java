@@ -15,7 +15,7 @@ public enum ExceptionEnum {
     USER_NOT_FOUND(404,"查询用户不存在"),
     USER_NAME_DUPLICATED(501,"用户名重复"),
     USER_DELETE_FAIL(500,"查询用户失败"),
-    NOT_FOUND_ROLERS(500,"查询角色失败"),
+    ROLERS_NOT_FOUND(404,"角色没有找到"),
     INSERT_ROLERS_FAIL(500,"新增角色失败"),
     USER_ADD_FAILURE(500,"添加失败"),
     USER_UPDATE_FAILURE(500,"更新失败"),

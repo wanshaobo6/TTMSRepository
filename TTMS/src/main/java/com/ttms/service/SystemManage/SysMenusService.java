@@ -299,7 +299,7 @@ public class SysMenusService {
     public List<SysRoles> getAllRoles() {
         List<SysRoles> list = this.sysRolesMapper.selectAll();
         if(CollectionUtils.isEmpty(list)){
-            throw new TTMSException(ExceptionEnum.NOT_FOUND_ROLERS);
+            throw new TTMSException(ExceptionEnum.ROLERS_NOT_FOUND);
         }
         return list;
     }
@@ -314,11 +314,11 @@ public class SysMenusService {
         PageHelper.startPage(page, rows);
         Example e=new Example(SysRoles.class);
         if(StringUtils.isNotBlank(name)){
-            e.createCriteria().andLike(name, "%"+name+"%");
+            e.createCriteria().andLike("name", "%"+name+"%");
         }
         List<SysRoles> sysRoles = this.sysRolesMapper.selectByExample(e);
         if(CollectionUtils.isEmpty(sysRoles)){
-            throw new TTMSException(ExceptionEnum.NOT_FOUND_ROLERS);
+            throw new TTMSException(ExceptionEnum.ROLERS_NOT_FOUND);
         }
 
         PageInfo<SysRoles> list=new PageInfo<>(sysRoles);

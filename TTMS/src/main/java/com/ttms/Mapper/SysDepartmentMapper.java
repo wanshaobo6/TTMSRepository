@@ -1,6 +1,7 @@
 package com.ttms.Mapper;
 
 import com.ttms.Entity.SysDepartment;
+import com.ttms.Entity.SysUser;
 import com.ttms.utils.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -8,9 +9,10 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface SysDepartmentMapper extends BaseMapper<SysDepartment> {
-    @Select("select sur.user_id from sys_user_roles sur where sur.role_id in " +
-            "(select sr.id from sys_department sd join sys_roles sr  on sd.id = sr.departmentId where " +
-            "sd.id = #{departmentId})")
+    //查询部门下的所有成员
+    @Select("SELECT su.* FROM sys_user su WHERE su.`roleId` IN  " +
+            "(SELECT sr.id FROM sys_department sd JOIN sys_roles sr  ON sd.id " +
+            "= sr.departmentId WHERE sd.id = #{departmentId})")
     public List<Integer> getAllStaffIdsOfDepartment(@Param("departmentId") int departmentId);
 
     //判断该用户是否属于产品部门
