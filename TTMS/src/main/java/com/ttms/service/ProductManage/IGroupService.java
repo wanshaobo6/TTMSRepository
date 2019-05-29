@@ -10,7 +10,8 @@ public interface IGroupService {
         void updateGroup(int groupId ,String groupName, int belongProjectId,
               int chargeUserId, String groupNote);
 
-        void pathvariable(Integer pid);
+        void ValidOrInvalidGroup(Integer pid);
+
 
 
         PageResult<List<GroupManageVo>> getAllGroupsByConditionAndPage(String groupName, String projectName, int valid, int page, int rows);

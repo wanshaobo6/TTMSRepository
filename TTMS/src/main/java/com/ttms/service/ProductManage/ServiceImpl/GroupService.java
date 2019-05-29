@@ -17,6 +17,7 @@ import com.ttms.service.ProductManage.IGroupService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
@@ -83,7 +84,7 @@ public class GroupService implements IGroupService {
      * @Author: lhf
      * @Date: 2019/5/28 14:38
      */
-    public void pathvariable(Integer pid) {
+    public void ValidOrInvalidGroup(Integer pid) {
         ProGroup proGroup = proGroupMapper.selectByPrimaryKey(pid);
         proGroup.setValid((byte) (proGroup.getValid() ^ 1));
         int i = this.proGroupMapper.updateByPrimaryKeySelective(proGroup);
