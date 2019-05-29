@@ -21,6 +21,4 @@ public interface IProjectService {
     //对某个项目启用修改valid的值
     Void enableProject(Integer pid);
 
-
-
 }

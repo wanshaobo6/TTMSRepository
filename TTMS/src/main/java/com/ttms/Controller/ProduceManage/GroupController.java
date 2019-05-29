@@ -76,7 +76,7 @@ public class GroupController {
     *Param[projectId]
     *returnorg.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysUser>>
     **/
-    @GetMapping("/groupmanage/getAllStaffInDep")
+    @GetMapping("/getAllStaffInDep")
     public ResponseEntity<List<SysUser>> getprojectinfo(@RequestParam(value = "projectId",required = true) Integer  projectId){
        List<SysUser> users  = this.groupService.getAllStaffInDep(projectId);
        return ResponseEntity.ok().body(users);

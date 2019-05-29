@@ -3,7 +3,6 @@ package com.ttms.service.ProductManage.ServiceImpl;
 
 import com.ttms.Entity.ProGroup;
 import com.ttms.Entity.ProProject;
-import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
@@ -13,16 +12,14 @@ import com.ttms.Mapper.SysDepartmentMapper;
 import com.ttms.Mapper.SysUserMapper;
 import com.ttms.service.ProductManage.IGroupService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GroupService implements IGroupService {
@@ -55,10 +52,15 @@ public class GroupService implements IGroupService {
         }
         proGroup.setProjectname(projectInDb.getProjectname());
         proGroup.setProjectid(belongProjectId);
-        //判断用户是不是属于产品部
-        List<String> curDepartmentStaffIds = sysDepartmentMapper.
+        //获取该部门下所有人id
+        List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
                 getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
-        if(!curDepartmentStaffIds.contains(String.valueOf(chargeUserId)))
+        //判断该部门下是否有人
+        if(CollectionUtils.isEmpty(curDepartmentStaffIds)){
+            throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_USER);
+        }
+        //判断用户是不是属于产品部
+        if(!curDepartmentStaffIds.contains(chargeUserId))
             throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
         proGroup.setChargeuserid(chargeUserId);
         proGroup.setGroupnote(groupNote);
@@ -103,35 +105,36 @@ public class GroupService implements IGroupService {
     public void createGroup(String groupName, Integer belongProjectId, Integer chargeUserId, String groupNote) {
             ProGroup proGroup = new ProGroup();
 
-        proGroup.setGroupname(groupName);
-        //判断当前项目是不是存在
-        //查询belongProjectId是否为空，为空抛异常
-        ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
-        if(projectInDb == null) {
-            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
-        }
-        proGroup.setProjectid(belongProjectId);
-        proGroup.setProjectname(projectInDb.getProjectname());
-        //判断用户是不是属于产品部
-        List<String> curDepartmentStaffIds = sysDepartmentMapper.
-                getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
-        if(!curDepartmentStaffIds.contains(String.valueOf(chargeUserId)))
-            throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
-        proGroup.setChargeuserid(chargeUserId);
-        proGroup.setGroupnote(groupNote);
-        proGroup.setValid((byte)1);
-        //获取当前用户
-        SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        Date now = new Date();
-        proGroup.setCreateuserid(curUser.getId());
-        proGroup.setUpdateuserid(curUser.getId());
-        proGroup.setCreatetime(now);
-        proGroup.setUpdatetime(now);
+            proGroup.setGroupname(groupName);
+            //判断当前项目是不是存在
+            //查询belongProjectId是否为空，为空抛异常
+            ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
+            if(projectInDb == null) {
+                throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+            }
+            proGroup.setProjectid(belongProjectId);
+            proGroup.setProjectname(projectInDb.getProjectname());
+            //判断用户是不是属于产品部
+            List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
+                    getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
+            if(!curDepartmentStaffIds.contains(chargeUserId)){
+                throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
+            }
+            proGroup.setChargeuserid(chargeUserId);
+            proGroup.setGroupnote(groupNote);
+            proGroup.setValid((byte)1);
+            //获取当前用户
+            SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+            Date now = new Date();
+            proGroup.setCreateuserid(curUser.getId());
+            proGroup.setUpdateuserid(curUser.getId());
+            proGroup.setCreatetime(now);
+            proGroup.setUpdatetime(now);
 
-        int i = this.proGroupMapper.insert(proGroup);
-        if (i != 1) {
-            throw new TTMSException(ExceptionEnum.GROUP_ADD_FAILURE);
-        }
+            int i = this.proGroupMapper.insert(proGroup);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.GROUP_ADD_FAILURE);
+            }
     }
 
 
@@ -154,21 +157,15 @@ public class GroupService implements IGroupService {
                  throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
 
          }
-        List<String> curDepartmentStaffIds = sysDepartmentMapper.
+        List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
                 getAllStaffIdsOfDepartment( project.getDepartmentid());
-         if (CollectionUtils.isEmpty(curDepartmentStaffIds))
-         {
-             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
-
+         if (CollectionUtils.isEmpty(curDepartmentStaffIds)) {
+             throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_USER);
          }
-        List<Long> list=new ArrayList<>();
-        for (String staffId : curDepartmentStaffIds) {
-            list.add(Long.parseLong(staffId));
-        }
-
-        List<SysUser> users = this.sysUserMapper.selectByIdList(list);
+        List<SysUser> users = this.sysUserMapper.selectByIdList(curDepartmentStaffIds);
         return users;
         }
     }
+
 
 

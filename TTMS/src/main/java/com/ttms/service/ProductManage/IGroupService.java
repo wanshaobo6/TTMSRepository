@@ -2,14 +2,15 @@ package com.ttms.service.ProductManage;
 
 
 import com.ttms.Entity.SysUser;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface IGroupService {
+        ///修改团信息
         void updateGroup(int groupId ,String groupName, int belongProjectId,
               int chargeUserId, String groupNote);
 
+        //启动禁用团状态
         void ValidOrInvalidGroup(Integer pid);
 
 

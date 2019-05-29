@@ -11,5 +11,5 @@ public interface SysDepartmentMapper extends Mapper<SysDepartment> {
     @Select("select sur.user_id from sys_user_roles sur where sur.role_id in " +
             "(select sr.id from sys_department sd join sys_roles sr  on sd.id = sr.departmentId where " +
             "sd.id = #{departmentId})")
-    public List<String> getAllStaffIdsOfDepartment(@Param("departmentId") int departmentId);
+    public List<Integer> getAllStaffIdsOfDepartment(@Param("departmentId") int departmentId);
 }
