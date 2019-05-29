@@ -56,8 +56,8 @@ public class GroupController {
      * @Author: 万少波
      * @Date: 2019/5/28 16:13
      */
-    @GetMapping("/all")
-    public ResponseEntity<PageResult<List<GroupManageVo>>> getAllGroupsByConditionAndPage(@RequestParam(required = false) String groupName,
+    @GetMapping("/page")
+    public ResponseEntity<PageResult<GroupManageVo>> getAllGroupsByConditionAndPage(@RequestParam(required = false) String groupName,
                                                                      @RequestParam(required = false) String projectName,
                                                                      @RequestParam(required = false ,defaultValue = "-1") int valid ,
                                                                      @RequestParam(required = false , defaultValue = "1")int page ,

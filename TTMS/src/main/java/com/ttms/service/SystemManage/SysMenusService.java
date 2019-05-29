@@ -482,6 +482,10 @@ public class SysMenusService {
             }
         }
 
-        public void selectUsersByIds(List<Integer> userIds){
+        public List<SysUser> getUsersByIds(List<Integer> userIds){
+            List<SysUser> users = sysUserMapper.selectByIdList(userIds);
+            if(org.apache.commons.collections.CollectionUtils.isEmpty(users))
+                throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
+            return users;
         }
 }

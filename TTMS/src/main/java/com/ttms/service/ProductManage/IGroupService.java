@@ -14,5 +14,5 @@ public interface IGroupService {
 
 
 
-        PageResult<List<GroupManageVo>> getAllGroupsByConditionAndPage(String groupName, String projectName, int valid, int page, int rows);
+        PageResult<GroupManageVo> getAllGroupsByConditionAndPage(String groupName, String projectName, int valid, int page, int rows);
 }

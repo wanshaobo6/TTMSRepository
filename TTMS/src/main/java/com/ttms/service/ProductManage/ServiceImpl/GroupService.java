@@ -14,6 +14,7 @@ import com.ttms.Mapper.SysUserMapper;
 import com.ttms.Vo.GroupManageVo;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.IGroupService;
+import com.ttms.service.SystemManage.SysMenusService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +34,8 @@ public class GroupService implements IGroupService {
     private ProProjectMapper proProjectMapper;
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
+    @Autowired
+    private SysMenusService sysMenusService;
     /**
      * 功能描述: 修改团信息
      * 〈〉
@@ -94,18 +95,19 @@ public class GroupService implements IGroupService {
     }
 
     @Override
-    public PageResult<List<GroupManageVo>> getAllGroupsByConditionAndPage(String groupName, String projectName, int valid, int page, int rows) {
-        PageResult<ProGroup> result = new PageResult<>();
+    public PageResult<GroupManageVo> getAllGroupsByConditionAndPage(String groupName, String projectName, int valid, int page, int rows) {
+        PageResult<GroupManageVo> result = new PageResult<>();
+        List<GroupManageVo> resultVO = new ArrayList<>();
         //分页
         PageHelper.startPage(page,rows);
         //封装条件
         Example example = new Example(ProGroup.class);
         Example.Criteria criteria = example.createCriteria();
         if(!StringUtils.isEmpty(groupName)){
-            criteria.andEqualTo("groupName","%"+groupName+"%");
+            criteria.andLike("groupname","%"+groupName+"%");
         }
         if(!StringUtils.isEmpty(projectName)){
-            criteria.andEqualTo("projectName","%"+projectName+"%");
+            criteria.andLike("projectname","%"+projectName+"%");
         }
         if(valid != -1){
             criteria.andEqualTo("valid",valid);
@@ -115,13 +117,28 @@ public class GroupService implements IGroupService {
         if (CollectionUtils.isEmpty(proGroups))
             throw new TTMSException(ExceptionEnum.GROUP_NOT_FOUND);
         //获取所有相关的用户id
-        Set<Integer> userIds = proGroups.stream().map(ProGroup::getChargeuserid).collect(Collectors.toSet());
+        Set<Integer> idsSet = proGroups.stream().map(ProGroup::getChargeuserid).collect(Collectors.toSet());
+        ArrayList<Integer> idList = new ArrayList<>();
+        List<SysUser> userList = sysMenusService.getUsersByIds(idList);
+        //转化为map(id , sysUser)
+        Map<Integer, SysUser> idUserMap = userList.stream().collect(Collectors.toMap(SysUser::getId, item -> item));
+        //封装数据
+        SysUser curUser = null;
+        for (ProGroup proGroup:proGroups){
+            GroupManageVo groupManageVo = new GroupManageVo();
+            groupManageVo.setProGroup(proGroup);
+             curUser = idUserMap.get(proGroup.getChargeuserid());
+            groupManageVo.setChargerName(curUser.getUsername());
+            groupManageVo.setChargerPhoneNumber(curUser.getMobile());
+            resultVO.add(groupManageVo);
+        }
         PageInfo pageInfo = new PageInfo(proGroups);
         long total = pageInfo.getTotal();
         long totalPage = ((total % rows) == 0)?(total/rows):(total/rows+1);
         result.setTotal(total);
         result.setTotalPage(totalPage);
-        return null;
+        result.setItems(resultVO);
+        return result;
     }
 
 }
