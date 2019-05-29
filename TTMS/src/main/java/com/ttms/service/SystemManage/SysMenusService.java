@@ -225,7 +225,7 @@ public class SysMenusService {
         PageHelper.startPage(page,rows);
         Example example = new Example(SysUser.class);
         if(StringUtils.isNotBlank(name)){
-            example.createCriteria().andLike("name","%"+name+"%");
+            example.createCriteria().andLike("username","%"+name+"%");
         }
         List<SysUser> list = sysUserMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(list)){
@@ -379,9 +379,14 @@ public class SysMenusService {
          */
         public void addSysUser( String username,  String image,
                                 String password,  String mail,
-                                String  phonenumber) {
+                                String  phonenumber , Integer roleId) {
+            //判断用户名是否重复
             SysUser user = new SysUser();
             user.setUsername(username);
+            List<SysUser> duser = sysUserMapper.select(user);
+            if (!CollectionUtils.isEmpty(duser)) {
+                throw new TTMSException(ExceptionEnum.USER_NAME_DUPLICATED);
+            }
             user.setImage(image);
             user.setSalt(CodecUtils.generateSalt());
             password = CodecUtils.md5Hex(password, user.getSalt());
@@ -389,14 +394,18 @@ public class SysMenusService {
             user.setEmail(mail);
             user.setMobile(phonenumber);
             user.setValid((byte) 0);
+            user.setRoleid(roleId);
             Date now = new Date();
             user.setCreatedtime(now);
             user.setModifiedtime(now);
+            SysUser curUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
+            user.setCreateduserid(curUser.getId());
             //设置新增用户
             int i = this.sysUserMapper.insert(user);
             if (i != 1) {
                 throw new TTMSException(ExceptionEnum.USER_ADD_FAILURE);
             }
+
         }
 
     /**
@@ -488,4 +497,12 @@ public class SysMenusService {
                 throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
             return users;
         }
+
+    public List<SysDepartment> getDepartmentsByIds(ArrayList<Integer> departIdList) {
+        List<SysDepartment> sysDepartments = sysDepartmentMapper.selectByIdList(departIdList);
+        if (CollectionUtils.isEmpty(sysDepartments)) {
+            throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_FOUND);
+        }
+        return sysDepartments;
+    }
 }

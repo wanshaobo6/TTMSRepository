@@ -26,6 +26,8 @@ public class SysUser {
 
     private String mobile;
 
+    private Integer roleid;
+
     private Byte valid;
 
     private Date createdtime;
@@ -33,8 +35,6 @@ public class SysUser {
     private Date modifiedtime;
 
     private int createduserid;
-
-    private int modifieduserid;
 
     @Transient
     private SysRoles sysRole;

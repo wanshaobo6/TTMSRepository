@@ -43,7 +43,7 @@ public class UserRealm extends AuthorizingRealm {
         SysUser curUser = (SysUser)subject.getPrincipal();
         //封装当前用户所有权限
         List<SysMenus> allowMenuList = sysMenusService.
-                getMenusListByUserId(sysMenusService.getSysUserRolesByUserId(curUser.getId()).getRoleId());
+                getMenusListByUserId(curUser.getRoleid());
         Set<String> permses = allowMenuList.stream().map(
                 sysMenus -> {return menuIdPermsMap.get(sysMenus.getId());}
                 ).collect(Collectors.toSet());

@@ -3,6 +3,7 @@ package com.ttms.service.ProductManage.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ttms.Entity.ProGroup;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
@@ -15,6 +16,7 @@ import com.ttms.Vo.GroupManageVo;
 import com.ttms.Vo.ProjectVo;
 import com.ttms.service.ProductManage.IProjectService;
 import com.ttms.Vo.PageResult;
+import com.ttms.service.SystemManage.SysMenusService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectInfoService implements IProjectService {
@@ -34,6 +35,9 @@ public class ProjectInfoService implements IProjectService {
 
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
+
+    @Autowired
+    private SysMenusService sysMenusService;
 
 
 
@@ -140,6 +144,16 @@ public class ProjectInfoService implements IProjectService {
         //创建返回结果
         PageResult<ProProject> result = new PageResult<>();
         PageInfo<ProProject> pageInfo = new PageInfo<>(proProjects);
+        //封装部门名称
+        //获取所有相关的部门id
+        Set<Integer> departmentidsSet = proProjects.stream().map(ProProject::getDepartmentid).collect(Collectors.toSet());
+        ArrayList<Integer> departIdList = new ArrayList<>(departmentidsSet);
+        List<SysDepartment> sysDepartments = sysMenusService.getDepartmentsByIds(departIdList);
+        //转化为map(id , String)
+       Map<Integer, String> idNameMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, SysDepartment::getDepartmentname));
+       for (ProProject proProject:proProjects){
+           proProject.setDepartmentName(idNameMap.get(proProject.getDepartmentid()));
+       }
         result.setItems(proProjects);
         result.setTotal(pageInfo.getTotal());
         result.setTotalPage(pageInfo.getPages());

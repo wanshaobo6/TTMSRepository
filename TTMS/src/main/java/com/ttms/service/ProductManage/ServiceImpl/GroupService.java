@@ -204,7 +204,7 @@ public class GroupService implements IGroupService {
             throw new TTMSException(ExceptionEnum.GROUP_NOT_FOUND);
         //获取所有相关的用户id
         Set<Integer> idsSet = proGroups.stream().map(ProGroup::getChargeuserid).collect(Collectors.toSet());
-        ArrayList<Integer> idList = new ArrayList<>();
+        ArrayList<Integer> idList = new ArrayList<>(idsSet);
         List<SysUser> userList = sysMenusService.getUsersByIds(idList);
         //转化为map(id , sysUser)
         Map<Integer, SysUser> idUserMap = userList.stream().collect(Collectors.toMap(SysUser::getId, item -> item));
