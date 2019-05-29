@@ -1,6 +1,7 @@
 package com.ttms.Controller.ProduceManage;
 
 import com.ttms.Vo.GroupManageVo;
+import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,9 +47,21 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈〉分页条件查询团信息
+     * @Param: [groupName, projectName, valid, page, rows]
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Vo.GroupManageVo>>
+     * @Author: 万少波
+     * @Date: 2019/5/28 16:13
+     */
     @GetMapping("/all")
-    public ResponseEntity<List<GroupManageVo>> getAllGroupsByConditionAndPage(){
-        return null;
+    public ResponseEntity<PageResult<List<GroupManageVo>>> getAllGroupsByConditionAndPage(@RequestParam(required = false) String groupName,
+                                                                     @RequestParam(required = false) String projectName,
+                                                                     @RequestParam(required = false ,defaultValue = "-1") int valid ,
+                                                                     @RequestParam(required = false , defaultValue = "1")int page ,
+                                                                     @RequestParam(required = false , defaultValue = "5")int  rows){
+       return ResponseEntity.ok(groupService.getAllGroupsByConditionAndPage(groupName,projectName,valid,page,rows));
     }
 
 }

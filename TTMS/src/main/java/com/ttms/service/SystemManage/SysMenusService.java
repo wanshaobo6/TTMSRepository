@@ -481,4 +481,7 @@ public class SysMenusService {
                 throw new TTMSException(ExceptionEnum.DEPARTMENT_ADD_FAILURE);
             }
         }
+
+        public void selectUsersByIds(List<Integer> userIds){
+        }
 }

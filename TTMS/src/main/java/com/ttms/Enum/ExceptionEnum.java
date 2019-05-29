@@ -24,6 +24,7 @@ public enum ExceptionEnum {
     DEPARTMENT_ADD_FAILURE(500,"部门添加失败"),
     DEPARTMENT_NOT_FOUND(404,"部门不存在"),
     GROUP_UPDATE_FAILURE(500,"团信息修改失败"),
+    GROUP_NOT_FOUND(404,"团不存在"),
     PROJECT_NOT_EXIST(404,"项目不存在"),
     USER_NOT_BELONG_PRODUCT_DEP(403,"用户不属于产品部"),
     GROUP_VALID_MODIFY_ERROR(500,"团启动状态更新失败"),
