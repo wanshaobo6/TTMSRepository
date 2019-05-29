@@ -12,4 +12,9 @@ public interface SysDepartmentMapper extends Mapper<SysDepartment> {
             "(select sr.id from sys_department sd join sys_roles sr  on sd.id = sr.departmentId where " +
             "sd.id = #{departmentId})")
     public List<String> getAllStaffIdsOfDepartment(@Param("departmentId") int departmentId);
+
+    //判断该用户是否属于产品部门
+    @Select("SELECT depart.departmentname FROM sys_department depart WHERE  depart.id IN" +
+            "( SELECT r.departmentId FROM sys_user u, sys_roles r,sys_user_roles s WHERE u.id=s.user_id AND s.role_id=r.id AND u.id=#{Uid})")
+    public SysDepartment IsBelongProduceManager(@Param("Uid")Integer Uid);
 }
