@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public enum ExceptionEnum {
     USER_UNLOGIN(403,"您没有登陆"),
     NOT_AUTHORITY(403,"您没有权限访问"),
+    NOT_OPERATION_AUTHORITY(403,"您无权创建项目"),
     USER_HAVE_BEEN_LIMIT(403,"您已被禁用"),
     MENUS_ALLOW_ACCESS_IS_NULL(404,"没有可以访问的菜单"),
     SYSTEM_ERROR(555,"系统错误，请正确访问"),
@@ -40,7 +41,13 @@ public enum ExceptionEnum {
     GROUPNAME_NOT_EMPTY(500,"团名不能为空"),
     PROJECTID_NOT_FOUND(500,"ID不存在"),
     PROJECT_UPDATE_FAIL(500,"项目更新失败"),
-    PROJECT_INSERT_FAIL(500,"项目新增失败")
+    PROJECT_INSERT_FAIL(500,"项目新增失败"),
+    PROJECT_CODE_NULL(500,"项目编号不能为空"),
+    PROJECT_NAME_NULL(500,"项目名称不能为空"),
+    PROJECT_PROHIBIT_OR_ENABLE_FAIL(500,"更新状态失败"),
+    DEPARTMENT_VALID_MODIFY_ERROR(500,"部门启动状态更新失败"),
+    NOT_FOUND_ROLERS(404,"没有找到角色"),
+    PRODUCT_ADD_FAILURE(500,"创建产品失败")
     ;
     private int status;
     private String message;

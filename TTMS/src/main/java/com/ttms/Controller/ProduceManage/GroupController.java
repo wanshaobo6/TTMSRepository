@@ -1,9 +1,11 @@
 package com.ttms.Controller.ProduceManage;
 
+import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysUser;
 import com.ttms.Vo.GroupManageVo;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.IGroupService;
+import com.ttms.service.ProductManage.ServiceImpl.ProjectInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +47,7 @@ public class GroupController {
     @GetMapping("/validorinvalid/{pid}")
     public ResponseEntity<Void> pathvariable(@PathVariable("pid") Integer pid){
         groupService.ValidOrInvalidGroup(pid);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.ok().body(null);
     }
 
     /**
@@ -93,5 +95,19 @@ public class GroupController {
     public ResponseEntity<List<SysUser>> getprojectinfo(@RequestParam(value = "projectId",required = true) Integer  projectId){
        List<SysUser> users  = this.groupService.getAllStaffInDep(projectId);
        return ResponseEntity.ok().body(users);
+    }
+
+    /**
+     * 功能描述: 查询所有项目名
+     * 〈〉
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.ProProject>>
+     * @Author: lhf
+     * @Date: 2019/5/30 15:11
+     */
+    @GetMapping("/getProjectInfo")
+    public ResponseEntity<List<ProProject>> getprojectinfo(){
+        List<ProProject> getproject = this.groupService.getprojectinfo();
+        return ResponseEntity.ok().body(getproject);
     }
 }

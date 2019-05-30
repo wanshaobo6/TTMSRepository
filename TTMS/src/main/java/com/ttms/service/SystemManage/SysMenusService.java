@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class SysMenusService {
-
+    @Autowired
+    private SysUserRolesMapper sysUserRolesMapper;
     @Autowired
     private SysMenusMapper sysMenusMapper;
     @Autowired
@@ -206,6 +207,14 @@ public class SysMenusService {
         return sysRoleMenusMapper.getMenusListByRoleId(roleid);
     }
 
+    public SysUserRoles getSysUserRolesByUserId(int userid){
+        SysUserRoles sysUserRoles = new SysUserRoles();
+        sysUserRoles.setUserId(userid);
+        List<SysUserRoles> result = sysUserRolesMapper.select(sysUserRoles);
+        if(CollectionUtils.isEmpty(result))
+            throw new TTMSException(ExceptionEnum.SYSTEM_ERROR);
+        return result.get(0);
+    }
     /*功能描述
      *@author罗占
      *@Description
@@ -498,6 +507,84 @@ public class SysMenusService {
         return sysDepartments;
     }
 
+    /*
+    *功能描述：分页查询所有机构
+    *@author罗占
+    *@Description
+    *Date7:59 2019/5/30
+    *Param
+    *return
+    **/
+    public PageResult<SysDepartment> queryDepartment(Integer page,Integer rows,
+                                                     String departmentname,Boolean valid){
+        PageHelper.startPage(page,rows);
+        Example example = new Example(SysDepartment.class);
+        Example.Criteria criteria = example.createCriteria();
+        if(StringUtils.isNotBlank(departmentname)){
+            criteria.andLike("departmentname","%"+departmentname+"%");
+        }
+        if(valid.equals(false )){
+            criteria.andEqualTo("valid",valid);
+        }
+        List<SysDepartment> list= this.sysDepartmentMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+        }
+        PageInfo<SysDepartment> pageInfo = new PageInfo<>(list);
+        PageResult<SysDepartment> result = new PageResult<>();
+        result.setItems(pageInfo.getList());
+        result.setTotal(pageInfo.getTotal());
+        result.setTotalPage(pageInfo.getPages());
+        return result;
+    }
+
+    /*
+    *功能描述：禁用和启用部门
+    *@author罗占
+    *@Description
+    *Date8:56 2019/5/30
+    *Param
+    *return
+    **/
+    public void  updateDepartmentValidOrInvalid(Integer id) {
+
+        SysDepartment department = this.sysDepartmentMapper.selectByPrimaryKey(id);
+        department.setValid((byte) (department.getValid() ^ 1));
+        int i = this.sysDepartmentMapper.updateByPrimaryKeySelective(department);
+        if (i != 1) {
+            throw new TTMSException(ExceptionEnum.DEPARTMENT_VALID_MODIFY_ERROR);
+        }
+
+        }
+
+
+
+
+        /*
+        *功能描述：修改部门
+        *@author罗占
+        *@Description
+        *Date9:13 2019/5/30
+        *Param[id]
+        *returnvoid
+        **/
+        public void updateDepartment(SysDepartment department){
+            //获取当前用户
+            SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+            Date now = new Date();
+            department.setModifiytime(now);
+            department.setModifyuserid(curUser.getId());
+            department.setCreateuserid(curUser.getId());
+            department.setCreatetime(now);
+
+            int i = this.sysDepartmentMapper.updateByPrimaryKeySelective(department);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.DEPARTMENT_ADD_FAILURE);
+            }
+
+
+        }
+
     //多条件查询部门
     public List<SysDepartment> getDepartmentsByCriteria(int parentId,String departmentName){
         SysDepartment sysDepartment = new SysDepartment();
@@ -527,5 +614,22 @@ public class SysMenusService {
             throw new TTMSException(ExceptionEnum.MENUS_ALLOW_ACCESS_IS_NULL);
         }
         return sysRoleMenues.stream().map(sysRoleMenu -> sysRoleMenu.getMenuId()).collect(Collectors.toList());
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉根据角色id查询角色
+    * @Param: [roleId]
+    * @Return: com.ttms.Entity.SysRoles
+    * @Author: 吴彬
+    * @Date: 9:43 9:43
+     */
+    public SysRoles getRoleById(Integer roleId){
+        SysRoles sysRoles = this.sysRolesMapper.selectByPrimaryKey(roleId);
+        if(sysRoles==null){
+            throw new TTMSException(ExceptionEnum.ROLERS_NOT_FOUND);
+        }
+        return sysRoles;
+
     }
 }
