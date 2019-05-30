@@ -568,11 +568,6 @@ public class SysMenusService {
         *returnvoid
         **/
         public void updateDepartment(SysDepartment department){
-
-            department.setId(department.getId());
-            department.setDepartmentname(department.getDepartmentname());
-            department.setDepartmentcode(department.getDepartmentcode());
-            department.setValid((byte) 1);
             //获取当前用户
             SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
             Date now = new Date();

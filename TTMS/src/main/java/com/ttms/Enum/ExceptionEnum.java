@@ -40,7 +40,8 @@ public enum ExceptionEnum {
     PROJECTID_NOT_FOUND(500,"ID不存在"),
     PROJECT_UPDATE_FAIL(500,"项目更新失败"),
     PROJECT_INSERT_FAIL(500,"项目新增失败"),
-    DEPARTMENT_VALID_MODIFY_ERROR(500,"部门启动状态更新失败")
+    DEPARTMENT_VALID_MODIFY_ERROR(500,"部门启动状态更新失败"),
+    NOT_FOUND_ROLERS(404,"没有找到角色")
     ;
     private int status;
     private String message;
