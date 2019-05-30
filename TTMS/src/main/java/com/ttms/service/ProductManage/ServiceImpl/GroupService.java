@@ -128,7 +128,6 @@ public class GroupService implements IGroupService {
             project.setDepartmentName(null);
             project.setUpdateuserid(null);
             project.setProjectnumber(null);
-            project.setId(null);
             project.setNote(null);
             project.setStarttime(null);
         }
