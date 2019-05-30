@@ -16,5 +16,17 @@ import java.util.List;
 public class CreateProjectController {
     @Autowired
     private ICreateProjectService createProjectService;
-
+    /*
+    *功能描述：查询所有团号
+    *@author罗占
+    *@Description
+    *Date17:04 2019/5/30
+    *Param
+    *return
+    **/
+    @GetMapping("/queryAllGroups")
+    public ResponseEntity<List<ProGroup>> queryAllGroups(){
+        List<ProGroup> groups = this.createProjectService.queryAllGroups();
+        return ResponseEntity.ok().body(groups);
+    }
 }
