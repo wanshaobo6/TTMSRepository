@@ -1,21 +1,16 @@
 package com.ttms.service.ProductManage.ServiceImpl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ttms.Entity.ProGroup;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
-import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
-import com.ttms.Vo.GroupManageVo;
-import com.ttms.Vo.ProjectVo;
-import com.ttms.service.ProductManage.IProjectService;
 import com.ttms.Vo.PageResult;
+import com.ttms.service.ProductManage.IProjectService;
 import com.ttms.service.SystemManage.SysMenusService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +33,7 @@ public class ProjectInfoService implements IProjectService {
 
     @Autowired
     private SysMenusService sysMenusService;
+
 
 
 
@@ -66,12 +62,12 @@ public class ProjectInfoService implements IProjectService {
      * @Date: 15:57 15:57
      */
     @Override
-    public Void addProject(ProProject project, SysUser user, String departName) {
+    @Transactional
+    public Void addProject(ProProject project, SysUser user, Integer departmentId) {
         project.setCreatetime(new Date());
         project.setCreateuserid(user.getId());
         project.setUpdatetime(null);
-        SysDepartment department = getSysDepartment(departName,null);
-        project.setDepartmentid(department.getId());
+        project.setDepartmentid(departmentId);
         project.setValid((byte)1);
         int i = this.proProjectMapper.insert(project);
         if(i!=1){
@@ -90,12 +86,11 @@ public class ProjectInfoService implements IProjectService {
      */
     @Override
     @Transactional
-    public Void editProject(ProProject project,String departName) {
-        project.setCreatetime(new Date());
-        project.setUpdatetime(null);
-        SysDepartment department = getSysDepartment(departName,null);
-        project.setDepartmentid(department.getId());
+    public Void editProject(ProProject project, SysUser user, Integer departId) {
+        project.setUpdatetime(new Date());
+        project.setDepartmentid(departId);
         project.setValid((byte)1);
+        project.setUpdateuserid(user.getId());
         int i = this.proProjectMapper.updateByPrimaryKeySelective(project);
         if(i!=1){
             throw new TTMSException(ExceptionEnum.PROJECT_UPDATE_FAIL);
@@ -103,15 +98,7 @@ public class ProjectInfoService implements IProjectService {
         return null;
     }
 
-    @Override
-    public Void prohibitProject(Integer pid) {
-        return null;
-    }
 
-    @Override
-    public Void enableProject(Integer pid) {
-        return null;
-    }
 
     @Override
     public PageResult<ProProject> getAllProjectByPage(String projectNumber, String projectName, int departmentid,
@@ -169,5 +156,57 @@ public class ProjectInfoService implements IProjectService {
 
     }
 
+    /*
+    * 功能描述: <br>
+    * 〈〉判断角色是否为产品经理
+    * @Param: [username]
+    * @Return: java.lang.Boolean
+    * @Author: 吴彬
+    * @Date: 9:35 9:35
+     */
+    @Override
+    public Boolean judge(String username) {
+        String s = this.proProjectMapper.judgeRoleIsProduceManager(username);
+        if(s.equals("产品经理")){
+            return  true;
+        }
+        return false;
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉根据id启用或禁用项目
+    * @Param: [pid]
+    * @Return: void
+    * @Author: 吴彬
+    * @Date: 10:33 10:33
+     */
+    @Override
+    public void ValidOrInvalidProject(Integer pid) {
+        ProProject projectById = findProjectById(pid);
+        projectById.setValid((byte)(projectById.getValid() ^ 1));
+        int i = this.proProjectMapper.updateByPrimaryKey(projectById);
+        if(i!=1){
+            throw new TTMSException(ExceptionEnum.PROJECT_PROHIBIT_OR_ENABLE_FAIL);
+        }
+        return;
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉根据id查询项目
+    * @Param: [pid]
+    * @Return: com.ttms.Entity.ProProject
+    * @Author: 吴彬
+    * @Date: 10:36 10:36
+     */
+    @Override
+    public ProProject findProjectById(Integer pid) {
+        ProProject proProject = this.proProjectMapper.selectByPrimaryKey(pid);
+        if(proProject==null){
+            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+        }
+        return proProject;
+    }
 
 }

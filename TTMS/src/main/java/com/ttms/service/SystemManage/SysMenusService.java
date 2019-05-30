@@ -525,4 +525,21 @@ public class SysMenusService {
         }
         return sysDepartments;
     }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉根据角色id查询角色
+    * @Param: [roleId]
+    * @Return: com.ttms.Entity.SysRoles
+    * @Author: 吴彬
+    * @Date: 9:43 9:43
+     */
+    public SysRoles getRoleById(Integer roleId){
+        SysRoles sysRoles = this.sysRolesMapper.selectByPrimaryKey(roleId);
+        if(sysRoles==null){
+            throw new TTMSException(ExceptionEnum.ROLERS_NOT_FOUND);
+        }
+        return sysRoles;
+
+    }
 }

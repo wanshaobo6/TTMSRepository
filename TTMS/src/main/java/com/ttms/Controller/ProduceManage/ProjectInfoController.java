@@ -3,15 +3,13 @@ package com.ttms.Controller.ProduceManage;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
+import com.ttms.Enum.ExceptionEnum;
+import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
-import com.ttms.Vo.ProjectVo;
-import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.IProjectService;
-import com.ttms.service.ProductManage.ServiceImpl.ProjectInfoService;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,18 +47,38 @@ public class ProjectInfoController {
     }
 
 
+    /**
+    * 功能描述: <br>
+    * 〈〉新增项目
+    * @Param: [projectnumber, projectname, starttime, endtime, note, departmentId]
+    * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+    * @Author: 吴彬
+    * @Date: 10:10 10:10
+     */
+    @PostMapping("/add")
+    public ResponseEntity<Void> addProject(@RequestParam(value ="projectnumber" )String projectnumber,
+                                           @RequestParam(value ="projectname" )String projectname,
+                                           @RequestParam(required = false,value ="starttime" )  Date starttime,
+                                           @RequestParam(required = false,value ="endtime" )   Date endtime,
+                                           @RequestParam(value = "note",required = false) String note ,
+                                           @RequestParam(required = false,value ="departmentId" ) Integer departmentId){
+        ProProject proProject = encapsulation(projectnumber, projectname, starttime, endtime, note, departmentId);
+        this.projectService.addProject(proProject, (SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
+        return ResponseEntity.ok().build();
+    }
     @PutMapping("/{pid}")
-    public ResponseEntity<Void> addProject(@RequestParam(required = true,value ="projectnumber" )String projectnumber,
-                                           @PathVariable(value = "pid",required = true) Integer pid,
-                                           @RequestParam(required = true,value ="projectname" )String projectname,
+    public ResponseEntity<Void> editProject(
+            @PathVariable("pid") Integer pid,
+                                            @RequestParam(value ="projectnumber" )String projectnumber,
+                                           @RequestParam(value ="projectname" )String projectname,
                                            @RequestParam(required = false,value ="starttime" ) Date starttime,
                                            @RequestParam(required = false,value ="endtime" )Date endtime,
-                                           @RequestParam(value = "note",required = false) String note ,@RequestParam(required = false,value ="departmentname" ) String departmentname){
-        SysUser user=(SysUser) SecurityUtils.getSubject().getPrincipal();
-        //判断是否角色是否为产品经理。。。。。。
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+                                           @RequestParam(value = "note",required = false) String note ,
+                                           @RequestParam(required = false,value ="departmentId" ) Integer departmentId){
+        ProProject project = encapsulation(projectnumber, projectname, starttime, endtime, note, departmentId);
+        this.projectService.editProject(project,(SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
+        return ResponseEntity.ok().build();
     }
-
     /**
      * 功能描述: <br>
      * 〈〉查询产品部下面的子部门
@@ -73,4 +91,34 @@ public class ProjectInfoController {
     public ResponseEntity<List<SysDepartment>> getSubdepartmentProductDepartment(){
         return ResponseEntity.ok(projectService.getSubdepartmentProductDepartment());
     }
+
+    private ProProject encapsulation(String projectnumber, String projectname, Date starttime, Date endtime, String note, Integer departmentId){
+        SysUser user=(SysUser) SecurityUtils.getSubject().getPrincipal();
+        //判断角色是否为产品部的产品经理。。。。。。
+        //1.先判断角色是否为产品经理
+        if(!projectService.judge(user.getUsername())){
+            throw new TTMSException(ExceptionEnum.NOT_OPERATION_AUTHORITY);
+        }else if(StringUtils.isBlank(projectnumber)){
+            throw new TTMSException(ExceptionEnum.PROJECT_CODE_NULL);
+        }else if(StringUtils.isBlank(projectname)){
+            throw new TTMSException(ExceptionEnum.PROJECT_NAME_NULL);
+        }
+        ProProject proProject=new ProProject();
+        proProject.setProjectnumber(projectnumber);
+        proProject.setProjectname(projectname);
+        proProject.setStarttime(starttime);
+        proProject.setEndtime(endtime);
+        proProject.setNote(note);
+        return proProject;
+
+    }
+
+    @GetMapping("/validorinvalid/{pid}")
+    public ResponseEntity<Void> ValidOrInvalidProject(@PathVariable("pid") Integer pid){
+        this.projectService.ValidOrInvalidProject(pid);
+        return  ResponseEntity.ok().build();
+
+    }
+
+
 }
