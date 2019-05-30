@@ -27,8 +27,6 @@ import java.util.stream.Collectors;
 @Service
 public class SysMenusService {
     @Autowired
-    private SysUserRolesMapper sysUserRolesMapper;
-    @Autowired
     private SysMenusMapper sysMenusMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -195,26 +193,7 @@ public class SysMenusService {
         urlPermissionsMapping.put(urlBuffer.toString(),permissionBuffer.toString());
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈〉   根据用户id查询能访问的所有菜单
-     * @Param: [id]
-     * @Return: java.util.List<com.ttms.Entity.SysMenus>
-     * @Author: 万少波
-     * @Date: 2019/5/27 14:01
-     */
-    public List<SysMenus> getMenusListByUserId(int roleid){
-        return sysRoleMenusMapper.getMenusListByRoleId(roleid);
-    }
 
-    public SysUserRoles getSysUserRolesByUserId(int userid){
-        SysUserRoles sysUserRoles = new SysUserRoles();
-        sysUserRoles.setUserId(userid);
-        List<SysUserRoles> result = sysUserRolesMapper.select(sysUserRoles);
-        if(CollectionUtils.isEmpty(result))
-            throw new TTMSException(ExceptionEnum.SYSTEM_ERROR);
-        return result.get(0);
-    }
     /*功能描述
      *@author罗占
      *@Description
