@@ -22,11 +22,11 @@ import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SysMenusService {
-    @Autowired
-    private SysUserRolesMapper sysUserRolesMapper;
+
     @Autowired
     private SysMenusMapper sysMenusMapper;
     @Autowired
@@ -206,14 +206,6 @@ public class SysMenusService {
         return sysRoleMenusMapper.getMenusListByRoleId(roleid);
     }
 
-    public SysUserRoles getSysUserRolesByUserId(int userid){
-        SysUserRoles sysUserRoles = new SysUserRoles();
-        sysUserRoles.setUserId(userid);
-        List<SysUserRoles> result = sysUserRolesMapper.select(sysUserRoles);
-        if(CollectionUtils.isEmpty(result))
-            throw new TTMSException(ExceptionEnum.SYSTEM_ERROR);
-        return result.get(0);
-    }
     /*功能描述
      *@author罗占
      *@Description
@@ -524,5 +516,16 @@ public class SysMenusService {
             throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_FOUND);
         }
         return sysDepartments;
+    }
+
+    //根据roleId返回可以访问的菜单
+    public List<Integer> getAllowedMenuidsByRoleid(Integer roleid) {
+        SysRoleMenus sysRoleMenus = new SysRoleMenus();
+        sysRoleMenus.setRoleId(roleid);
+        List<SysRoleMenus> sysRoleMenues = sysRoleMenusMapper.select(sysRoleMenus);
+        if (CollectionUtils.isEmpty(sysRoleMenues)) {
+            throw new TTMSException(ExceptionEnum.MENUS_ALLOW_ACCESS_IS_NULL);
+        }
+        return sysRoleMenues.stream().map(sysRoleMenu -> sysRoleMenu.getMenuId()).collect(Collectors.toList());
     }
 }

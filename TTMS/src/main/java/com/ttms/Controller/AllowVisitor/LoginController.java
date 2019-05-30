@@ -5,6 +5,8 @@ import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
+import com.ttms.Vo.ModulesVo;
+import com.ttms.service.AllowVisitor.LoginService;
 import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.CodecUtils;
 import org.apache.shiro.SecurityUtils;
@@ -26,10 +28,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/login")
 public class LoginController {
-    @Autowired
-    private SysMenusService sysMenusService;
+
     @Autowired
     private MyThreadLocal myThreadLocal;
+    @Autowired
+    private LoginService loginService;
     /**
      * 功能描述: <br>
      * 〈〉登陆逻辑
@@ -39,11 +42,11 @@ public class LoginController {
      * @Date: 2019/5/26 17:05
      */
     @PostMapping
-    public ResponseEntity<List<SysMenus>> login(@RequestParam String username , @RequestParam String password){
+    public ResponseEntity<List<ModulesVo>> login(@RequestParam String username , @RequestParam String password){
         //获取subject
         Subject subject = SecurityUtils.getSubject();
         //根据用户名查询到用户
-        SysUser currUser = sysMenusService.getUserByUserName(username);
+        SysUser currUser = loginService.getUserByUserName(username);
         //如果没有该用户则一定登录失败
         if(currUser == null)
             throw new TTMSException(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
@@ -58,8 +61,7 @@ public class LoginController {
         try {
             subject.login(usernamePasswordToken);    //只要没有任何异常则表示登录成功
             //查询用户能访问到的菜单并返回
-            System.out.println("111"+(SysUser) SecurityUtils.getSubject().getPrincipal());
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(loginService.getUserMenusVo());
         }catch (LockedAccountException e) {
             //该账户已被锁定
             throw new TTMSException(ExceptionEnum.USER_ACCOUNT_LOCK);
@@ -68,4 +70,6 @@ public class LoginController {
             throw new TTMSException(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         }
     }
+
+
 }

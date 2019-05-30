@@ -166,7 +166,6 @@ public class ProjectInfoService implements IProjectService {
         SysDepartment productDepartment = sysMenusService.getDepartmentsByCriteria(0, "产品部").get(0);
         //查询出其子部门
         return  sysMenusService.getDepartmentsByCriteria(productDepartment.getId(), null);
-
     }
 
 
