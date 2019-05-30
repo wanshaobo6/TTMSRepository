@@ -43,7 +43,9 @@ public enum ExceptionEnum {
     PROJECT_INSERT_FAIL(500,"项目新增失败"),
     PROJECT_CODE_NULL(500,"项目编号不能为空"),
     PROJECT_NAME_NULL(500,"项目名称不能为空"),
-    PROJECT_PROHIBIT_OR_ENABLE_FAIL(500,"更新状态失败")
+    PROJECT_PROHIBIT_OR_ENABLE_FAIL(500,"更新状态失败"),
+    DEPARTMENT_VALID_MODIFY_ERROR(500,"部门启动状态更新失败"),
+    NOT_FOUND_ROLERS(404,"没有找到角色")
     ;
     private int status;
     private String message;

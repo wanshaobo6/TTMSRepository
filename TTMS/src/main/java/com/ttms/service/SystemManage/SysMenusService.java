@@ -299,7 +299,7 @@ public class SysMenusService {
     public List<SysRoles> getAllRoles() {
         List<SysRoles> list = this.sysRolesMapper.selectAll();
         if(CollectionUtils.isEmpty(list)){
-            throw new TTMSException(ExceptionEnum.ROLERS_NOT_FOUND);
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_ROLERS);
         }
         return list;
     }
@@ -314,11 +314,11 @@ public class SysMenusService {
         PageHelper.startPage(page, rows);
         Example e=new Example(SysRoles.class);
         if(StringUtils.isNotBlank(name)){
-            e.createCriteria().andLike("name", "%"+name+"%");
+            e.createCriteria().andLike(name, "%"+name+"%");
         }
         List<SysRoles> sysRoles = this.sysRolesMapper.selectByExample(e);
         if(CollectionUtils.isEmpty(sysRoles)){
-            throw new TTMSException(ExceptionEnum.ROLERS_NOT_FOUND);
+            throw new TTMSException(ExceptionEnum.NOT_FOUND_ROLERS);
         }
 
         PageInfo<SysRoles> list=new PageInfo<>(sysRoles);
@@ -505,6 +505,84 @@ public class SysMenusService {
         }
         return sysDepartments;
     }
+
+    /*
+    *功能描述：分页查询所有机构
+    *@author罗占
+    *@Description
+    *Date7:59 2019/5/30
+    *Param
+    *return
+    **/
+    public PageResult<SysDepartment> queryDepartment(Integer page,Integer rows,
+                                                     String departmentname,Boolean valid){
+        PageHelper.startPage(page,rows);
+        Example example = new Example(SysDepartment.class);
+        Example.Criteria criteria = example.createCriteria();
+        if(StringUtils.isNotBlank(departmentname)){
+            criteria.andLike("departmentname","%"+departmentname+"%");
+        }
+        if(valid.equals(false )){
+            criteria.andEqualTo("valid",valid);
+        }
+        List<SysDepartment> list= this.sysDepartmentMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+        }
+        PageInfo<SysDepartment> pageInfo = new PageInfo<>(list);
+        PageResult<SysDepartment> result = new PageResult<>();
+        result.setItems(pageInfo.getList());
+        result.setTotal(pageInfo.getTotal());
+        result.setTotalPage(pageInfo.getPages());
+        return result;
+    }
+
+    /*
+    *功能描述：禁用和启用部门
+    *@author罗占
+    *@Description
+    *Date8:56 2019/5/30
+    *Param
+    *return
+    **/
+    public void  updateDepartmentValidOrInvalid(Integer id) {
+
+        SysDepartment department = this.sysDepartmentMapper.selectByPrimaryKey(id);
+        department.setValid((byte) (department.getValid() ^ 1));
+        int i = this.sysDepartmentMapper.updateByPrimaryKeySelective(department);
+        if (i != 1) {
+            throw new TTMSException(ExceptionEnum.DEPARTMENT_VALID_MODIFY_ERROR);
+        }
+
+        }
+
+
+
+
+        /*
+        *功能描述：修改部门
+        *@author罗占
+        *@Description
+        *Date9:13 2019/5/30
+        *Param[id]
+        *returnvoid
+        **/
+        public void updateDepartment(SysDepartment department){
+            //获取当前用户
+            SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+            Date now = new Date();
+            department.setModifiytime(now);
+            department.setModifyuserid(curUser.getId());
+            department.setCreateuserid(curUser.getId());
+            department.setCreatetime(now);
+
+            int i = this.sysDepartmentMapper.updateByPrimaryKeySelective(department);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.DEPARTMENT_ADD_FAILURE);
+            }
+
+
+        }
 
     //多条件查询部门
     public List<SysDepartment> getDepartmentsByCriteria(int parentId,String departmentName){
