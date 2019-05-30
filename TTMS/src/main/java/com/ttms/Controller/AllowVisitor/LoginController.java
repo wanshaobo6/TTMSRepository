@@ -47,6 +47,10 @@ public class LoginController {
         //如果没有该用户则一定登录失败
         if(currUser == null)
             throw new TTMSException(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
+        //如果用户被禁用
+        if(currUser.getValid() == 0){
+            throw new TTMSException(ExceptionEnum.USER_HAVE_BEEN_LIMIT);
+        }
         myThreadLocal.setTempUser(currUser);
         password = CodecUtils.md5Hex(password, currUser.getSalt());
         //封装用户名和密码

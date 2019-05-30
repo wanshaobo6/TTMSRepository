@@ -1,11 +1,14 @@
 package com.ttms.service.ProductManage;
 
 import com.ttms.Entity.ProProject;
+import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProjectVo;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
+import java.util.List;
 
 public interface IProjectService {
 
@@ -23,4 +26,6 @@ public interface IProjectService {
 
     PageResult<ProProject> getAllProjectByPage(String projectNumber, String projectName, int departmentid,
                                                Date startTime, Date endTime, int valid, int page, int rows);
+
+    List<SysDepartment> getSubdepartmentProductDepartment();
 }

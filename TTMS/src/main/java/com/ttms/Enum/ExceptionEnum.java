@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public enum ExceptionEnum {
     USER_UNLOGIN(403,"您没有登陆"),
     NOT_AUTHORITY(403,"您没有权限访问"),
+    USER_HAVE_BEEN_LIMIT(403,"您已被禁用"),
     SYSTEM_ERROR(555,"系统错误，请正确访问"),
     USERNAME_OR_PASSWORD_ERROR(500,"用户名密码错误"),
     USER_NOT_FOUND(404,"查询用户不存在"),
