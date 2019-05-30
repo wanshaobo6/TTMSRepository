@@ -1,6 +1,7 @@
 package com.ttms.service.ProductManage;
 
 
+import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysUser;
 import com.ttms.Vo.GroupManageVo;
 import com.ttms.Vo.PageResult;
@@ -15,6 +16,8 @@ public interface IGroupService {
         //启动禁用团状态
         void ValidOrInvalidGroup(Integer pid);
 
+        //查询所有项目名
+        List<ProProject> getprojectinfo();
 
         //创建团
     void createGroup(String groupName,Integer belongProjectId, Integer chargeUserId, String groupNote);

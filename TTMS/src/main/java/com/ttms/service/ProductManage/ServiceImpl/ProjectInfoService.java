@@ -84,7 +84,6 @@ public class ProjectInfoService implements IProjectService {
      * @Author: 吴彬
      * @Date: 19:33 19:33
      */
-    @Override
     @Transactional
     public Void editProject(ProProject project, SysUser user, Integer departId) {
         project.setUpdatetime(new Date());
@@ -126,7 +125,7 @@ public class ProjectInfoService implements IProjectService {
         if(valid != -1){
             criteria.andEqualTo("valid",valid);
         }
-        //查询
+        //查询select * from user where age > 1 limit  5,10;
         List<ProProject> proProjects = proProjectMapper.selectByExample(example);
         //创建返回结果
         PageResult<ProProject> result = new PageResult<>();

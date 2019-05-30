@@ -107,6 +107,34 @@ public class GroupService implements IGroupService {
         }
     }
 
+    /**
+     * 功能描述: 查询所有项目名
+     * 〈〉
+     * @Param: []
+     * @Return: java.util.List<com.ttms.Entity.ProProject>
+     * @Author: lhf
+     * @Date: 2019/5/30 16:36
+     */
+    @Override
+    public List<ProProject> getprojectinfo() {
+        List<ProProject> projects = this.proProjectMapper.selectAll();
+        for (ProProject project: projects){
+            project.setCreatetime(null);
+            project.setDepartmentid(null);
+            project.setUpdatetime(null);
+            project.setValid(null);
+            project.setEndtime(null);
+            project.setCreateuserid(null);
+            project.setDepartmentName(null);
+            project.setUpdateuserid(null);
+            project.setProjectnumber(null);
+            project.setId(null);
+            project.setNote(null);
+            project.setStarttime(null);
+        }
+        return projects;
+    }
+
     /*
      *功能描述：创建团
      *@author罗占
