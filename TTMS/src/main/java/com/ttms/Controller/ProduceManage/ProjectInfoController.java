@@ -1,6 +1,7 @@
 package com.ttms.Controller.ProduceManage;
 
 import com.ttms.Entity.ProProject;
+import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProjectVo;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 //----------产品管理->产品-项目信息管理
 @RestController
@@ -25,8 +27,6 @@ public class ProjectInfoController {
     @Autowired
     private IProjectService projectService;
 
-    @Autowired
-    private IGroupService groupService;
 
     /**
      * 功能描述: <br>
@@ -48,6 +48,7 @@ public class ProjectInfoController {
         return ResponseEntity.ok(projectService.getAllProjectByPage(projectNumber,projectName,departmentid,startTime,endTime,valid,page,rows));
     }
 
+
     @PutMapping("/{pid}")
     public ResponseEntity<Void> addProject(@RequestParam(required = true,value ="projectnumber" )String projectnumber,
                                            @PathVariable(value = "pid",required = true) Integer pid,
@@ -58,5 +59,18 @@ public class ProjectInfoController {
         SysUser user=(SysUser) SecurityUtils.getSubject().getPrincipal();
         //判断是否角色是否为产品经理。。。。。。
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉查询产品部下面的子部门
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysDepartment>>
+     * @Author: 万少波
+     * @Date: 2019/5/30 8:11
+     */
+    @GetMapping("/subDepOfProduction")
+    public ResponseEntity<List<SysDepartment>> getSubdepartmentProductDepartment(){
+        return ResponseEntity.ok(projectService.getSubdepartmentProductDepartment());
     }
 }

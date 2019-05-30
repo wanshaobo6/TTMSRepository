@@ -160,5 +160,14 @@ public class ProjectInfoService implements IProjectService {
         return result;
     }
 
+    @Override
+    public List<SysDepartment> getSubdepartmentProductDepartment() {
+        //查询出生产部门
+        SysDepartment productDepartment = sysMenusService.getDepartmentsByCriteria(0, "产品部").get(0);
+        //查询出其子部门
+        return  sysMenusService.getDepartmentsByCriteria(productDepartment.getId(), null);
+
+    }
+
 
 }

@@ -589,5 +589,23 @@ public class SysMenusService {
 
         }
 
+    //多条件查询部门
+    public List<SysDepartment> getDepartmentsByCriteria(int parentId,String departmentName){
+        SysDepartment sysDepartment = new SysDepartment();
+        Example example = new Example(SysDepartment.class);
+        Example.Criteria criteria = example.createCriteria();
+        //parentId
+        if(parentId != -1){
+            criteria.andEqualTo("parentid",parentId);
+        }
+        //departmentName
+        if(StringUtils.isEmpty(departmentName)){
+            criteria.andEqualTo("departmentname",departmentName);
+        }
+        List<SysDepartment> sysDepartments = sysDepartmentMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(sysDepartments)) {
+            throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_FOUND);
+        }
+        return sysDepartments;
+    }
 }
-
