@@ -12,8 +12,9 @@ public enum ExceptionEnum {
     NOT_AUTHORITY(403,"您没有权限访问"),
     NOT_OPERATION_AUTHORITY(403,"您无权创建项目"),
     USER_HAVE_BEEN_LIMIT(403,"您已被禁用"),
+    MENUS_ALLOW_ACCESS_IS_NULL(404,"没有可以访问的菜单"),
     SYSTEM_ERROR(555,"系统错误，请正确访问"),
-    USERNAME_OR_PASSWORD_ERROR(500,"用户名密码错误"),
+    USERNAME_OR_PASSWORD_ERROR(403,"用户名密码错误"),
     USER_NOT_FOUND(404,"查询用户不存在"),
     USER_NAME_DUPLICATED(501,"用户名重复"),
     USER_DELETE_FAIL(500,"查询用户失败"),
@@ -50,7 +51,7 @@ public enum ExceptionEnum {
     NOT_FOUND_PARENTID(404,"没有找到该分类的父id"),
     PRODUCT_ADD_FAIL(500,"产品添加失败"),
     USER_NOT_GRUOPCHARGEUSER(500,"当前用户不是团的负责人"),
-
+    PRODUCT_ADD_FAILURE(500,"创建产品失败")
     ;
     private int status;
     private String message;

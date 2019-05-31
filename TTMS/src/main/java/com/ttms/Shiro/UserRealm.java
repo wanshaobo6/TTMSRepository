@@ -42,11 +42,10 @@ public class UserRealm extends AuthorizingRealm {
         //获取认证后传过来的值
         SysUser curUser = (SysUser)subject.getPrincipal();
         //封装当前用户所有权限
-        List<SysMenus> allowMenuList = sysMenusService.
-                getMenusListByUserId(curUser.getRoleid());
-        Set<String> permses = allowMenuList.stream().map(
-                sysMenus -> {return menuIdPermsMap.get(sysMenus.getId());}
-                ).collect(Collectors.toSet());
+        List<Integer> allowMenuIds = sysMenusService.getAllowedMenuidsByRoleid(curUser.getRoleid());
+        Set<String> permses = allowMenuIds.stream().map(menuId -> {
+            return menuIdPermsMap.get(menuId);
+        }).collect(Collectors.toSet());
         System.out.println(curUser.getUsername()+"在"+permses.toString()+"放行");
         info.addStringPermissions(permses);
         return info;

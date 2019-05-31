@@ -51,7 +51,7 @@ public class ProProduct {
 
     private String hottip;
 
-    private String produceintroduction;
+    private String productintroduction;
 
     private Date createtime;
 
