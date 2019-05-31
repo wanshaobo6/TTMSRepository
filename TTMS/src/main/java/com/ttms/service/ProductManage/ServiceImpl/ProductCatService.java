@@ -7,6 +7,9 @@ import com.ttms.Mapper.ProProductCatMapper;
 import com.ttms.service.ProductManage.IProductCatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 @Service
 public class ProductCatService implements IProductCatService {
@@ -18,5 +21,13 @@ public class ProductCatService implements IProductCatService {
             throw new TTMSException(ExceptionEnum.PRODUCTCATID_NOT_FOUND);
         }
         return null;
+    }
+
+    public List<ProProductCat> getProductCatByIds(List<Integer> ids){
+        List<ProProductCat> proProductCats = proProductCatMapper.selectByIdList(ids);
+        if (CollectionUtils.isEmpty(proProductCats)) {
+            throw new TTMSException(ExceptionEnum.PRODUCTCATID_NOT_FOUND);
+        }
+        return proProductCats;
     }
 }

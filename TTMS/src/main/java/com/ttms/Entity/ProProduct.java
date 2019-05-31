@@ -2,10 +2,7 @@ package com.ttms.Entity;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Table(name = "pro_product")
@@ -25,9 +22,13 @@ public class ProProduct {
 
     private Integer productcatid3;
 
-    private int projectId;
+    //三级分类的名称
+    @Transient
+    private String productcatnames;
 
-    private  String projectName;
+    private int projectid;
+
+    private  String projectname;
 
     private String productname;
 
