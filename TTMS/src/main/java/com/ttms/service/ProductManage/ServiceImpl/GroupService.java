@@ -183,6 +183,7 @@ public class GroupService implements IGroupService {
      *Param[projectId]
      *returnjava.util.List<com.ttms.Entity.SysUser>
      **/
+    @Override
     public List<SysUser> getAllStaffInDep(Integer projectId) {
         //判断id是否存在
         if (StringUtils.isEmpty(String.valueOf(projectId))) {
@@ -276,6 +277,15 @@ public class GroupService implements IGroupService {
     }
 
 
+
+    @Override
+    public ProGroup getGroupById(Integer groupId) {
+        ProGroup proGroup = proGroupMapper.selectByPrimaryKey(groupId);
+        if (proGroup == null) {
+            throw new TTMSException(ExceptionEnum.GROUP_NOT_FOUND);
+        }
+        return proGroup;
+    }
 
 }
 

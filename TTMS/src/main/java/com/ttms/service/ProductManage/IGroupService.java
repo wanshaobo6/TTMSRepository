@@ -1,6 +1,8 @@
 package com.ttms.service.ProductManage;
 
 import com.ttms.Entity.ProProductCat;
+
+import com.ttms.Entity.ProGroup;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysUser;
 import com.ttms.Vo.GroupManageVo;
@@ -25,6 +27,9 @@ public interface IGroupService {
     List<SysUser> getAllStaffInDep(Integer projectId);
 
         PageResult<GroupManageVo> getAllGroupsByConditionAndPage(String groupName, String projectName, int valid, int page, int rows);
+
+        //查询团号
+        ProGroup getGroupById(Integer groupId);
 
     List<ProProductCat> queryCatById(Integer catId);
 }
