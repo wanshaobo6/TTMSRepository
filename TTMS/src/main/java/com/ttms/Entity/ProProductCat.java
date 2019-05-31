@@ -15,13 +15,11 @@ public class ProProductCat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String productname;
+    private String productcatname;
 
     private String note;
 
     private Integer parentid;
-
-    private Byte isparent;
 
     private Date createtime;
 
