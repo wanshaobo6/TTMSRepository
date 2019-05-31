@@ -4,10 +4,7 @@ import com.ttms.Entity.ProProductCat;
 import com.ttms.service.ProductManage.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,9 +25,11 @@ public class ProductCatController {
     * @Date: 11:10 11:10
      */
     @GetMapping("queryCatById")
-    public ResponseEntity<List<ProProductCat>> queryCatById(@PathVariable("catId") Integer catId){
+    public ResponseEntity<List<ProProductCat>> queryCatById(@RequestParam("catId") Integer catId){
         return ResponseEntity.ok(this.groupService.queryCatById(catId));
     }
+
+
 
 
 }

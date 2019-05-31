@@ -267,7 +267,7 @@ public class GroupService implements IGroupService {
         Integer id = proProductCat.getId();
         Example example=new Example(ProProductCat.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("parentId", id);
+        criteria.andEqualTo("parentid", id);
         List<ProProductCat> list = this.productCatMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(list)){
             throw new TTMSException(ExceptionEnum.PRODUCT_CAT_NOT_FOUNDF);

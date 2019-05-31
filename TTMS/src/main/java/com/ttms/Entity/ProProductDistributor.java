@@ -1,6 +1,8 @@
 package com.ttms.Entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,26 +10,27 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
-@Table(name = "pro_product_cat")
+@Table(name = "pro_product_distributor")
 @Data
-public class ProProductCat {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProProductDistributor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String productcatname;
+    private Integer productid;
 
-    private String note;
+    private Integer distributorid;
 
-    private Integer parentid;
+    private Integer distributenum;
 
+    private Date starttime;
+
+    private Date endtime;
 
     private Date createtime;
 
     private Date updatetime;
-
-    private Integer createuserid;
-
-    private Integer updateuserid;
 
 }
