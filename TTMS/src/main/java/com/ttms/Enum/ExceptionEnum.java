@@ -53,7 +53,8 @@ public enum ExceptionEnum {
     USER_NOT_GRUOPCHARGEUSER(500,"当前用户不是团的负责人"),
     PRODUCT_ADD_FAILURE(500,"创建产品失败"),
     PRODUCT_CAT_NOT_FOUNDF(500,"产品分类没有"),
-    PRODUCT_UPDATE_FAIL(500,"操作失败")
+    PRODUCT_UPDATE_FAIL(500,"操作失败"),
+    PWERMISSION_OPTERATION(500,"你没有权限操作"),
     ;
     private int status;
     private String message;
