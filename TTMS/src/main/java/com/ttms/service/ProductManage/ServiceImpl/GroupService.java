@@ -2,30 +2,24 @@ package com.ttms.service.ProductManage.ServiceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import com.ttms.Entity.ProGroup;
+import com.ttms.Entity.ProProductCat;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
-import com.ttms.Mapper.ProGroupMapper;
-import com.ttms.Mapper.ProProjectMapper;
-import com.ttms.Mapper.SysDepartmentMapper;
-import com.ttms.Mapper.SysUserMapper;
+import com.ttms.Mapper.*;
 import com.ttms.Vo.GroupManageVo;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.SystemManage.SysMenusService;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +33,8 @@ public class GroupService implements IGroupService {
     private SysDepartmentMapper sysDepartmentMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
+    @Autowired
+    private ProProductCatMapper productCatMapper;
     @Autowired
     private SysMenusService sysMenusService;
 
@@ -253,6 +249,33 @@ public class GroupService implements IGroupService {
         result.setItems(resultVO);
         return result;
     }
+    
+    /**
+    * 功能描述: <br>
+    * 〈〉根据id查询分类
+    * @Param: [catId]
+    * @Return: java.util.List<com.ttms.Entity.ProProductCat>
+    * @Author: 吴彬
+    * @Date: 11:15 11:15
+     */
+    @Override
+    public List<ProProductCat> queryCatById(Integer catId) {
+        ProProductCat proProductCat = this.productCatMapper.selectByPrimaryKey(catId);
+        if(proProductCat==null){
+            return null;
+        }
+        Integer id = proProductCat.getId();
+        Example example=new Example(ProProductCat.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("parentId", id);
+        List<ProProductCat> list = this.productCatMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            throw new TTMSException(ExceptionEnum.PRODUCT_CAT_NOT_FOUNDF);
+        }
+        return list;
+    }
+
+
 
 }
 

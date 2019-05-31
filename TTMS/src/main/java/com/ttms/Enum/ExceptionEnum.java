@@ -47,7 +47,8 @@ public enum ExceptionEnum {
     PROJECT_PROHIBIT_OR_ENABLE_FAIL(500,"更新状态失败"),
     DEPARTMENT_VALID_MODIFY_ERROR(500,"部门启动状态更新失败"),
     NOT_FOUND_ROLERS(404,"没有找到角色"),
-    PRODUCT_ADD_FAILURE(500,"创建产品失败")
+    PRODUCT_ADD_FAILURE(500,"创建产品失败"),
+    PRODUCT_CAT_NOT_FOUNDF(500,"产品分类查询失败")
     ;
     private int status;
     private String message;
