@@ -5,7 +5,6 @@ import com.ttms.Entity.ProProduct;
 import com.ttms.Entity.ProProductCat;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
-import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProductMapper;
 import com.ttms.service.ProductManage.ICreateProductService;
 import com.ttms.service.ProductManage.IGroupService;
@@ -67,7 +66,7 @@ public class CreateProductService implements ICreateProductService {
         proProduct.setLowestnumber(lowestNumber);
         proProduct.setProductprice(productPrice);
         proProduct.setHottip(hotTip);
-        proProduct.setProduceintroduction(productIntroduction);
+        proProduct.setProductintroduction(productIntroduction);
         int i = this.proProductMapper.insert(proProduct);
         if (i != 1) {
             throw new TTMSException(ExceptionEnum.PRODUCT_ADD_FAIL);
