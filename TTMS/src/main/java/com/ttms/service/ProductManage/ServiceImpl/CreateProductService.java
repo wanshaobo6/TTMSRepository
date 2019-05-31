@@ -5,6 +5,7 @@ import com.ttms.Entity.ProProduct;
 import com.ttms.Entity.ProProductCat;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
+import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProductMapper;
 import com.ttms.service.ProductManage.ICreateProductService;
 import com.ttms.service.ProductManage.IGroupService;
@@ -13,12 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Service
 public class CreateProductService implements ICreateProductService {
     @Autowired
     private IGroupService groupService;
+    @Autowired
+    private ProGroupMapper groupMapper;
 
     @Autowired
     private IProductCatService productCatService;
@@ -71,5 +75,22 @@ public class CreateProductService implements ICreateProductService {
         if (i != 1) {
             throw new TTMSException(ExceptionEnum.PRODUCT_ADD_FAIL);
         }
+    }
+
+    @Override
+    public List<ProGroup> queryAllGroups() {
+        List<ProGroup> groups = this.groupMapper.selectAll();
+        for(ProGroup group:groups){
+            group.setProjectid(null);
+            group.setProjectname(null);
+            group.setValid(null);
+            group.setChargeuserid(null);
+            group.setGroupnote(null);
+            group.setUpdatetime(null);
+            group.setCreatetime(null);
+            group.setCreateuserid(null);
+            group.setUpdateuserid(null);
+        }
+        return groups;
     }
 }

@@ -1,14 +1,13 @@
 package com.ttms.Controller.ProduceManage;
 
+import com.ttms.Entity.ProGroup;
 import com.ttms.service.ProductManage.ICreateProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 
 //----------产品管理->产品->创建产品------------
@@ -17,6 +16,21 @@ import java.util.Date;
 public class CreateProductController {
     @Autowired
     private ICreateProductService createProductService;
+
+
+    /*
+     *功能描述：查询所有团号
+     *@author罗占
+     *@Description
+     *Date17:04 2019/5/30
+     *Param
+     *return
+     **/
+    @GetMapping("/queryAllGroups")
+    public ResponseEntity<List<ProGroup>> queryAllGroups(){
+        List<ProGroup> groups = this.createProductService.queryAllGroups();
+        return ResponseEntity.ok().body(groups);
+    }
 
     /**
      * 功能描述: 创建产品
