@@ -45,7 +45,12 @@ public enum ExceptionEnum {
     PROJECT_NAME_NULL(500,"项目名称不能为空"),
     PROJECT_PROHIBIT_OR_ENABLE_FAIL(500,"更新状态失败"),
     DEPARTMENT_VALID_MODIFY_ERROR(500,"部门启动状态更新失败"),
-    NOT_FOUND_ROLERS(404,"没有找到角色")
+    NOT_FOUND_ROLERS(404,"没有找到角色"),
+    PRODUCTCATID_NOT_FOUND(404,"没有找到该分类"),
+    NOT_FOUND_PARENTID(404,"没有找到该分类的父id"),
+    PRODUCT_ADD_FAIL(500,"产品添加失败"),
+    USER_NOT_GRUOPCHARGEUSER(500,"当前用户不是团的负责人"),
+
     ;
     private int status;
     private String message;

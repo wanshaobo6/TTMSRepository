@@ -45,7 +45,7 @@ public class ProProduct {
 
     private Date onselltime;
 
-    private Integer projectprice;
+    private Integer productprice;
 
     private Date upselltime;
 
