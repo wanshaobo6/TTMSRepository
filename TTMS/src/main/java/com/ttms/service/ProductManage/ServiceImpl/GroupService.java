@@ -251,30 +251,7 @@ public class GroupService implements IGroupService {
         return result;
     }
     
-    /**
-    * 功能描述: <br>
-    * 〈〉根据id查询分类
-    * @Param: [catId]
-    * @Return: java.util.List<com.ttms.Entity.ProProductCat>
-    * @Author: 吴彬
-    * @Date: 11:15 11:15
-     */
-    @Override
-    public List<ProProductCat> queryCatById(Integer catId) {
-        ProProductCat proProductCat = this.productCatMapper.selectByPrimaryKey(catId);
-        if(proProductCat==null){
-            return null;
-        }
-        Integer id = proProductCat.getId();
-        Example example=new Example(ProProductCat.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("parentid", id);
-        List<ProProductCat> list = this.productCatMapper.selectByExample(example);
-        if(CollectionUtils.isEmpty(list)){
-            throw new TTMSException(ExceptionEnum.PRODUCT_CAT_NOT_FOUNDF);
-        }
-        return list;
-    }
+
 
 
 
