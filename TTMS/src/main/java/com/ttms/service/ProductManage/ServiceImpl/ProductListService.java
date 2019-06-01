@@ -106,7 +106,7 @@ public class ProductListService implements IProductListService {
             throw new TTMSException(ExceptionEnum.PRODUCTDISTRIBUTOR_NOT_MATCH);
         }
         //修改数量
-        product.setSellednumber(+product.getSellednumber()-proProductDistributor.getDistributenum());
+        product.setSellednumber(product.getSellednumber()-proProductDistributor.getDistributenum());
         product.setLowestnumber(product.getLowestnumber()+proProductDistributor.getDistributenum());
         //更新产品数量
         productMapper.updateByPrimaryKey(product);
