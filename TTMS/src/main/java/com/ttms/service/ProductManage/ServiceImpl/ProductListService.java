@@ -4,13 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.ProProduct;
 import com.ttms.Entity.ProProductCat;
+import com.ttms.Entity.ProProductDistributor;
+import com.ttms.Entity.SupDistributor;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
+import com.ttms.Mapper.ProProductDistributorMapper;
 import com.ttms.Mapper.ProProductMapper;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
+import com.ttms.service.SupplyManage.IDistributorManageService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +34,13 @@ public class ProductListService implements IProductListService {
     private ProProductMapper productMapper;
 
     @Autowired
+    private ProProductDistributorMapper proProductDistributorMapper;
+
+    @Autowired
     private IProductCatService productCatService;
+
+    @Autowired
+    private IDistributorManageService distributorManageService;
 
 
     /**
@@ -94,6 +104,33 @@ public class ProductListService implements IProductListService {
         ProProduct proProduct = this.productMapper.selectByPrimaryKey(productId);
         return proProduct.getCreateuserid();
     }
+
+    @Override
+    @Transactional
+    public Void deleteProductDistribute(int pid, int productDistributorId) {
+        //查询出该产品
+        ProProduct product = getProductById(pid);
+        //根据id查询产品的分销商
+        ProProductDistributor proProductDistributor = getProProductDistributorByid(productDistributorId);
+        //判断该产品和该分销商是否匹配
+        if (product.getId() != proProductDistributor.getProductid()) {
+            throw new TTMSException(ExceptionEnum.PRODUCTDISTRIBUTOR_NOT_MATCH);
+        }
+        //修改数量
+        product.setSellednumber(+product.getSellednumber()-proProductDistributor.getDistributenum());
+        product.setLowestnumber(product.getLowestnumber()+proProductDistributor.getDistributenum());
+        //更新产品数量
+        productMapper.updateByPrimaryKey(product);
+        //删除记录
+        proProductDistributorMapper.deleteByPrimaryKey(productDistributorId);
+        return null;
+    }
+
+    @Override
+    public List<SupDistributor> getAllDistributorInfo() {
+        return distributorManageService.getAllDistributor();
+    }
+
     @Override
     public PageResult<ProProduct> queryProjectByPage(int status, int productCatId1,
            int productCatId2, int productCatId3, String projectName, String productNumber,
@@ -158,5 +195,13 @@ public class ProductListService implements IProductListService {
             throw new TTMSException(ExceptionEnum.PRODUCT_NOT_FOUND);
         }
         return proProduct;
+    }
+
+    public ProProductDistributor getProProductDistributorByid(int id){
+        ProProductDistributor proProductDistributor = proProductDistributorMapper.selectByPrimaryKey(id);
+        if (proProductDistributor==null) {
+            throw new TTMSException(ExceptionEnum.PRODUCTDISTRIBUTOR_NOT_FOUND);
+        }
+        return proProductDistributor;
     }
 }

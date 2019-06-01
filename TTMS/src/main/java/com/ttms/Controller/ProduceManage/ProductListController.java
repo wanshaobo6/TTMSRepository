@@ -1,6 +1,7 @@
 package com.ttms.Controller.ProduceManage;
 
 import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.SupDistributor;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
@@ -115,5 +116,21 @@ public class ProductListController {
                 serverEndTime,page,size));
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈〉删除为产品分销的分销商
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/1 13:55
+     */
+    @DeleteMapping("/privilege/distributor/{pid}")
+    public ResponseEntity<Void> deleteProductDistribute(@PathVariable int pid ,@RequestParam int productDistributorId){
+        return ResponseEntity.ok(productListService.deleteProductDistribute(pid,productDistributorId));
+    }
 
+    @GetMapping("/distributors")
+    public ResponseEntity<List<SupDistributor>> getAllDistributorInfo(){
+        return ResponseEntity.ok(productListService.getAllDistributorInfo());
+    }
 }

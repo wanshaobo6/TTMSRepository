@@ -55,7 +55,10 @@ public enum ExceptionEnum {
     PRODUCT_CAT_NOT_FOUNDF(500,"产品分类没有"),
     PRODUCT_UPDATE_FAIL(500,"操作失败"),
     PWERMISSION_OPTERATION(500,"你没有权限操作"),
-    PRODUCT_NOT_FOUND(404,"产品不存在")
+    PRODUCT_NOT_FOUND(404,"产品不存在"),
+    PRODUCTDISTRIBUTOR_NOT_FOUND(404,"没有为该产品分销的分销商"),
+    PRODUCTDISTRIBUTOR_NOT_MATCH(401,"产品没有被该分销商分销"),
+    SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到")
     ;
     private int status;
     private String message;
