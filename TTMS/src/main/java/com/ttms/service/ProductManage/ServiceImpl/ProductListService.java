@@ -24,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,7 @@ public class ProductListService implements IProductListService {
 
     @Autowired
     private ProProductGuideMapper productGuideMapper;
+
 
     @Autowired
     private IProductCatService productCatService;
@@ -183,6 +185,34 @@ public class ProductListService implements IProductListService {
             throw new TTMSException(ExceptionEnum.PRODUCT_GUIDE_DELETE_FAIL);
         }
         return null;
+    }
+
+    @Override
+    public PageResult<ResGuide> queryGuidesNotInProduct(Integer productId ,
+                 String guideName, String mobile, String language, String nationality, int page, int rows) {
+        PageResult<ResGuide> pageResult = new PageResult<>();
+        //查询出该产品下添加的所有导游Id
+        ProProductGuide proProductGuide = new ProProductGuide();
+        proProductGuide.setProductid(productId);
+        List<ProProductGuide> proProductGuides = productGuideMapper.select(proProductGuide);
+        //获取产品下所有的导游id
+        List<Integer> productGuideIds = null;
+        if(!CollectionUtils.isEmpty(proProductGuides)){
+            productGuideIds = proProductGuides.stream().map(guide -> {
+                return guide.getGuideid();
+            }).collect(Collectors.toList());
+        }
+        //分页
+        PageHelper.startPage(page,rows);
+        //查询条件并查询
+        List<ResGuide> resGuides = guideInfoManageService.
+                queryGuidesByCriteria(productGuideIds,guideName,mobile,language,nationality);
+        //封装结果
+        PageInfo<ResGuide> pageInfo = new PageInfo<>(resGuides);
+        pageResult.setItems(resGuides);
+        pageResult.setTotalPage(pageInfo.getPages());
+        pageResult.setTotal(pageInfo.getTotal());
+        return pageResult;
     }
 
 

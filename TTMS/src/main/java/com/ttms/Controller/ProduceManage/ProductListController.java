@@ -1,9 +1,6 @@
 package com.ttms.Controller.ProduceManage;
 
-import com.ttms.Entity.ProProduct;
-import com.ttms.Entity.ResGuide;
-import com.ttms.Entity.ResoAttachment;
-import com.ttms.Entity.SupDistributor;
+import com.ttms.Entity.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductListService;
@@ -173,5 +170,26 @@ public class ProductListController {
     @DeleteMapping("/privilege/guide")
     public ResponseEntity<Void> deleteProductGuide(@RequestParam Integer productId  , @RequestParam Integer guideId){
         return ResponseEntity.ok(productListService.deleteProductGuide(productId , guideId));
+    }
+    
+    /**
+     * 功能描述: <br>
+     * 〈〉分页查询所有我的项目中未添加的导游
+     * @Param: [guideName, mobile, language, nationality, page, rows]
+     * @Return: org.springframework.http.ResponseEntity<com.ttms.Vo.PageResult<com.ttms.Entity.ProProductGuide>>
+     * @Author: 万少波
+     * @Date: 2019/6/1 21:19
+     */
+    @RequestMapping("/guide/page")
+    public ResponseEntity<PageResult<ResGuide>>
+    queryGuidesNotInProduct(
+                           @RequestParam  Integer productId,
+                           @RequestParam(required = false)  String guideName ,
+                           @RequestParam(required = false) String mobile,
+                           @RequestParam(required = false) String language ,
+                           @RequestParam(required = false) String nationality,
+                           @RequestParam(required = false,defaultValue = "1") int page ,
+                           @RequestParam(required = false,defaultValue = "5") int rows){
+        return ResponseEntity.ok(productListService.queryGuidesNotInProduct(productId,guideName,mobile,language,nationality,page,rows));
     }
  }
