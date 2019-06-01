@@ -11,6 +11,8 @@ import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
+import com.ttms.service.ResourceManage.IAttachmentService;
+import com.ttms.service.SupplyManage.IDistributorManageService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,7 @@ public class ProductListService implements IProductListService {
 
     @Autowired
     private IAttachmentService attachmentService;
-    @Autowired
-    private ProProductDistributorMapper proProductDistributorMapper;
+
 
 
     /**
