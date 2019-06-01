@@ -1,6 +1,8 @@
 package com.ttms.service.ProductManage;
 
 import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.ResoAttachment;
+import com.ttms.Entity.SupDistributor;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 
@@ -15,6 +17,18 @@ public interface IProductListService {
 
     void addProductDistribute(Integer pid, Integer distributorId, Integer distributorNumber, Date startTime, Date endTime);
 
+
+    Void deleteProductDistribute(int pid, int productDistributorId);
+
+    List<SupDistributor> getAllDistributorInfo();
+
+    List<ResoAttachment> getAttachmentsByPid(int pid);
+
+    Void addAttachement( int pid , String fileName , String fileUrl,String attachmentname);
+
+    ProProduct getProductById(int pid);
+
+    boolean checkIsCharger(int productId);
     Integer selectProductCreateUser(Integer productId);
 
 

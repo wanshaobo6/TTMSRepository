@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public enum ExceptionEnum {
     USER_UNLOGIN(403,"您没有登陆"),
     NOT_AUTHORITY(403,"您没有权限访问"),
-    TIME_CONVERTER_ERROR(403,"时间装换出错了"),
     NOT_OPERATION_AUTHORITY(403,"您无权创建项目"),
     USER_HAVE_BEEN_LIMIT(403,"您已被禁用"),
     MENUS_ALLOW_ACCESS_IS_NULL(404,"没有可以访问的菜单"),
@@ -52,8 +51,7 @@ public enum ExceptionEnum {
     NOT_FOUND_PARENTID(404,"没有找到该分类的父id"),
     PRODUCT_ADD_FAIL(500,"产品添加失败"),
     USER_NOT_GRUOPCHARGEUSER(500,"当前用户不是团的负责人"),
-    PRODUCT_EDIT_FAIL(500,"修改产品失败"),
-    YOU_CREATE_PRODUCT(500,"你已经创建了产品"),
+    PRODUCT_ADD_FAILURE(500,"创建产品失败"),
     PRODUCT_CAT_NOT_FOUNDF(500,"产品分类没有"),
     PRODUCT_UPDATE_FAIL(500,"操作失败"),
     PWERMISSION_OPTERATION(500,"你没有权限操作"),
@@ -61,6 +59,12 @@ public enum ExceptionEnum {
     NUMBER_NOT_ENOUGH(500,"产品剩余数量不足分销"),
     PRODUCT_UPDATE_NUM_FAIL(404,"产品更新数量失败"),
     INSERT_DISTRIBUTOR_FAIL(404,"新增分销商失败"),
+   // PRODUCT_NOT_FOUND(404,"产品不存在"),
+    PRODUCT_ATTACHMENT_NOT_FOUND(404,"产品下不存在附件"),
+    PRODUCT_DISTRIBUTOR_NOT_FOUND(404,"没有为该产品分销的分销商"),
+    PRODUCTDISTRIBUTOR_NOT_MATCH(401,"产品没有被该分销商分销"),
+    SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到"),
+    ATTACHMENT_INSERT_FAIL(500,"新增附件失败")
     ;
     private int status;
     private String message;

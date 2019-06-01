@@ -2,9 +2,7 @@ package com.ttms.service.ProductManage.ServiceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ttms.Entity.ProProduct;
-import com.ttms.Entity.ProProductCat;
-import com.ttms.Entity.ProProductDistributor;
+import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.ProProductDistributorMapper;
@@ -14,6 +12,7 @@ import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +31,16 @@ public class ProductListService implements IProductListService {
     private ProProductMapper productMapper;
 
     @Autowired
+    private ProProductDistributorMapper proProductDistributorMapper;
+
+    @Autowired
     private IProductCatService productCatService;
 
+    @Autowired
+    private IDistributorManageService distributorManageService;
+
+    @Autowired
+    private IAttachmentService attachmentService;
     @Autowired
     private ProProductDistributorMapper proProductDistributorMapper;
 
@@ -110,18 +117,32 @@ public class ProductListService implements IProductListService {
         return;
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈〉查询产品的负责人id
-     * @Param: []
-     * @Return: java.lang.Integer
-     * @Author: 吴彬
-     * @Date: 17:24 17:24
-     */
+
+
     @Override
-    public Integer selectProductCreateUser(Integer productId) {
-        ProProduct proProduct = this.productMapper.selectByPrimaryKey(productId);
-        return proProduct.getCreateuserid();
+    @Transactional
+    public Void deleteProductDistribute(int pid, int productDistributorId) {
+        //查询出该产品
+        ProProduct product = getProductById(pid);
+        //根据id查询产品的分销商
+        ProProductDistributor proProductDistributor = getProProductDistributorByid(productDistributorId);
+        //判断该产品和该分销商是否匹配
+        if (product.getId() != proProductDistributor.getProductid()) {
+            throw new TTMSException(ExceptionEnum.PRODUCTDISTRIBUTOR_NOT_MATCH);
+        }
+        //修改数量
+        product.setSellednumber(+product.getSellednumber()-proProductDistributor.getDistributenum());
+        product.setLowestnumber(product.getLowestnumber()+proProductDistributor.getDistributenum());
+        //更新产品数量
+        productMapper.updateByPrimaryKey(product);
+        //删除记录
+        proProductDistributorMapper.deleteByPrimaryKey(productDistributorId);
+        return null;
+    }
+
+    @Override
+    public List<SupDistributor> getAllDistributorInfo() {
+        return distributorManageService.getAllDistributor();
     }
 
     /**
@@ -138,6 +159,17 @@ public class ProductListService implements IProductListService {
         return proProduct.getLowestnumber();
     }
 
+
+
+    @Override
+    public List<ResoAttachment> getAttachmentsByPid(int pid) {
+        return attachmentService.getAttachmentsByPid(pid);
+    }
+
+    @Override
+    public Void addAttachement(int pid, String fileName, String fileUrl, String attachmentname) {
+        return attachmentService.addAttachment(pid,fileName,fileUrl,attachmentname, ((SysUser) SecurityUtils.getSubject().getPrincipal()).getId());
+    }
 
     @Override
     public PageResult<ProProduct> queryProjectByPage(int status, int productCatId1,
@@ -211,5 +243,30 @@ public class ProductListService implements IProductListService {
             throw new TTMSException(ExceptionEnum.PRODUCT_NOT_FOUND);
         }
         return proProduct;
+    }
+
+    @Override
+    public boolean checkIsCharger(int productId) {
+        //判断当前用户是否是主管人
+        SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
+        System.out.println("当前用户是"+sysUser.toString());
+        //查询当前product
+        ProProduct proProduct = getProductById(productId);
+        if(sysUser.getId() != proProduct.getCreateuserid())
+            return false;
+        return true;
+    }
+
+    @Override
+    public Integer selectProductCreateUser(Integer productId) {
+        return null;
+    }
+
+    public ProProductDistributor getProProductDistributorByid(int id){
+        ProProductDistributor proProductDistributor = proProductDistributorMapper.selectByPrimaryKey(id);
+        if (proProductDistributor==null) {
+            throw new TTMSException(ExceptionEnum.PRODUCT_DISTRIBUTOR_NOT_FOUND);
+        }
+        return proProductDistributor;
     }
 }
