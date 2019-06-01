@@ -15,6 +15,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+        //只让负责人对产品相关一切进行操作
         registry.addInterceptor(this.createChargerOpeProductFilter()).addPathPatterns("/producemanage/product/productlist/privilege/**");
     }
 }

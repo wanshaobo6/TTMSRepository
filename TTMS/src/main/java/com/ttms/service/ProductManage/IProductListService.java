@@ -40,6 +40,9 @@ public interface IProductListService {
 
     Void deleteProductGuide(Integer productId, Integer guideId);
 
+    PageResult<ResGuide> queryGuidesNotInProduct(Integer productId ,
+        String guideName, String mobile, String language, String nationality, int page, int rows);
+
     //为产品添加分销商之后产品的数量更改  修改产品的数量
    // Void updataProductNumber(Integer productId);
 
