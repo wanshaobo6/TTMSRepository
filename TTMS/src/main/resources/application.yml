@@ -11,7 +11,6 @@ spring:
   redis:
     host: 114.115.204.56
     password: 123wan12345
-
 #mybatis:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

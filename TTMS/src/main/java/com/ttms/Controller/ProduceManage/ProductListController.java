@@ -3,18 +3,13 @@ package com.ttms.Controller.ProduceManage;
 import com.ttms.Entity.ProProduct;
 import com.ttms.Entity.ResoAttachment;
 import com.ttms.Entity.SupDistributor;
-import com.ttms.Entity.SysUser;
-import com.ttms.Enum.ExceptionEnum;
-import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductListService;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.Date;
 import java.util.List;
 

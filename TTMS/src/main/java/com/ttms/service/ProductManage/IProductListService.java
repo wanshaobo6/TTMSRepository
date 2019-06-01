@@ -5,8 +5,6 @@ import com.ttms.Entity.ResoAttachment;
 import com.ttms.Entity.SupDistributor;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
@@ -31,4 +29,16 @@ public interface IProductListService {
     ProProduct getProductById(int pid);
 
     boolean checkIsCharger(int productId);
+    Integer selectProductCreateUser(Integer productId);
+
+
+    //查询商品剩余的数量
+    Integer selectProductLowestNumber(Integer pid);
+
+    //为产品添加分销商之后产品的数量更改  修改产品的数量
+   // Void updataProductNumber(Integer productId);
+
+
+
+
 }
