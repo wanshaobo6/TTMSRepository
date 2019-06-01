@@ -92,19 +92,7 @@ public class ProductListService implements IProductListService {
 
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈〉查询产品的负责人id
-     * @Param: []
-     * @Return: java.lang.Integer
-     * @Author: 吴彬
-     * @Date: 17:24 17:24
-     */
-    @Override
-    public Integer selectProductCreateUser(Integer productId) {
-        ProProduct proProduct = this.productMapper.selectByPrimaryKey(productId);
-        return proProduct.getCreateuserid();
-    }
+
 
     @Override
     @Transactional
@@ -206,6 +194,18 @@ public class ProductListService implements IProductListService {
             throw new TTMSException(ExceptionEnum.PRODUCT_NOT_FOUND);
         }
         return proProduct;
+    }
+
+    @Override
+    public boolean checkIsCharger(int productId) {
+        //判断当前用户是否是主管人
+        SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
+        System.out.println("当前用户是"+sysUser.toString());
+        //查询当前product
+        ProProduct proProduct = getProductById(productId);
+        if(sysUser.getId() != proProduct.getCreateuserid())
+            return false;
+        return true;
     }
 
     public ProProductDistributor getProProductDistributorByid(int id){

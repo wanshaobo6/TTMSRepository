@@ -34,12 +34,7 @@ public class ProductListController {
      * @Date: 17:18 17:18
      */
     @PutMapping("/privilege/updateproductStatus")
-    public ResponseEntity<Void> updateproductStatus(Integer productId , Integer pstatus){
-
-        Boolean opt = isPermissionOpt(productId);
-        if(!opt){
-            throw new TTMSException(ExceptionEnum.PWERMISSION_OPTERATION);
-        }
+    public ResponseEntity<Void> updateproductStatus(@RequestParam int productId ,@RequestParam Integer pstatus){
         productListService.updateproductStatus(productId,pstatus);
         return  ResponseEntity.ok().build();
     }
@@ -73,17 +68,6 @@ public class ProductListController {
         this.productListService.addProductDistribute(productId,distributorId,distributorNumber,startTime,endTime);
 
         return   ResponseEntity.ok().build();
-    }
-
-    private  Boolean isPermissionOpt(Integer productId){
-        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        //查询产品的创建者是不是和当前用户一致
-        Integer userId = productListService.selectProductCreateUser(productId);
-        // 判断当前用户是否为该产品的负责人
-        if(!user.getId().equals(userId)){
-            return false;
-        }
-        return true;
     }
 
     /**

@@ -19,7 +19,6 @@ public interface IProductListService {
 
     void addProductDistribute(Integer pid, Integer distributorId, Integer distributorNumber, Date startTime, Date endTime);
 
-    Integer selectProductCreateUser(Integer productId);
 
     Void deleteProductDistribute(int pid, int productDistributorId);
 
@@ -30,4 +29,6 @@ public interface IProductListService {
     Void addAttachement( int pid , String fileName , String fileUrl,String attachmentname);
 
     ProProduct getProductById(int pid);
+
+    boolean checkIsCharger(int productId);
 }
