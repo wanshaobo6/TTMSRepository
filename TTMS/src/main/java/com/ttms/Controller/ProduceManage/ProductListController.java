@@ -65,16 +65,12 @@ public class ProductListController {
      * @Author: 吴彬
      * @Date: 17:29 17:29
      */
-    @PostMapping("/privilege/distributor/{pid}")
-    public ResponseEntity<Void> addProductDistribute(Integer pid ,Integer distributorId ,
+    @PostMapping("/privilege/distributor")
+    public ResponseEntity<Void> addProductDistribute(Integer productId ,Integer distributorId ,
                                                      Integer distributorNumber, Date startTime, Date endTime){
-        //判断是否有权利操作
-        Boolean opt = isPermissionOpt(pid);
-        if(!opt){
-            throw new TTMSException(ExceptionEnum.PWERMISSION_OPTERATION);
-        }
+
         //TODO 没有完成需要查询产品的数量是否够分销  需要加一次判断
-        this.productListService.addProductDistribute(pid,distributorId,distributorNumber,startTime,endTime);
+        this.productListService.addProductDistribute(productId,distributorId,distributorNumber,startTime,endTime);
 
         return   ResponseEntity.ok().build();
     }
@@ -126,9 +122,9 @@ public class ProductListController {
      * @Author: 万少波
      * @Date: 2019/6/1 13:55
      */
-    @DeleteMapping("/privilege/distributor/{pid}")
-    public ResponseEntity<Void> deleteProductDistribute(@PathVariable int pid ,@RequestParam int productDistributorId){
-        return ResponseEntity.ok(productListService.deleteProductDistribute(pid,productDistributorId));
+    @DeleteMapping("/privilege/distributor")
+    public ResponseEntity<Void> deleteProductDistribute(@RequestParam int productId ,@RequestParam int productDistributorId){
+        return ResponseEntity.ok(productListService.deleteProductDistribute(productId,productDistributorId));
     }
 
     /**
@@ -165,11 +161,11 @@ public class ProductListController {
      * @Author: 万少波
      * @Date: 2019/6/1 14:58
      */
-    @PostMapping("privilege/attachment/{pid}")
-    public ResponseEntity<Void> addAttachement(@PathVariable int pid ,
+    @PostMapping("privilege/attachment")
+    public ResponseEntity<Void> addAttachement(@RequestParam int productId  ,
                                                @RequestParam String fileName ,
                                                @RequestParam String fileUrl,
                                                @RequestParam String attachmentname){
-        return ResponseEntity.ok(productListService.addAttachement(pid ,fileName ,fileUrl ,attachmentname));
+        return ResponseEntity.ok(productListService.addAttachement(productId ,fileName ,fileUrl ,attachmentname));
     }
  }
