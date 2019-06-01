@@ -6,12 +6,14 @@ import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.ProProductDistributorMapper;
+import com.ttms.Mapper.ProProductGuideMapper;
 import com.ttms.Mapper.ProProductMapper;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
 import com.ttms.service.ResourceManage.IAttachmentService;
+import com.ttms.service.ResourceManage.IGuideInfoManageService;
 import com.ttms.service.SupplyManage.IDistributorManageService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -36,6 +38,9 @@ public class ProductListService implements IProductListService {
     private ProProductDistributorMapper proProductDistributorMapper;
 
     @Autowired
+    private ProProductGuideMapper productGuideMapper;
+
+    @Autowired
     private IProductCatService productCatService;
 
     @Autowired
@@ -43,6 +48,9 @@ public class ProductListService implements IProductListService {
 
     @Autowired
     private IAttachmentService attachmentService;
+
+    @Autowired
+    private IGuideInfoManageService guideInfoManageService;
 
 
 
@@ -132,7 +140,7 @@ public class ProductListService implements IProductListService {
             throw new TTMSException(ExceptionEnum.PRODUCTDISTRIBUTOR_NOT_MATCH);
         }
         //修改数量
-        product.setSellednumber(+product.getSellednumber()-proProductDistributor.getDistributenum());
+        product.setSellednumber(product.getSellednumber()-proProductDistributor.getDistributenum());
         product.setLowestnumber(product.getLowestnumber()+proProductDistributor.getDistributenum());
         //更新产品数量
         productMapper.updateByPrimaryKey(product);
@@ -160,6 +168,22 @@ public class ProductListService implements IProductListService {
         return proProduct.getLowestnumber();
     }
 
+    @Override
+    public List<ResGuide> getGuidesByProductId(Integer pid) {
+        return guideInfoManageService.getGuidesByProductId(pid);
+    }
+
+    @Override
+    public Void deleteProductGuide(Integer productId, Integer guideId) {
+        ProProductGuide proProductGuide = new ProProductGuide();
+        proProductGuide.setProductid(productId);
+        proProductGuide.setGuideid(productId);
+        int delete = productGuideMapper.delete(proProductGuide);
+        if(delete != 1){
+            throw new TTMSException(ExceptionEnum.PRODUCT_GUIDE_DELETE_FAIL);
+        }
+        return null;
+    }
 
 
     @Override
