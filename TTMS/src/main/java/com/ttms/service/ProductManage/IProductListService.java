@@ -1,6 +1,7 @@
 package com.ttms.service.ProductManage;
 
 import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.ResGuide;
 import com.ttms.Entity.ResoAttachment;
 import com.ttms.Entity.SupDistributor;
 import com.ttms.Vo.PageResult;
@@ -34,6 +35,10 @@ public interface IProductListService {
 
     //查询商品剩余的数量
     Integer selectProductLowestNumber(Integer pid);
+
+    List<ResGuide> getGuidesByProductId(Integer pid);
+
+    Void deleteProductGuide(Integer productId, Integer guideId);
 
     //为产品添加分销商之后产品的数量更改  修改产品的数量
    // Void updataProductNumber(Integer productId);

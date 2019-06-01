@@ -1,6 +1,7 @@
 package com.ttms.Controller.ProduceManage;
 
 import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.ResGuide;
 import com.ttms.Entity.ResoAttachment;
 import com.ttms.Entity.SupDistributor;
 import com.ttms.Vo.PageResult;
@@ -140,11 +141,37 @@ public class ProductListController {
      * @Author: 万少波
      * @Date: 2019/6/1 14:58
      */
-    @PostMapping("privilege/attachment")
+    @PostMapping("/privilege/attachment")
     public ResponseEntity<Void> addAttachement(@RequestParam int productId  ,
                                                @RequestParam String fileName ,
                                                @RequestParam String fileUrl,
                                                @RequestParam String attachmentname){
         return ResponseEntity.ok(productListService.addAttachement(productId ,fileName ,fileUrl ,attachmentname));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉获取和产品关联的所有导游
+     * @Param: [pid]
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.ResGuide>>
+     * @Author: 万少波
+     * @Date: 2019/6/1 20:29
+     */
+    @GetMapping("/guide/{pid}")
+    public ResponseEntity<List<ResGuide>> getGuidesByProductId(@PathVariable Integer pid){
+        return ResponseEntity.ok(productListService.getGuidesByProductId(pid));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉删除产品下面的导游
+     * @Param: [productId, guideId]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/1 20:35
+     */
+    @DeleteMapping("/privilege/guide")
+    public ResponseEntity<Void> deleteProductGuide(@RequestParam Integer productId  , @RequestParam Integer guideId){
+        return ResponseEntity.ok(productListService.deleteProductGuide(productId , guideId));
     }
  }

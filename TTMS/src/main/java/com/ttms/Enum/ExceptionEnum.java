@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 public enum ExceptionEnum {
     USER_UNLOGIN(403,"您没有登陆"),
     NOT_AUTHORITY(403,"您没有权限访问"),
-    TIME_CONVERTER_ERROR(403,"时间转换错误"),
+    WRONG_OPERATION(444,"请正确操作"),
+    TIME_CONVERTER_ERROR(404,"时间转换错误"),
     NOT_OPERATION_AUTHORITY(403,"您无权创建项目"),
     USER_HAVE_BEEN_LIMIT(403,"您已被禁用"),
     MENUS_ALLOW_ACCESS_IS_NULL(404,"没有可以访问的菜单"),
@@ -62,12 +63,13 @@ public enum ExceptionEnum {
     NUMBER_NOT_ENOUGH(500,"产品剩余数量不足分销"),
     PRODUCT_UPDATE_NUM_FAIL(404,"产品更新数量失败"),
     INSERT_DISTRIBUTOR_FAIL(404,"新增分销商失败"),
-   // PRODUCT_NOT_FOUND(404,"产品不存在"),
     PRODUCT_ATTACHMENT_NOT_FOUND(404,"产品下不存在附件"),
     PRODUCT_DISTRIBUTOR_NOT_FOUND(404,"没有为该产品分销的分销商"),
     PRODUCTDISTRIBUTOR_NOT_MATCH(401,"产品没有被该分销商分销"),
     SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到"),
-    ATTACHMENT_INSERT_FAIL(500,"新增附件失败")
+    ATTACHMENT_INSERT_FAIL(500,"新增附件失败"),
+    RESGUIDE_NOT_FOUND(404,"导游不存在"),
+    PRODUCT_GUIDE_DELETE_FAIL(500,"产品下的导游删除失败")
     ;
     private int status;
     private String message;

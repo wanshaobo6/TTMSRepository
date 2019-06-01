@@ -27,7 +27,7 @@ public class ChargerOpeProductFilter implements HandlerInterceptor {
         try{
              productId = Integer.parseInt(request.getParameter("productId"));
         }catch (Exception e){
-            throw new TTMSException(ExceptionEnum.SYSTEM_ERROR);
+                throw new TTMSException(ExceptionEnum.WRONG_OPERATION);
         }
         boolean haveprivilege = productListService.checkIsCharger(productId);
         if(haveprivilege)
