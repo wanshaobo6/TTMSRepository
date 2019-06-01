@@ -63,18 +63,26 @@ public class ProductListController {
      * @Date: 17:29 17:29
      */
     @PostMapping("/privilege/distributor/{pid}")
-    public ResponseEntity<Void> addProductDistribute(Integer pid ,Integer distributorId ,
-                                                     Integer distributorNumber, Date startTime, Date endTime){
+    public ResponseEntity<Void> addProductDistribute(@PathVariable("pid") Integer pid ,Integer distributorId ,
+                                                     @RequestParam Integer distributorNumber, @RequestParam Date startTime,@RequestParam Date endTime){
         //判断是否有权利操作
         Boolean opt = isPermissionOpt(pid);
         if(!opt){
             throw new TTMSException(ExceptionEnum.PWERMISSION_OPTERATION);
         }
-        //TODO 没有完成需要查询产品的数量是否够分销  需要加一次判断
+        //  需要查询产品的数量是否够分销  需要加一次判断
+        //查询商品剩余数量
+        Integer b = this.productListService.selectProductLowestNumber(pid);
+       // int min = Math.min(distributorNumber, b);
+        if(b<distributorNumber ? true:false){
+            //分销数量大于剩余数量
+            throw new TTMSException(ExceptionEnum.NUMBER_NOT_ENOUGH);
+        }
         this.productListService.addProductDistribute(pid,distributorId,distributorNumber,startTime,endTime);
 
         return   ResponseEntity.ok().build();
     }
+
 
     private  Boolean isPermissionOpt(Integer productId){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();

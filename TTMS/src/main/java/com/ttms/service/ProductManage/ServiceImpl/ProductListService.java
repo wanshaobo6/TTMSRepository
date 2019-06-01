@@ -4,8 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.ProProduct;
 import com.ttms.Entity.ProProductCat;
+import com.ttms.Entity.ProProductDistributor;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
+import com.ttms.Mapper.ProProductDistributorMapper;
 import com.ttms.Mapper.ProProductMapper;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
@@ -31,6 +33,9 @@ public class ProductListService implements IProductListService {
 
     @Autowired
     private IProductCatService productCatService;
+
+    @Autowired
+    private ProProductDistributorMapper proProductDistributorMapper;
 
 
     /**
@@ -77,8 +82,32 @@ public class ProductListService implements IProductListService {
      * @Date: 17:20 17:20
      */
     @Override
+    @Transactional
     public void addProductDistribute(Integer pid, Integer distributorId, Integer distributorNumber, Date startTime, Date endTime) {
-
+        ProProductDistributor proProductDistributor=new ProProductDistributor();
+        proProductDistributor.setProductid(pid);
+        proProductDistributor.setDistributorid(distributorId);
+        proProductDistributor.setDistributenum(distributorNumber);
+        proProductDistributor.setStarttime(startTime);
+        proProductDistributor.setEndtime(endTime);
+        proProductDistributor.setCreatetime(new Date());
+        proProductDistributor.setUpdatetime(null);
+        int i = this.proProductDistributorMapper.insert(proProductDistributor);
+        if(i!=1){
+            throw new TTMSException(ExceptionEnum.INSERT_DISTRIBUTOR_FAIL);
+        }
+        //为产品添加分销商之后产品的数量更改  修改产品的数量 售出的数量 和剩余的数量
+        ProProduct product=new ProProduct();
+        //查询产品的售出数量
+        ProProduct productById = getProductById(pid);
+        product.setId(pid);
+        product.setSellednumber(productById.getSellednumber()+distributorNumber);
+        product.setLowestnumber(productById.getLowestnumber()-distributorNumber);
+        int update = this.productMapper.updateByPrimaryKeySelective(product);
+        if(update!=1){
+            throw new TTMSException(ExceptionEnum.PRODUCT_UPDATE_NUM_FAIL);
+        }
+        return;
     }
 
     /**
@@ -94,6 +123,22 @@ public class ProductListService implements IProductListService {
         ProProduct proProduct = this.productMapper.selectByPrimaryKey(productId);
         return proProduct.getCreateuserid();
     }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询商品的剩余数量
+    * @Param: [pid]
+    * @Return: java.lang.Integer
+    * @Author: 吴彬
+    * @Date: 13:55 13:55
+     */
+    @Override
+    public Integer selectProductLowestNumber(Integer pid) {
+        ProProduct proProduct = this.productMapper.selectByPrimaryKey(pid);
+        return proProduct.getLowestnumber();
+    }
+
+
     @Override
     public PageResult<ProProduct> queryProjectByPage(int status, int productCatId1,
            int productCatId2, int productCatId3, String projectName, String productNumber,
@@ -152,6 +197,14 @@ public class ProductListService implements IProductListService {
     }
 
 
+    /**
+    * 功能描述: <br>
+    * 〈〉根据id查询产品
+    * @Param: [pid]
+    * @Return: com.ttms.Entity.ProProduct
+    * @Author: 吴彬
+    * @Date: 14:06 14:06
+     */
     public ProProduct getProductById(int pid){
         ProProduct proProduct = productMapper.selectByPrimaryKey(pid);
         if (proProduct == null) {
