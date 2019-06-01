@@ -1,6 +1,7 @@
 package com.ttms.Controller.ProduceManage;
 
 import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.ResoAttachment;
 import com.ttms.Entity.SupDistributor;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.Date;
 import java.util.List;
 
@@ -129,8 +131,45 @@ public class ProductListController {
         return ResponseEntity.ok(productListService.deleteProductDistribute(pid,productDistributorId));
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈〉获取所有的分销商
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SupDistributor>>
+     * @Author: 万少波
+     * @Date: 2019/6/1 14:39
+     */
     @GetMapping("/distributors")
     public ResponseEntity<List<SupDistributor>> getAllDistributorInfo(){
         return ResponseEntity.ok(productListService.getAllDistributorInfo());
     }
-}
+
+    /**
+     * 功能描述: <br>
+     * 〈〉查询当前产品下所有附件
+     * @Param: [pid]
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.ResoAttachment>>
+     * @Author: 万少波
+     * @Date: 2019/6/1 14:49
+     */
+    @GetMapping("/allAttachment/{pid}")
+    public ResponseEntity<List<ResoAttachment>> getAttachmentsByPid(@PathVariable int pid){
+        return ResponseEntity.ok(productListService.getAttachmentsByPid(pid));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉新增附件
+     * @Param: [pid, fileName, attachmentname, attachmentUrl]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/1 14:58
+     */
+    @PostMapping("privilege/attachment/{pid}")
+    public ResponseEntity<Void> addAttachement(@PathVariable int pid ,
+                                               @RequestParam String fileName ,
+                                               @RequestParam String fileUrl,
+                                               @RequestParam String attachmentname){
+        return ResponseEntity.ok(productListService.addAttachement(pid ,fileName ,fileUrl ,attachmentname));
+    }
+ }

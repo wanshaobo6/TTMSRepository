@@ -1,10 +1,12 @@
 package com.ttms.service.ProductManage;
 
 import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.ResoAttachment;
 import com.ttms.Entity.SupDistributor;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
@@ -22,4 +24,10 @@ public interface IProductListService {
     Void deleteProductDistribute(int pid, int productDistributorId);
 
     List<SupDistributor> getAllDistributorInfo();
+
+    List<ResoAttachment> getAttachmentsByPid(int pid);
+
+    Void addAttachement( int pid , String fileName , String fileUrl,String attachmentname);
+
+    ProProduct getProductById(int pid);
 }

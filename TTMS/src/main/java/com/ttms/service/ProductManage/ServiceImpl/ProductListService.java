@@ -2,10 +2,7 @@ package com.ttms.service.ProductManage.ServiceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ttms.Entity.ProProduct;
-import com.ttms.Entity.ProProductCat;
-import com.ttms.Entity.ProProductDistributor;
-import com.ttms.Entity.SupDistributor;
+import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.ProProductDistributorMapper;
@@ -14,8 +11,10 @@ import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
+import com.ttms.service.ResourceManage.IAttachmentService;
 import com.ttms.service.SupplyManage.IDistributorManageService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +41,8 @@ public class ProductListService implements IProductListService {
     @Autowired
     private IDistributorManageService distributorManageService;
 
+    @Autowired
+    private IAttachmentService attachmentService;
 
     /**
      * 功能描述: <br>
@@ -132,6 +133,16 @@ public class ProductListService implements IProductListService {
     }
 
     @Override
+    public List<ResoAttachment> getAttachmentsByPid(int pid) {
+        return attachmentService.getAttachmentsByPid(pid);
+    }
+
+    @Override
+    public Void addAttachement(int pid, String fileName, String fileUrl, String attachmentname) {
+        return attachmentService.addAttachment(pid,fileName,fileUrl,attachmentname, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getId());
+    }
+
+    @Override
     public PageResult<ProProduct> queryProjectByPage(int status, int productCatId1,
            int productCatId2, int productCatId3, String projectName, String productNumber,
             String productName, Date serverStartTime, Date serverEndTime, int page, int size) {
@@ -200,7 +211,7 @@ public class ProductListService implements IProductListService {
     public ProProductDistributor getProProductDistributorByid(int id){
         ProProductDistributor proProductDistributor = proProductDistributorMapper.selectByPrimaryKey(id);
         if (proProductDistributor==null) {
-            throw new TTMSException(ExceptionEnum.PRODUCTDISTRIBUTOR_NOT_FOUND);
+            throw new TTMSException(ExceptionEnum.PRODUCT_DISTRIBUTOR_NOT_FOUND);
         }
         return proProductDistributor;
     }

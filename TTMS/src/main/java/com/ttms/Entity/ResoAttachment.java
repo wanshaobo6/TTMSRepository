@@ -1,5 +1,6 @@
 package com.ttms.Entity;
 
+
 import lombok.Data;
 
 import javax.persistence.GeneratedValue;

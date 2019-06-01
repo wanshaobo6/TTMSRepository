@@ -56,9 +56,11 @@ public enum ExceptionEnum {
     PRODUCT_UPDATE_FAIL(500,"操作失败"),
     PWERMISSION_OPTERATION(500,"你没有权限操作"),
     PRODUCT_NOT_FOUND(404,"产品不存在"),
-    PRODUCTDISTRIBUTOR_NOT_FOUND(404,"没有为该产品分销的分销商"),
+    PRODUCT_ATTACHMENT_NOT_FOUND(404,"产品下不存在附件"),
+    PRODUCT_DISTRIBUTOR_NOT_FOUND(404,"没有为该产品分销的分销商"),
     PRODUCTDISTRIBUTOR_NOT_MATCH(401,"产品没有被该分销商分销"),
-    SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到")
+    SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到"),
+    ATTACHMENT_INSERT_FAIL(500,"新增附件失败")
     ;
     private int status;
     private String message;
