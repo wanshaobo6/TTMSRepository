@@ -1,4 +1,4 @@
-package com.ttms.service.ProductManage.ServiceImpl;
+package com.ttms.service.ResourceManage.ServiceImpl;
 
 import com.ttms.Entity.ResGuide;
 import com.ttms.Enum.ExceptionEnum;

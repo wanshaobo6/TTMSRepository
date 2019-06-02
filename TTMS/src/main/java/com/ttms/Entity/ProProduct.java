@@ -1,6 +1,7 @@
 package com.ttms.Entity;
 
 import lombok.Data;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -61,5 +62,7 @@ public class ProProduct {
     private Integer createuserid;
 
     private Integer updateuserid;
+
+
 
 }

@@ -4,10 +4,13 @@ import com.ttms.Entity.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductListService;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.Date;
 import java.util.List;
 
@@ -180,7 +183,7 @@ public class ProductListController {
      * @Author: 万少波
      * @Date: 2019/6/1 21:19
      */
-    @RequestMapping("/guide/page")
+    @GetMapping("/guide/page")
     public ResponseEntity<PageResult<ResGuide>>
     queryGuidesNotInProduct(
                            @RequestParam  Integer productId,
@@ -191,5 +194,77 @@ public class ProductListController {
                            @RequestParam(required = false,defaultValue = "1") int page ,
                            @RequestParam(required = false,defaultValue = "5") int rows){
         return ResponseEntity.ok(productListService.queryGuidesNotInProduct(productId,guideName,mobile,language,nationality,page,rows));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉为产品添加导游
+     * @Param: [productId, guideIds]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/2 9:08
+     */
+    @PostMapping("/privilege/guide")
+    public ResponseEntity<Void> addProductGuide﻿(@RequestParam Integer productId , @RequestParam @RequestBody List<Integer> guideIds){
+        return ResponseEntity.ok(productListService.addProductGuide﻿(productId,guideIds));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉查询当前产品加入的价格政策
+     * @Param: [pid]
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.ResGuide>>
+     * @Author: 万少波
+     * @Date: 2019/6/2 9:31
+     */
+    @GetMapping("/pricepolicy/{pid}")
+    public ResponseEntity<List<ProPricepolicy>> getPricePolicyByProductId(@PathVariable Integer pid){
+        return ResponseEntity.ok(productListService.getPricePolicyByProductId(pid));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉删除产品下面的价格政策
+     * @Param: [productId, pricePolicyId]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/2 10:17
+     */
+    @DeleteMapping("/privilege/pricepolicy")
+    public ResponseEntity<Void> deleteProductPricePolicy(int productId, int pricePolicyId){
+        return ResponseEntity.ok(productListService.deleteProductPricePolicy(productId,pricePolicyId));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉分页查询产品下关联的价格政策
+     * @Param: [productId, pricePolicyName, startTime, endTime, page, rows]
+     * @Return: org.springframework.http.ResponseEntity<com.ttms.Vo.PageResult<com.ttms.Entity.ProPricepolicy>>
+     * @Author: 万少波
+     * @Date: 2019/6/2 11:09
+     */
+    @GetMapping("/pricepolicy/page")
+    public ResponseEntity<PageResult<ProPricepolicy>> getPolicyNotinProductByPage(@RequestParam Integer productId,
+                                                                  @RequestParam(required = false) String pricePolicyName ,
+                                                                  @RequestParam(required = false) Date startTime ,
+                                                                  @RequestParam(required = false) Date endTime,
+                                                                  @RequestParam(required = false,defaultValue = "1") int page,
+                                                                  @RequestParam(required = false,defaultValue = "5") int rows
+                                                                  ){
+        return ResponseEntity.ok(productListService.getPolicyNotinProductByPage(productId, pricePolicyName ,startTime ,endTime ,page,rows ));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉为产品添加价格政策
+     * @Param: [productId, pricespolicyIds]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/2 11:12
+     */
+    @PostMapping("/privilege/pricepolicy")
+    public ResponseEntity<Void> addProductPricePolicy(@RequestParam int productId ,
+                                                      @RequestParam @RequestBody List<Integer> pricespolicyIds){
+        return ResponseEntity.ok(productListService.addProductPricePolicy(productId,pricespolicyIds));
     }
  }
