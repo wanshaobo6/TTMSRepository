@@ -1,10 +1,12 @@
 package com.ttms.Controller.ProduceManage;
 
 import com.ttms.Entity.ProGroup;
+import com.ttms.Entity.ProProductCat;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.service.ProductManage.ICreateProductService;
+import com.ttms.service.ProductManage.ServiceImpl.ProductCatService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ import java.util.List;
 public class CreateProductController {
     @Autowired
     private ICreateProductService createProductService;
+
+    @Autowired
+    private ProductCatService productCatService;
 
 
     /*
@@ -98,6 +103,19 @@ public class CreateProductController {
         , productCatId3, serverStartTime, serverEndTime, preSellNumber, selledNumber
         , lowestNumber, onsellTime, productPrice, upsellTime, hotTip, productIntroduction, user);
         return ResponseEntity.ok().body(null);
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉根据id查询所有
+     * @Param: [catId]
+     * @Return: java.util.List<com.ttms.Entity.ProProductCat>
+     * @Author: 吴彬
+     * @Date: 11:10 11:10
+     */
+    @GetMapping("queryCatById")
+    public ResponseEntity<List<ProProductCat>> queryCatById(@RequestParam("catId") Integer catId){
+        return ResponseEntity.ok(this.productCatService.queryCatById(catId));
     }
 
 }
