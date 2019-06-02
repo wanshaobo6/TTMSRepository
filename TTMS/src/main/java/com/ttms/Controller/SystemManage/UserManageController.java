@@ -105,7 +105,6 @@ public class UserManageController {
         user.setCreateduserid(curUser.getId());
         sysMenusService.updateUserById(user);
         //更新项目表
-       // TODO: 2019/5/29
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
