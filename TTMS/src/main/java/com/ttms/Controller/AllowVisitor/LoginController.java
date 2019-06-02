@@ -9,6 +9,7 @@ import com.ttms.Vo.ModulesVo;
 import com.ttms.service.AllowVisitor.LoginService;
 import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.CodecUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -18,15 +19,12 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/login")
+@Slf4j
 public class LoginController {
 
     @Autowired
@@ -41,7 +39,7 @@ public class LoginController {
      * @Author: 万少波
      * @Date: 2019/5/26 17:05
      */
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<List<ModulesVo>> login(@RequestParam String username , @RequestParam String password){
         //获取subject
         Subject subject = SecurityUtils.getSubject();
@@ -60,6 +58,7 @@ public class LoginController {
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
         try {
             subject.login(usernamePasswordToken);    //只要没有任何异常则表示登录成功
+            log.debug("用户" + currUser.getUsername() + "退出登录");
             //查询用户能访问到的菜单并返回
             return ResponseEntity.ok(loginService.getUserMenusVo());
         }catch (LockedAccountException e) {
@@ -71,5 +70,22 @@ public class LoginController {
         }
     }
 
-
+    /**
+     * 功能描述: <br>
+     * 〈〉退出登录
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/2 13:51
+     */
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout(){
+        Subject subject = SecurityUtils.getSubject();
+        SysUser user = (SysUser)subject.getPrincipal();
+        if (subject.isAuthenticated()) {
+            subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存
+              log.debug("用户" + user.getUsername() + "退出登录");
+        }
+        return ResponseEntity.ok(null);
+    }
 }

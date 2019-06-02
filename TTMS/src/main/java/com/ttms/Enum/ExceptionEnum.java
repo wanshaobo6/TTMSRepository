@@ -11,6 +11,8 @@ public enum ExceptionEnum {
     USER_UNLOGIN(403,"您没有登陆"),
     NOT_AUTHORITY(403,"您没有权限访问"),
     WRONG_OPERATION(444,"请正确操作"),
+    FILE_UPLOAD_FAIL(500,"文件上传失败"),
+    FILE_SIZE_TOO_LARGE(500,"文件过大"),
     TIME_CONVERTER_ERROR(404,"时间转换错误"),
     NOT_OPERATION_AUTHORITY(403,"您无权创建项目"),
     USER_HAVE_BEEN_LIMIT(403,"您已被禁用"),

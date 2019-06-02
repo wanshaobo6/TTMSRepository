@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Configuration
 @Slf4j
-public class convertDate implements Converter<String,Date> {
+public class ConvertDate implements Converter<String,Date> {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Override
     public Date convert(String s) {
