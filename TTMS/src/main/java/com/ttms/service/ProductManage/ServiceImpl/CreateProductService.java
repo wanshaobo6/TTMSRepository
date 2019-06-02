@@ -81,7 +81,15 @@ public class CreateProductService implements ICreateProductService {
         proProduct.setProductcatid1(productCatId1);
         proProduct.setProductcatid2(productCatId2);
         proProduct.setProductcatid3(productCatId3);
-        proProduct.setProductname(productName());
+        proProduct.setProductname(productName);
+        proProduct.setProductnumber(productName());
+        //根据groupId查询补全参数
+        //ProGroup group = this.groupMapper.selectByPrimaryKey(groupId);
+        ProGroup groupById = this.groupService.getGroupById(groupId);
+        proProduct.setProjectid(groupById.getProjectid());
+        //TODO proProduct.setProductname(null);
+        proProduct.setProjectname(groupById.getProjectname());
+        //TODO proProduct.setPresellnumber(0);
         proProduct.setServerstarttime(serverStartTime);
         proProduct.setServerendtime(serverEndTime);
         proProduct.setOnselltime(onsellTime);
@@ -92,6 +100,7 @@ public class CreateProductService implements ICreateProductService {
         proProduct.setProductprice(productPrice);
         proProduct.setHottip(hotTip);
         proProduct.setProductintroduction(productIntroduction);
+        proProduct.setProductstatus(1);
         int i = this.proProductMapper.insert(proProduct);
         if (i != 1) {
             throw new TTMSException(ExceptionEnum.PRODUCT_ADD_FAIL);

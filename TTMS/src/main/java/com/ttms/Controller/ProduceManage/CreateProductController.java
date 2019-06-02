@@ -84,10 +84,17 @@ public class CreateProductController {
         return ResponseEntity.ok().body(null);
     }
 
-
+    /**
+    * 功能描述: <br>
+    * 〈〉, @RequestParam(name = "groupId") Integer groupId,
+    * @Param: [pid, productCatId1, productCatId2, productCatId3, productName, serverStartTime, serverEndTime, preSellNumber, selledNumber, lowestNumber, onsellTime, productPrice, upsellTime, hotTip, productIntroduction]
+    * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+    * @Author: 吴彬
+    * @Date: 16:51 16:51
+     */
     @PostMapping("/privilege/{pid}")
     public ResponseEntity<Void> editProduct(
-            @PathVariable("pid") Integer pid, @RequestParam(name = "groupId") Integer groupId,
+           @PathVariable("pid") Integer pid,
             @RequestParam Integer productCatId1,
             @RequestParam Integer productCatId2,
             @RequestParam(value = "productCatId3") Integer productCatId3,
@@ -103,7 +110,7 @@ public class CreateProductController {
             @RequestParam(value = "hotTip") String hotTip,
             @RequestParam(value = "productIntroduction") String productIntroduction){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        this.createProductService.UpdateProduct(groupId, productCatId1,productCatId2
+        this.createProductService.UpdateProduct(null, productCatId1,productCatId2
         , productCatId3, serverStartTime, serverEndTime, preSellNumber, selledNumber
         , lowestNumber, onsellTime, productPrice, upsellTime, hotTip, productIntroduction, user);
         return ResponseEntity.ok().body(null);

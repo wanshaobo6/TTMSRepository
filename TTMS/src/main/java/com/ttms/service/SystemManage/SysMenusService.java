@@ -357,6 +357,7 @@ public class SysMenusService {
          * @Author: lhf
          * @Date: 2019/5/26 17:40
          */
+        @Transactional
         public void addSysUser( String username,  String image,
                                 String password,  String mail,
                                 String  phonenumber , Integer roleId) {
