@@ -72,7 +72,7 @@ public class ProductCatService implements IProductCatService {
         ProProductCat productCat=new ProProductCat();
         productCat.setCreatetime(new Date());
         productCat.setCreateuserid(user.getId());
-        productCat.setIsparent((byte)0);
+        productCat.setIsParent((byte)0);
         productCat.setParentid(parentId);
         productCat.setUpdatetime(null);
         productCat.setProductcatname(name);
@@ -83,11 +83,16 @@ public class ProductCatService implements IProductCatService {
         //如果根据父id为主键查询不存在的话
         ProProductCat proProductCat = proProductCatMapper.selectByPrimaryKey(parentId);
         //证明添加的是一级分类可以结束方法
-        if(productCat==null){
+        if(proProductCat==null){
+            productCat.setIsParent((byte)1);
+            int update = this.proProductCatMapper.updateByPrimaryKeySelective(productCat);
+            if(update!=1){
+                throw new TTMSException(ExceptionEnum.PRODUCT_CAT_ADD_FAIL);
+            }
             return null;
         }
-        if(proProductCat.getIsparent()!=1){
-            proProductCat.setIsparent((byte) 1);
+        if(proProductCat.getIsParent()!=1){
+            proProductCat.setIsParent((byte) 1);
             int key = this.proProductCatMapper.updateByPrimaryKey(proProductCat);
         }
         return null;
@@ -128,6 +133,7 @@ public class ProductCatService implements IProductCatService {
     public Void updateProProductCat(Integer productId, String name, SysUser user) {
         ProProductCat productCat=new ProProductCat();
         productCat.setUpdateuserid(user.getId());
+        productCat.setId(productId);
         productCat.setUpdatetime(new Date());
         productCat.setProductcatname(name);
         int i = this.proProductCatMapper.updateByPrimaryKeySelective(productCat);
@@ -153,7 +159,7 @@ public class ProductCatService implements IProductCatService {
 //        Example example=new Example(ProProductCat.class);
 //        example
         ProProductCat productCat = this.proProductCatMapper.selectByPrimaryKey(productCatId);
-        if(productCat.getIsparent()==1){
+        if(productCat.getIsParent()==1){
             Example example=new Example(ProProductCat.class);
             Example.Criteria criteria = example.createCriteria();
             criteria.andEqualTo("parentid", productCat.getId());

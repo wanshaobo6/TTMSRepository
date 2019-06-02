@@ -72,6 +72,8 @@ public enum ExceptionEnum {
     SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到"),
     ATTACHMENT_INSERT_FAIL(500,"新增附件失败"),
     RESGUIDE_NOT_FOUND(404,"导游不存在"),
+    MSG_UPDATE_FALI(404,"消息更新失败"),
+    MSG_RELEASE_FALI(404,"消息发布失败"),
     PRODUCT_GUIDE_DELETE_FAIL(500,"产品下的导游删除失败")
     ;
     private int status;
