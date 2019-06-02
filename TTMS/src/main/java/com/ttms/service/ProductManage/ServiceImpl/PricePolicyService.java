@@ -53,4 +53,13 @@ public class PricePolicyService implements IPricePolicyService {
         }
         return pricepolicies;
     }
+
+    @Override
+    public List<ProPricepolicy> getPricePolicyByIds(List<Integer> pricepolicyIds) {
+        List<ProPricepolicy> pricepolicies = pricePolicyMapper.selectByIdList(pricepolicyIds);
+        if (CollectionUtils.isEmpty(pricepolicies)) {
+            throw new TTMSException(ExceptionEnum.PRICE_POLICY_NOT_FOUND);
+        }
+        return pricepolicies;
+    }
 }

@@ -10,4 +10,6 @@ public interface IPricePolicyService {
     List<ProPricepolicy> getProPricepoliciesByProductId(Integer pid);
 
     List<ProPricepolicy> queryPricePolicyByCriteria(List<Integer> pricePolicyIds, String pricePolicyName, Date startTime, Date endTime);
+
+    List<ProPricepolicy> getPricePolicyByIds(List<Integer> pricepolicyIds);
 }

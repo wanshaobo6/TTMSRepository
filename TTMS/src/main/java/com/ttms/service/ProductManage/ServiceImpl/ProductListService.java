@@ -23,10 +23,7 @@ import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -220,8 +217,9 @@ public class ProductListService implements IProductListService {
     @Override
     @Transactional
     public Void addProductGuide﻿(Integer productId, List<Integer> guideIds) {
+        //查询是否产品是否已经和该导游关联
         Example example = new Example(ProProductGuide.class);
-        example.createCriteria().andIn("guideid",guideIds);
+        example.createCriteria().andIn("guideid",guideIds).andEqualTo("productid",productId);
         List<ProProductGuide> proProductGuides = productGuideMapper.selectByExample(example);
         if (!CollectionUtils.isEmpty(proProductGuides)) {
             throw new TTMSException(ExceptionEnum.PRODUCT_GUIDE_ALREADY_EXIST);
@@ -287,6 +285,43 @@ public class ProductListService implements IProductListService {
         pageResult.setTotalPage(pageInfo.getPages());
         pageResult.setTotal(pageInfo.getTotal());
         return pageResult;
+    }
+
+    @Override
+    @Transactional
+    public Void addProductPricePolicy(int productId, List<Integer> pricepolicyIds) {
+        //查看产品下需要增加的政策是不是已经存在
+        Example example = new Example(ProProductPricepolicy.class);
+        example.createCriteria().andIn("pricepolicyid",pricepolicyIds).andEqualTo("productid",productId);
+        List<ProProductPricepolicy> proProductPricepolicies = productPricepolicyMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(proProductPricepolicies)) {
+            throw new TTMSException(ExceptionEnum.PRODUCT_PRICE_POLICY_ALREADY_EXIST);
+        }
+        //查询当前项目信息
+        ProProduct product = this.getProductById(productId);
+        //获取价格政策相关信息
+        List<ProPricepolicy> dbPricepolicy = pricePolicyService.getPricePolicyByIds(pricepolicyIds);
+        Map<Integer,ProPricepolicy> dbPricepolicyMap =dbPricepolicy.stream().
+                collect(Collectors.toMap(ProPricepolicy::getId,(p)->p));
+        //插入记录
+        List<ProProductPricepolicy> insertpolicies = new ArrayList<>();
+        Date now = new Date();
+        for (Integer pricepolicyId:pricepolicyIds){
+            ProProductPricepolicy pricepolicy = new ProProductPricepolicy();
+            pricepolicy.setProductid(productId);
+            ProPricepolicy p = dbPricepolicyMap.get(pricepolicyId);
+            pricepolicy.setPriceafterdiscount(product.getProductprice() - p.getPolicydiscount());
+            pricepolicy.setPricepolicyid(pricepolicyId);
+            pricepolicy.setCreatetime(now);
+            pricepolicy.setUpdatetime(now);
+            insertpolicies.add(pricepolicy);
+        }
+        int count = productPricepolicyMapper.insertList(insertpolicies);
+        //特殊情况
+        if(count != pricepolicyIds.size()){
+            throw new TTMSException(ExceptionEnum.PRODUCT_PRICE_POLICY_INSERT_FAIL);
+        }
+       return null;
     }
 
     @Override

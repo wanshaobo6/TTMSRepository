@@ -254,4 +254,17 @@ public class ProductListController {
         return ResponseEntity.ok(productListService.getPolicyNotinProductByPage(productId, pricePolicyName ,startTime ,endTime ,page,rows ));
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈〉为产品添加价格政策
+     * @Param: [productId, pricespolicyIds]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/2 11:12
+     */
+    @PostMapping("/privilege/pricepolicy")
+    public ResponseEntity<Void> addProductPricePolicy(@RequestParam int productId ,
+                                                      @RequestParam @RequestBody List<Integer> pricespolicyIds){
+        return ResponseEntity.ok(productListService.addProductPricePolicy(productId,pricespolicyIds));
+    }
  }

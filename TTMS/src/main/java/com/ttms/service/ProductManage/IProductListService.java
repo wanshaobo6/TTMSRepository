@@ -49,6 +49,8 @@ public interface IProductListService {
 
     PageResult<ProPricepolicy> getPolicyNotinProductByPage(Integer productId, String pricePolicyName, Date startTime, Date endTime , int page  , int rows);
 
+    Void addProductPricePolicy(int productId, List<Integer> pricepolicyIds);
+
     //为产品添加分销商之后产品的数量更改  修改产品的数量
    // Void updataProductNumber(Integer productId);
 
