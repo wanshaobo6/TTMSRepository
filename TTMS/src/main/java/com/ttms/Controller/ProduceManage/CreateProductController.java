@@ -6,6 +6,7 @@ import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.service.ProductManage.ICreateProductService;
+import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.ServiceImpl.ProductCatService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class CreateProductController {
 
     @Autowired
     private ProductCatService productCatService;
+
+    @Autowired
+    private IGroupService groupService;
 
 
     /*
@@ -116,6 +120,24 @@ public class CreateProductController {
     @GetMapping("queryCatById")
     public ResponseEntity<List<ProProductCat>> queryCatById(@RequestParam("catId") Integer catId){
         return ResponseEntity.ok(this.productCatService.queryCatById(catId));
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询用户是否和当前团的负责人一致
+    * @Param: [groupId]
+    * @Return: org.springframework.http.ResponseEntity<com.ttms.Entity.SysUser>
+    * @Author: 吴彬
+    * @Date: 13:31 13:31
+     */
+    @GetMapping("/AmIcharger/{groupId}")
+    public ResponseEntity<SysUser> AmIcharger(@PathVariable("groupId") Integer groupId){
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        Boolean amIcharger=this.groupService.AmIcharger(groupId,user.getId());
+        if(!amIcharger){
+            throw new TTMSException(ExceptionEnum.USER_NOT_GROUPCHARGEUSER);
+        }
+        return ResponseEntity.ok(user);
     }
 
 }

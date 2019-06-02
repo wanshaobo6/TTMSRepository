@@ -55,6 +55,9 @@ public class ProductListService implements IProductListService {
     @Autowired
     private IPricePolicyService pricePolicyService;
 
+    @Autowired
+    private ProRouteMapper proRouteMapper;
+
     /**
      * 功能描述: <br>
      * 〈〉修改产品的状态
@@ -322,6 +325,45 @@ public class ProductListService implements IProductListService {
             throw new TTMSException(ExceptionEnum.PRODUCT_PRICE_POLICY_INSERT_FAIL);
         }
        return null;
+    }
+    /**
+    * 功能描述: <br>
+    * 〈〉添加行程
+    * @Param: [productId, name, content, stayMessage, breakfast, lunch, supper]
+    * @Return: java.lang.Void
+    * @Author: 吴彬
+    * @Date: 13:42 13:42
+     */
+    @Override
+    @Transactional
+    public Void addRount(Integer productId, String name, String content, String stayMessage, String breakfast, String lunch, String supper) {
+        //查询是否存在行程
+        ProRoute proRoute=new ProRoute();
+        proRoute.setProductid(productId);
+        ProRoute selectOne = this.proRouteMapper.selectOne(proRoute);
+        proRoute.setId(selectOne.getId());
+        proRoute.setBreakfast(breakfast);
+        proRoute.setContent(content);
+        proRoute.setLunch(lunch);
+        proRoute.setStaymessage(stayMessage);
+        proRoute.setName(name);
+        proRoute.setSupper(supper);
+        if(selectOne==null){
+        proRoute.setCreatetime(new Date());
+        proRoute.setUpdatetime(null);
+            //新增
+            int insert = this.proRouteMapper.insert(proRoute);
+            if (insert!=1){
+                throw  new TTMSException(ExceptionEnum.PRODUCT_ROUTE_SET_FAIL);
+            }
+        }
+        proRoute.setCreatetime(null);
+        proRoute.setUpdatetime(new Date());
+        int i = this.proRouteMapper.updateByPrimaryKeySelective(proRoute);
+        if(i!=1){
+            throw  new TTMSException(ExceptionEnum.PRODUCT_ROUTE_UPDATE_FAIL);
+        }
+        return null;
     }
 
     @Override

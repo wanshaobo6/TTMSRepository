@@ -4,13 +4,10 @@ import com.ttms.Entity.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
 import com.ttms.service.ProductManage.IProductListService;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.Date;
 import java.util.List;
 
@@ -60,9 +57,8 @@ public class ProductListController {
     public ResponseEntity<Void> addProductDistribute(Integer productId ,Integer distributorId ,
                                                      Integer distributorNumber, Date startTime, Date endTime){
 
-        //TODO 没有完成需要查询产品的数量是否够分销  需要加一次判断
+        // 没有完成需要查询产品的数量是否够分销  需要加一次判断
         this.productListService.addProductDistribute(productId,distributorId,distributorNumber,startTime,endTime);
-
         return   ResponseEntity.ok().build();
     }
 
@@ -266,5 +262,11 @@ public class ProductListController {
     public ResponseEntity<Void> addProductPricePolicy(@RequestParam int productId ,
                                                       @RequestParam @RequestBody List<Integer> pricespolicyIds){
         return ResponseEntity.ok(productListService.addProductPricePolicy(productId,pricespolicyIds));
+    }
+    @PostMapping("/privilege/route")
+    public ResponseEntity<Void> addRount(Integer productId,String name,
+                                                      String content,String stayMessage,String breakfast,String lunch,String supper){
+
+    return ResponseEntity.ok(productListService.addRount(productId,name,content,stayMessage,breakfast,lunch,supper));
     }
  }
