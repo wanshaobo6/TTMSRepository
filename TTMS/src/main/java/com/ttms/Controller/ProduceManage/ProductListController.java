@@ -231,7 +231,7 @@ public class ProductListController {
      * @Date: 2019/6/2 10:17
      */
     @DeleteMapping("/privilege/pricepolicy")
-    public ResponseEntity<Void> deleteProductPricePolicy(int productId, int pricePolicyId){
+    public ResponseEntity<Void> deleteProductPricePolicy(@RequestParam  int productId, @RequestParam  int pricePolicyId){
         return ResponseEntity.ok(productListService.deleteProductPricePolicy(productId,pricePolicyId));
     }
 

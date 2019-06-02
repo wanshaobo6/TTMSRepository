@@ -11,6 +11,8 @@ public enum ExceptionEnum {
     USER_UNLOGIN(403,"您没有登陆"),
     NOT_AUTHORITY(403,"您没有权限访问"),
     WRONG_OPERATION(444,"请正确操作"),
+    FILE_UPLOAD_FAIL(500,"文件上传失败"),
+    FILE_SIZE_TOO_LARGE(500,"文件过大"),
     TIME_CONVERTER_ERROR(404,"时间转换错误"),
     NOT_OPERATION_AUTHORITY(403,"您无权创建项目"),
     USER_HAVE_BEEN_LIMIT(403,"您已被禁用"),
@@ -79,7 +81,7 @@ public enum ExceptionEnum {
     PRODUCT_PRICE_POLICY_DELETE_FAIL(500,"产品下的价格优惠政策删除失败"),
     PRODUCT_PRICE_POLICY_ALREADY_EXIST(501,"产品下的优惠信息不能重复增加"),
     PRODUCT_PRICE_POLICY_INSERT_FAIL(501,"为产品增加优惠政策失败"),
-    PRICE_POLICY_NOT_FOUND(404,"价格政策不存在")
+    PRICE_POLICY_NOT_FOUND(404,"价格政策不存在"),
     ;
     private int status;
     private String message;
