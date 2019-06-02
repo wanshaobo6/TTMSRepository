@@ -69,7 +69,11 @@ public enum ExceptionEnum {
     SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到"),
     ATTACHMENT_INSERT_FAIL(500,"新增附件失败"),
     RESGUIDE_NOT_FOUND(404,"导游不存在"),
-    PRODUCT_GUIDE_DELETE_FAIL(500,"产品下的导游删除失败")
+    PRODUCT_GUIDE_DELETE_FAIL(500,"产品下的导游删除失败"),
+    PRODUCT_GUIDE_ALREADY_EXIST(501,"导游信息不能重复插入"),
+    PRODUCT_GUIDE_INSERT_FAIL(501,"为产品增加导游失败"),
+    PRODUCT_PRICE_POLICY_NOT_FOUND(404,"该产品下没有价格优惠政策"),
+    PRODUCT_PRICE_POLICY_DELETE_FAIL(500,"产品下的价格优惠政策删除失败")
     ;
     private int status;
     private String message;

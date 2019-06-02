@@ -5,11 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
-import com.ttms.Mapper.ProProductDistributorMapper;
-import com.ttms.Mapper.ProProductGuideMapper;
-import com.ttms.Mapper.ProProductMapper;
+import com.ttms.Mapper.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
+import com.ttms.service.ProductManage.IPricePolicyService;
 import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
 import com.ttms.service.ResourceManage.IAttachmentService;
@@ -41,6 +40,8 @@ public class ProductListService implements IProductListService {
     @Autowired
     private ProProductGuideMapper productGuideMapper;
 
+    @Autowired
+    private ProProductPricepolicyMapper productPricepolicyMapper;
 
     @Autowired
     private IProductCatService productCatService;
@@ -54,7 +55,8 @@ public class ProductListService implements IProductListService {
     @Autowired
     private IGuideInfoManageService guideInfoManageService;
 
-
+    @Autowired
+    private IPricePolicyService pricePolicyService;
 
     /**
      * 功能描述: <br>
@@ -215,6 +217,77 @@ public class ProductListService implements IProductListService {
         return pageResult;
     }
 
+    @Override
+    @Transactional
+    public Void addProductGuide﻿(Integer productId, List<Integer> guideIds) {
+        Example example = new Example(ProProductGuide.class);
+        example.createCriteria().andIn("guideid",guideIds);
+        List<ProProductGuide> proProductGuides = productGuideMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(proProductGuides)) {
+            throw new TTMSException(ExceptionEnum.PRODUCT_GUIDE_ALREADY_EXIST);
+        }
+        //插入记录
+        List<ProProductGuide> productGuides = new ArrayList<>();
+        Date now = new Date();
+        for (Integer gudieId:guideIds){
+            ProProductGuide productGuide = new ProProductGuide();
+            productGuide.setProductid(productId);
+            productGuide.setGuideid(gudieId);
+            productGuide.setCreatetime(now);
+            productGuides.add(productGuide);
+        }
+        int count = productGuideMapper.insertList(productGuides);
+        //特殊情况
+        if(count != guideIds.size()){
+            throw new TTMSException(ExceptionEnum.PRODUCT_GUIDE_INSERT_FAIL);
+        }
+        return null;
+    }
+
+    @Override
+    public List<ProPricepolicy> getPricePolicyByProductId(Integer pid) {
+        return pricePolicyService.getProPricepoliciesByProductId(pid);
+    }
+
+    @Override
+    public Void deleteProductPricePolicy(int productId, int pricePolicyId) {
+        ProProductPricepolicy productPricepolicy = new ProProductPricepolicy();
+        productPricepolicy.setProductid(productId);
+        productPricepolicy.setPricepolicyid(pricePolicyId);
+        int count = productPricepolicyMapper.delete(productPricepolicy);
+        if(count != 1){
+            throw new TTMSException(ExceptionEnum.PRODUCT_PRICE_POLICY_DELETE_FAIL);
+        }
+        return null;
+    }
+
+    @Override
+    public PageResult<ProPricepolicy> getPolicyNotinProductByPage(Integer productId,
+                                          String pricePolicyName, Date startTime, Date endTime , int page  , int rows) {
+        PageResult<ProPricepolicy> pageResult = new PageResult<>();
+        //查询出该产品下添加的所有价格政策Id
+        ProProductPricepolicy productPricepolicy = new ProProductPricepolicy();
+        productPricepolicy.setProductid(productId);
+        List<ProProductPricepolicy> productPricepolicies = productPricepolicyMapper.select(productPricepolicy);
+        //获取产品下所有的导游id
+        List<Integer> pricePolicyIds = null;
+        if(!CollectionUtils.isEmpty(productPricepolicies)){
+            pricePolicyIds = productPricepolicies.stream().map(pricepolicy -> {
+                return pricepolicy.getPricepolicyid();
+            }).collect(Collectors.toList());
+        }
+        //分页
+        PageHelper.startPage(page,rows);
+        //查询条件并查询
+        List<ProPricepolicy> pricePolicies = pricePolicyService.
+                queryPricePolicyByCriteria(pricePolicyIds , pricePolicyName,startTime ,endTime);
+        //封装结果
+        PageInfo<ResGuide> pageInfo = new PageInfo(pricePolicies);
+        pageResult.setItems(pricePolicies);
+        pageResult.setTotalPage(pageInfo.getPages());
+        pageResult.setTotal(pageInfo.getTotal());
+        return pageResult;
+    }
 
     @Override
     public List<ResoAttachment> getAttachmentsByPid(int pid) {
