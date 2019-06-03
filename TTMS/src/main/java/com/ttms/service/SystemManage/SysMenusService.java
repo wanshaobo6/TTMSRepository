@@ -317,13 +317,15 @@ public class SysMenusService {
      * @Date: 17:32 17:32
      */
     @Transactional
-    public void AddRole(String name, String note, List<Integer> menuIds, int create_userid) {
+    public void AddRole(String name, String note, List<Integer> menuIds, int create_userid, Integer departmentId) {
         //添加角色
         SysRoles role=new SysRoles();
         role.setName(name);
         role.setNote(note);
         role.setCreatedtime(new Date());
         role.setCreateduserId(create_userid);
+        //TODO
+        role.setDepartmentId(departmentId);
         role.setModifiedtime(null);
         int i = this.sysRolesMapper.insert(role);
         if(i!=1){
@@ -611,5 +613,37 @@ public class SysMenusService {
         }
         return sysRoles;
 
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询所有父部门
+    * @Param: []
+    * @Return: java.util.List<com.ttms.Entity.SysDepartment>
+    * @Author: 吴彬
+    * @Date: 15:49 15:49
+     */
+    public List<SysDepartment> queryAllDepartment() {
+        Example example=new Example(SysDepartment.class);
+        example.createCriteria().andEqualTo("isparent", 1);
+        List<SysDepartment> sysDepartments = this.sysDepartmentMapper.selectByExample(example);
+        return sysDepartments;
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉根据父部门的id查询所有子部门
+    * @Param: [pid]
+    * @Return: java.util.List<com.ttms.Entity.SysDepartment>
+    * @Author: 吴彬
+    * @Date: 15:55 15:55
+     */
+    public List<SysDepartment> queryAllDepartmentBypid(Integer pid) {
+        Example example=new Example(SysDepartment.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("parentid", pid);
+        criteria.andEqualTo("valid", 1);
+        List<SysDepartment> sysDepartments = this.sysDepartmentMapper.selectByExample(example);
+        return sysDepartments;
     }
 }

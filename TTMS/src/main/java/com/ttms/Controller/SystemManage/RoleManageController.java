@@ -1,5 +1,6 @@
 package com.ttms.Controller.SystemManage;
 
+import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
@@ -20,6 +21,7 @@ public class RoleManageController {
 
     @Autowired
     private SysMenusService sysMenusService;
+
 
     /**
      * @Description:    分页查询所有角色
@@ -46,10 +48,11 @@ public class RoleManageController {
      * @Date: 16:48 16:48
      */
     @PostMapping
-    public ResponseEntity<Void> AddRole(@RequestParam("name") String name , @RequestParam(required = false,name = "note") String note , @RequestParam(name = "menuIds") List<Integer> menuIds, HttpSession session){
+    public ResponseEntity<Void> AddRole(@RequestParam("name") String name , @RequestParam(required = false,name = "note") String note ,
+                                        @RequestParam(name = "menuIds") List<Integer> menuIds, HttpSession session,@RequestParam("departmentId") Integer departmentId ){
         session.getAttribute("user");
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        this.sysMenusService.AddRole(name,note,menuIds,user.getId());
+        this.sysMenusService.AddRole(name,note,menuIds,user.getId(),departmentId);
         return ResponseEntity.ok().body(null);
     }
 
@@ -66,5 +69,34 @@ public class RoleManageController {
         return ResponseEntity.ok(sysMenusService.getSysMenusTree());
     }
 
+//    @GetMapping("getDepartmentBypid")
+////    public
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询所有的父部门
+    * @Param: []
+    * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysDepartment>>
+    * @Author: 吴彬
+    * @Date: 15:46 15:46
+     */
+    @GetMapping("/allDepartment")
+    public ResponseEntity<List<SysDepartment>> queryAllDepartment(){
+        return ResponseEntity.ok(this.sysMenusService.queryAllDepartment());
+    }
+
+
+    /**
+    * 功能描述: <br>
+    * 〈〉根据父部门id查询所有子部门
+    * @Param: []
+    * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysDepartment>>
+    * @Author: 吴彬
+    * @Date: 15:53 15:53
+     */
+    @GetMapping("/getDepartmentBypid")
+    public ResponseEntity<List<SysDepartment>> queryAllDepartmentBypid(@RequestParam Integer pid){
+        return ResponseEntity.ok(this.sysMenusService.queryAllDepartmentBypid(pid));
+    }
 
 }
