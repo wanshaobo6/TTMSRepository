@@ -43,6 +43,7 @@ public class LoginController {
     public ResponseEntity<List<ModulesVo>> login(@RequestParam String username , @RequestParam String password){
         //获取subject
         Subject subject = SecurityUtils.getSubject();
+        System.out.println("JSessionId"+subject.getSession().getId());
         //根据用户名查询到用户
         SysUser currUser = loginService.getUserByUserName(username);
         //如果没有该用户则一定登录失败

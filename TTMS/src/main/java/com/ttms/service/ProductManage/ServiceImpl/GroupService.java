@@ -39,7 +39,7 @@ public class GroupService implements IGroupService {
     private SysMenusService sysMenusService;
 
     /**
-     * 功能描述: 修改团信息
+     * 功能描述: 修改团信息getAllGroupsByConditionAndPage
      * 〈〉
      *
      * @Param: [groupId, groupName, belongProjectId, chargeUserId, groupNote]
@@ -94,8 +94,8 @@ public class GroupService implements IGroupService {
      * @Author: lhf
      * @Date: 2019/5/28 14:38
      */
-    public void ValidOrInvalidGroup(Integer pid) {
-        ProGroup proGroup = proGroupMapper.selectByPrimaryKey(pid);
+    public void ValidOrInvalidGroup(Integer gid) {
+        ProGroup proGroup = proGroupMapper.selectByPrimaryKey(gid);
         proGroup.setValid((byte) (proGroup.getValid() ^ 1));
         int i = this.proGroupMapper.updateByPrimaryKeySelective(proGroup);
         if (i != 1) {
