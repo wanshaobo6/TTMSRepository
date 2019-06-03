@@ -1,12 +1,12 @@
 package com.ttms.Controller.ProduceManage;
 
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
+import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.IProjectService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -25,6 +25,9 @@ public class ProjectInfoController {
 
     @Autowired
     private IProjectService projectService;
+
+    @Autowired
+    private IGroupService groupService;
 
 
     /**

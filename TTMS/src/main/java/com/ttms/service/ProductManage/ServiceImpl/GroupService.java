@@ -33,8 +33,6 @@ public class GroupService implements IGroupService {
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
-    private ProProductCatMapper productCatMapper;
-    @Autowired
     private SysMenusService sysMenusService;
 
     /**
@@ -283,6 +281,20 @@ public class GroupService implements IGroupService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 功能描述: 修改项目时，更新团中的项目名
+     * 〈〉
+     * @Param: [id, projectname]
+     * @Return: java.lang.Void
+     * @Author: lhf
+     * @Date: 2019/6/3 16:00
+     */
+    @Override
+    public Void updateRedundancyWordProjectName(Integer id, String projectname) {
+        proGroupMapper.updateRedundancyWordProjectName(id,projectname);
+        return null;
     }
 
 }
