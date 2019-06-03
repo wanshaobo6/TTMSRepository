@@ -20,7 +20,7 @@ public interface IGroupService {
         List<ProProject> getprojectinfo();
 
         //创建团
-    void createGroup(String groupName,Integer belongProjectId, Integer chargeUserId, String groupNote);
+    void createGroup(String groupName,Integer belongProjectId, String groupNote);
     //根据项目id查找其部门下所有职员
     List<SysUser> getAllStaffInDep(Integer projectId);
 

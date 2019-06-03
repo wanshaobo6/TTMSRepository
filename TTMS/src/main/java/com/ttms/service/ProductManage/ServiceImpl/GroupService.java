@@ -138,9 +138,9 @@ public class GroupService implements IGroupService {
      *returnvoid
      **/
     @Override
-    public void createGroup(String groupName, Integer belongProjectId, Integer chargeUserId, String groupNote) {
+    public void createGroup(String groupName, Integer belongProjectId, String groupNote) {
         ProGroup proGroup = new ProGroup();
-
+        SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
         proGroup.setGroupname(groupName);
         //判断当前项目是不是存在
         //查询belongProjectId是否为空，为空抛异常
@@ -153,10 +153,10 @@ public class GroupService implements IGroupService {
         //判断用户是不是属于产品部
         List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
                 getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
-        if (!curDepartmentStaffIds.contains(chargeUserId)) {
+        if (!curDepartmentStaffIds.contains(sysUser.getId())) {
             throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
         }
-        proGroup.setChargeuserid(chargeUserId);
+        proGroup.setChargeuserid(sysUser.getId());
         proGroup.setGroupnote(groupNote);
         proGroup.setValid((byte) 1);
         //获取当前用户

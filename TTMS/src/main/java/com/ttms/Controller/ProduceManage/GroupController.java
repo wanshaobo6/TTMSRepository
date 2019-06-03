@@ -75,9 +75,8 @@ public class GroupController {
      *return
      **/
     @PostMapping
-    public ResponseEntity<Void> createGroup(  String groupName, Integer belongProjectId,
-                                             Integer chargeUserId,  String groupNote){
-        this.groupService.createGroup(groupName,belongProjectId,chargeUserId,groupNote);
+    public ResponseEntity<Void> createGroup(  String groupName, Integer belongProjectId,  String groupNote){
+        this.groupService.createGroup(groupName,belongProjectId,groupNote);
         return ResponseEntity.ok().body(null);
 
     }
