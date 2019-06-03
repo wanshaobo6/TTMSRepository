@@ -1,6 +1,5 @@
 package com.ttms.Controller.ProduceManage;
 
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
@@ -82,7 +81,6 @@ public class ProjectInfoController {
                                            @RequestParam(value = "note",required = false) String note ,
                                            @RequestParam(required = false,value ="departmentId" ) Integer departmentId){
         ProProject project = encapsulation(pid,projectnumber, projectname, starttime, endtime, note, departmentId);
-        //groupService.updateGroup(pid);
         this.projectService.editProject(project,(SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
         return ResponseEntity.ok().build();
     }

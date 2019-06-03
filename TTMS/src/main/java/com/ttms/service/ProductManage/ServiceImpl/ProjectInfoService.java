@@ -2,13 +2,11 @@ package com.ttms.service.ProductManage.ServiceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ttms.Entity.ProGroup;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
-import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
 import com.ttms.Vo.PageResult;
@@ -96,7 +94,7 @@ public class ProjectInfoService implements IProjectService {
      */
     @Transactional
     public Void editProject(ProProject project, SysUser user, Integer departId) {
-        //更新产品
+        //更新产品中的项目名
         productService.updateRedundancyWordProjectNameProduct(project.getId(),project.getProjectname());
         project.setUpdatetime(new Date());
         project.setDepartmentid(departId);

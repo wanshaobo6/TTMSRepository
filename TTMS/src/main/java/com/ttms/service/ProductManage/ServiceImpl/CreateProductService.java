@@ -222,6 +222,14 @@ public class CreateProductService implements ICreateProductService {
         return;
     }
 
+    /**
+     * 功能描述: 修改项目时更新产品中的项目名
+     * 〈〉
+     * @Param: [id, projectname]
+     * @Return: java.lang.Void
+     * @Author: lhf
+     * @Date: 2019/6/3 15:59
+     */
     @Override
     public Void updateRedundancyWordProjectNameProduct(Integer id, String projectname) {
         proProductMapper.updateRedundancyWordProjectNameProduct(id,projectname);
