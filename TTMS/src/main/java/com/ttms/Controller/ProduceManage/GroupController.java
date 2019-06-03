@@ -43,9 +43,9 @@ public class GroupController {
      * @Author: lhf
      * @Date: 2019/5/28 14:37
      */
-    @GetMapping("/validorinvalid/{pid}")
-    public ResponseEntity<Void> pathvariable(@PathVariable("pid") Integer pid){
-        groupService.ValidOrInvalidGroup(pid);
+    @PutMapping("/validorinvalid/{gid}")
+    public ResponseEntity<Void> pathvariable(@PathVariable("gid") Integer gid){
+        groupService.ValidOrInvalidGroup(gid);
         return ResponseEntity.ok().body(null);
     }
 
@@ -75,9 +75,8 @@ public class GroupController {
      *return
      **/
     @PostMapping
-    public ResponseEntity<Void> createGroup(  String groupName, Integer belongProjectId,
-                                             Integer chargeUserId,  String groupNote){
-        this.groupService.createGroup(groupName,belongProjectId,chargeUserId,groupNote);
+    public ResponseEntity<Void> createGroup(  String groupName, Integer belongProjectId,  String groupNote){
+        this.groupService.createGroup(groupName,belongProjectId,groupNote);
         return ResponseEntity.ok().body(null);
 
     }

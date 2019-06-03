@@ -14,13 +14,13 @@ public interface IGroupService {
               int chargeUserId, String groupNote);
 
         //启动禁用团状态
-        void ValidOrInvalidGroup(Integer pid);
+        void ValidOrInvalidGroup(Integer gid);
 
         //查询所有项目名
         List<ProProject> getprojectinfo();
 
         //创建团
-    void createGroup(String groupName,Integer belongProjectId, Integer chargeUserId, String groupNote);
+    void createGroup(String groupName,Integer belongProjectId, String groupNote);
     //根据项目id查找其部门下所有职员
     List<SysUser> getAllStaffInDep(Integer projectId);
 

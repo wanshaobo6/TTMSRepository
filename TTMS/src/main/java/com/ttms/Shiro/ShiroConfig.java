@@ -42,7 +42,6 @@ public class ShiroConfig {
         Map<String,String> permissionMap = sysMenusService.getUrlPermissionMapping();
         //登陆无须拦截
         //过滤路径映射
-       permissionMap.put("/login","anon");
        for (Map.Entry entry:permissionMap.entrySet()) {
            log.info("Url:"+entry.getKey()+"   permission:"+entry.getValue());
       }
