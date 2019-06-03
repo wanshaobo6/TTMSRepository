@@ -88,9 +88,9 @@ public class CreateProductService implements ICreateProductService {
         //ProGroup group = this.groupMapper.selectByPrimaryKey(groupId);
         ProGroup groupById = this.groupService.getGroupById(groupId);
         proProduct.setProjectid(groupById.getProjectid());
-        //TODO proProduct.setProductname(null);
+        // proProduct.setProductname(null);
         proProduct.setProjectname(groupById.getProjectname());
-        //TODO proProduct.setPresellnumber(0);
+        // proProduct.setPresellnumber(0);
         proProduct.setServerstarttime(serverStartTime);
         proProduct.setServerendtime(serverEndTime);
         proProduct.setOnselltime(onsellTime);

@@ -1,7 +1,6 @@
 package com.ttms.Entity;
 
 import lombok.Data;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -27,7 +26,7 @@ public class ProProduct {
     @Transient
     private String productcatnames;
 
-    private int projectid;
+    private Integer projectid;
 
     private  String projectname;
 
