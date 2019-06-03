@@ -26,10 +26,11 @@ public class ProductCatService implements IProductCatService {
 
     @Override
     public ProProductCat getProductCatById(Integer parentid) {
-        if(proProductCatMapper.selectByPrimaryKey(parentid) == null){
+        ProProductCat productCat = proProductCatMapper.selectByPrimaryKey(parentid);
+        if(productCat == null){
             throw new TTMSException(ExceptionEnum.PRODUCTCATID_NOT_FOUND);
         }
-        return null;
+        return productCat;
     }
 
     public List<ProProductCat> getProductCatByIds(List<Integer> ids){

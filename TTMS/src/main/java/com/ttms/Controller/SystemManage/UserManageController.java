@@ -8,7 +8,6 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -76,7 +75,7 @@ public class UserManageController {
     @PostMapping
     public ResponseEntity<Void> addSysUser(@RequestParam  String username, @RequestParam  String image,
                                            @RequestParam  String password, @RequestParam  String mail,
-                                           @RequestParam  String  phonenumber , @RequestParam  Integer roleId, BindingResult result){
+                                           @RequestParam  String  phonenumber , @RequestParam  Integer roleId){
         this.sysMenusService.addSysUser(username,image, password,mail,phonenumber,roleId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
