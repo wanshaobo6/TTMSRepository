@@ -30,4 +30,8 @@ public interface IGroupService {
         ProGroup getGroupById(Integer groupId);
         //查询用户是否和当前团的负责人一致
     Boolean AmIcharger(Integer groupId, Integer id);
+
+    //更新团中的项目名（当修改项目信息后）
+    Void updateRedundancyWordProjectName(Integer id, String projectname);
+
 }

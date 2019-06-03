@@ -33,8 +33,6 @@ public class GroupService implements IGroupService {
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
-    private ProProductCatMapper productCatMapper;
-    @Autowired
     private SysMenusService sysMenusService;
 
     /**
@@ -283,6 +281,12 @@ public class GroupService implements IGroupService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Void updateRedundancyWordProjectName(Integer id, String projectname) {
+        proGroupMapper.updateRedundancyWordProjectName(id,projectname);
+        return null;
     }
 
 }

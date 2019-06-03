@@ -2,14 +2,18 @@ package com.ttms.service.ProductManage.ServiceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ttms.Entity.ProGroup;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
+import com.ttms.Mapper.ProGroupMapper;
 import com.ttms.Mapper.ProProjectMapper;
 import com.ttms.Mapper.SysDepartmentMapper;
 import com.ttms.Vo.PageResult;
+import com.ttms.service.ProductManage.ICreateProductService;
+import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.IProjectService;
 import com.ttms.service.SystemManage.SysMenusService;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +38,11 @@ public class ProjectInfoService implements IProjectService {
     @Autowired
     private SysMenusService sysMenusService;
 
+    @Autowired
+    private IGroupService groupService;
+
+    @Autowired
+    private ICreateProductService productService;
 
 
 
@@ -87,6 +96,8 @@ public class ProjectInfoService implements IProjectService {
      */
     @Transactional
     public Void editProject(ProProject project, SysUser user, Integer departId) {
+        //更新产品
+        productService.updateRedundancyWordProjectNameProduct(project.getId(),project.getProjectname());
         project.setUpdatetime(new Date());
         project.setDepartmentid(departId);
         project.setValid((byte)1);
@@ -95,6 +106,8 @@ public class ProjectInfoService implements IProjectService {
         if(i!=1){
             throw new TTMSException(ExceptionEnum.PROJECT_UPDATE_FAIL);
         }
+        //更新团的冗余字段
+        groupService.updateRedundancyWordProjectName(project.getId(),project.getProjectname());
         return null;
     }
 

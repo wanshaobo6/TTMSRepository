@@ -222,6 +222,11 @@ public class CreateProductService implements ICreateProductService {
         return;
     }
 
+    @Override
+    public Void updateRedundancyWordProjectNameProduct(Integer id, String projectname) {
+        proProductMapper.updateRedundancyWordProjectNameProduct(id,projectname);
+        return null;
+    }
 
 
 }

@@ -20,7 +20,8 @@ public interface ICreateProductService {
                        Date serverStartTime, Date serverEndTime, Integer preSellNumber , Integer selledNumber, Integer lowestNumber,
                        Date onsellTime , Integer productPrice, Date upsellTime, String hotTip, String productIntroduction, SysUser user);
 
-
+    //更新产品中的项目名（当修改项目信息后）
+    Void updateRedundancyWordProjectNameProduct(Integer id, String projectname);
 
 }
 
