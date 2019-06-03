@@ -22,7 +22,7 @@ public class ProProductCat {
     private Integer parentid;
 
     //用来判断是否为父分类
-    private Byte isparent;
+      private Byte isParent;;
 
     private Date createtime;
 

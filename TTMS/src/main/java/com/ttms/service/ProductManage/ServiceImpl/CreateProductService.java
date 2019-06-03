@@ -78,10 +78,19 @@ public class CreateProductService implements ICreateProductService {
         if(!proProductCat2.getParentid().equals(productCatId1)) {
             throw new TTMSException(ExceptionEnum.NOT_FOUND_PARENTID);
         }
+        proProduct.setCreateuserid(user.getId());
         proProduct.setProductcatid1(productCatId1);
         proProduct.setProductcatid2(productCatId2);
         proProduct.setProductcatid3(productCatId3);
-        proProduct.setProductname(productName());
+        proProduct.setProductname(productName);
+        proProduct.setProductnumber(productName());
+        //根据groupId查询补全参数
+        //ProGroup group = this.groupMapper.selectByPrimaryKey(groupId);
+        ProGroup groupById = this.groupService.getGroupById(groupId);
+        proProduct.setProjectid(groupById.getProjectid());
+        // proProduct.setProductname(null);
+        proProduct.setProjectname(groupById.getProjectname());
+        // proProduct.setPresellnumber(0);
         proProduct.setServerstarttime(serverStartTime);
         proProduct.setServerendtime(serverEndTime);
         proProduct.setOnselltime(onsellTime);
@@ -92,6 +101,8 @@ public class CreateProductService implements ICreateProductService {
         proProduct.setProductprice(productPrice);
         proProduct.setHottip(hotTip);
         proProduct.setProductintroduction(productIntroduction);
+        proProduct.setProductstatus(1);
+        proProduct.setCreatetime(new Date());
         int i = this.proProductMapper.insert(proProduct);
         if (i != 1) {
             throw new TTMSException(ExceptionEnum.PRODUCT_ADD_FAIL);
@@ -199,6 +210,8 @@ public class CreateProductService implements ICreateProductService {
         proProduct.setProductprice(productPrice);
         proProduct.setHottip(hotTip);
         proProduct.setProductintroduction(productIntroduction);
+        proProduct.setUpdatetime(new Date());
+        proProduct.setUpdateuserid(user.getId());
         int i = this.proProductMapper.updateByPrimaryKeySelective(proProduct);
         if(i!=1){
             throw new TTMSException(ExceptionEnum.PRODUCT_EDIT_FAIL);

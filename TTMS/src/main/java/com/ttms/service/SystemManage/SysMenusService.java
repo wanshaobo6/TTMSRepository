@@ -357,6 +357,7 @@ public class SysMenusService {
          * @Author: lhf
          * @Date: 2019/5/26 17:40
          */
+        @Transactional
         public void addSysUser( String username,  String image,
                                 String password,  String mail,
                                 String  phonenumber , Integer roleId) {
@@ -373,11 +374,11 @@ public class SysMenusService {
             user.setPassword(password);
             user.setEmail(mail);
             user.setMobile(phonenumber);
-            user.setValid((byte) 0);
+            user.setValid((byte) 1);
             user.setRoleid(roleId);
             Date now = new Date();
             user.setCreatedtime(now);
-            user.setModifiedtime(now);
+            user.setModifiedtime(null);
             SysUser curUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
             user.setCreateduserid(curUser.getId());
             //设置新增用户

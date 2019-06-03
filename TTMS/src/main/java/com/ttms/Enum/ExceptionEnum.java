@@ -43,6 +43,7 @@ public enum ExceptionEnum {
     GROUP_VALID_MODIFY_ERROR(500,"团启动状态更新失败"),
     PROJECTNAME_NOT_EMPTY(500,"团启动状态更新失败"),
     GROUPNAME_NOT_EMPTY(500,"团名不能为空"),
+    USER_NOT_GROUPCHARGEUSER(500,"你不是团的负责人"),
     PROJECTID_NOT_FOUND(500,"ID不存在"),
     PROJECT_UPDATE_FAIL(500,"项目更新失败"),
     PROJECT_INSERT_FAIL(500,"项目新增失败"),
@@ -74,6 +75,8 @@ public enum ExceptionEnum {
     SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到"),
     ATTACHMENT_INSERT_FAIL(500,"新增附件失败"),
     RESGUIDE_NOT_FOUND(404,"导游不存在"),
+    MSG_UPDATE_FALI(404,"消息更新失败"),
+    MSG_RELEASE_FALI(404,"消息发布失败"),
     PRODUCT_GUIDE_DELETE_FAIL(500,"产品下的导游删除失败"),
     PRODUCT_GUIDE_ALREADY_EXIST(501,"产品下的导游不能重复增加"),
     PRODUCT_GUIDE_INSERT_FAIL(501,"为产品增加导游失败"),
@@ -82,6 +85,8 @@ public enum ExceptionEnum {
     PRODUCT_PRICE_POLICY_ALREADY_EXIST(501,"产品下的优惠信息不能重复增加"),
     PRODUCT_PRICE_POLICY_INSERT_FAIL(501,"为产品增加优惠政策失败"),
     PRICE_POLICY_NOT_FOUND(404,"价格政策不存在"),
+    PRODUCT_ROUTE_SET_FAIL(404,"行程设置失败"),
+    PRODUCT_ROUTE_UPDATE_FAIL(404,"行程更新失败")
     ;
     private int status;
     private String message;

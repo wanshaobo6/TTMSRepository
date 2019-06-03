@@ -28,6 +28,6 @@ public interface IGroupService {
 
         //查询团号
         ProGroup getGroupById(Integer groupId);
-
-
+        //查询用户是否和当前团的负责人一致
+    Boolean AmIcharger(Integer groupId, Integer id);
 }

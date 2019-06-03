@@ -51,6 +51,9 @@ public interface IProductListService {
 
     Void addProductPricePolicy(int productId, List<Integer> pricepolicyIds);
 
+    //添加行程
+    Void addRount(Integer productId, String name, String content, String stayMessage, String breakfast, String lunch, String supper);
+
     //为产品添加分销商之后产品的数量更改  修改产品的数量
    // Void updataProductNumber(Integer productId);
 

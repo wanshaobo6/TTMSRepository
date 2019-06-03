@@ -73,9 +73,9 @@ public class UserManageController {
      * @Date: 2019/5/27 15:03
      */
     @PostMapping
-    public ResponseEntity<Void> addSysUser(@RequestParam  String username,@RequestParam String image,
-                                           @RequestParam String password,@RequestParam String mail,
-                                           @RequestParam String  phonenumber , @RequestParam Integer roleId){
+    public ResponseEntity<Void> addSysUser(@RequestParam  String username, @RequestParam  String image,
+                                           @RequestParam  String password, @RequestParam  String mail,
+                                           @RequestParam  String  phonenumber , @RequestParam  Integer roleId){
         this.sysMenusService.addSysUser(username,image, password,mail,phonenumber,roleId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -105,7 +105,6 @@ public class UserManageController {
         user.setCreateduserid(curUser.getId());
         sysMenusService.updateUserById(user);
         //更新项目表
-       // TODO: 2019/5/29
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 

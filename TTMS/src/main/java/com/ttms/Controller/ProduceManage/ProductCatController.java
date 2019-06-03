@@ -1,11 +1,14 @@
 package com.ttms.Controller.ProduceManage;
 
+import com.ttms.Entity.ProProductCat;
 import com.ttms.Entity.SysUser;
 import com.ttms.service.ProductManage.IProductCatService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 //----------产品管理->产品->产品分类------------
 @RestController
@@ -25,7 +28,7 @@ public class ProductCatController {
     * @Date: 20:42 20:42
      */
     @PostMapping("/add")
-    public ResponseEntity<Void> addProProductCat(@RequestParam(defaultValue = "0") Integer parentId,@RequestParam String name){
+    public ResponseEntity<Void> addProProductCat(@RequestParam(defaultValue = "0",required = false) Integer parentId,@RequestParam String name){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
          this.productCatService.addProductCat(parentId, name, user);
          return ResponseEntity.ok().build();
@@ -39,7 +42,7 @@ public class ProductCatController {
     * @Date: 21:33 21:33
      */
     @DeleteMapping("{productId}")
-    public ResponseEntity<Void> deleteProProductCat(Integer productId){
+    public ResponseEntity<Void> deleteProProductCat(@PathVariable("productId") Integer productId){
         this.productCatService.deleteProProductCat(productId);
         return  ResponseEntity.ok().build();
     }
@@ -53,10 +56,23 @@ public class ProductCatController {
     * @Date: 21:55 21:55
      */
     @PutMapping("{productId}")
-    public ResponseEntity<Void> updateProProductCat(@RequestParam Integer productId,@RequestParam String name){
+    public ResponseEntity<Void> updateProProductCat(@PathVariable("productId") Integer productId,@RequestParam String name){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
         this.productCatService.updateProProductCat(productId,name,user);
         return  ResponseEntity.ok().build();
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉根据id查询所有
+     * @Param: [catId]
+     * @Return: java.util.List<com.ttms.Entity.ProProductCat>
+     * @Author: 吴彬
+     * @Date: 11:10 11:10
+     */
+    @GetMapping("queryCatById")
+    public ResponseEntity<List<ProProductCat>> queryCatById(@RequestParam("catId") Integer catId){
+        return ResponseEntity.ok(this.productCatService.queryCatById(catId));
     }
 
 

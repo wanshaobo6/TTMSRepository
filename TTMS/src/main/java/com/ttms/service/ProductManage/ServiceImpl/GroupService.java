@@ -3,7 +3,6 @@ package com.ttms.service.ProductManage.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ttms.Entity.ProGroup;
-import com.ttms.Entity.ProProductCat;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
@@ -262,6 +261,28 @@ public class GroupService implements IGroupService {
             throw new TTMSException(ExceptionEnum.GROUP_NOT_FOUND);
         }
         return proGroup;
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉判断当前用户和团的负责人是否一致
+    * @Param: [groupId, id]
+    * @Return: java.lang.Boolean
+    * @Author: 吴彬
+    * @Date: 13:29 13:29
+     */
+    @Override
+    public Boolean AmIcharger(Integer groupId, Integer id) {
+        Example example=new Example(ProGroup.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("id", groupId);
+        criteria.andEqualTo("chargeuserid", id);
+        List<ProGroup> proGroups = this.proGroupMapper.selectByExample(example);
+        ProGroup proGroup = proGroups.get(0);
+        if(proGroup!=null){
+            return true;
+        }
+        return false;
     }
 
 }

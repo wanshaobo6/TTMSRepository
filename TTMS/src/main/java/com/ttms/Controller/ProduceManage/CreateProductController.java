@@ -6,6 +6,7 @@ import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.service.ProductManage.ICreateProductService;
+import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.ServiceImpl.ProductCatService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class CreateProductController {
 
     @Autowired
     private ProductCatService productCatService;
+
+    @Autowired
+    private IGroupService groupService;
 
 
     /*
@@ -80,10 +84,17 @@ public class CreateProductController {
         return ResponseEntity.ok().body(null);
     }
 
-
+    /**
+    * 功能描述: <br>
+    * 〈〉, @RequestParam(name = "groupId") Integer groupId,
+    * @Param: [pid, productCatId1, productCatId2, productCatId3, productName, serverStartTime, serverEndTime, preSellNumber, selledNumber, lowestNumber, onsellTime, productPrice, upsellTime, hotTip, productIntroduction]
+    * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+    * @Author: 吴彬
+    * @Date: 16:51 16:51
+     */
     @PostMapping("/privilege/{pid}")
     public ResponseEntity<Void> editProduct(
-            @PathVariable("pid") Integer pid, @RequestParam(name = "groupId") Integer groupId,
+           @PathVariable("pid") Integer pid,
             @RequestParam Integer productCatId1,
             @RequestParam Integer productCatId2,
             @RequestParam(value = "productCatId3") Integer productCatId3,
@@ -99,7 +110,7 @@ public class CreateProductController {
             @RequestParam(value = "hotTip") String hotTip,
             @RequestParam(value = "productIntroduction") String productIntroduction){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        this.createProductService.UpdateProduct(groupId, productCatId1,productCatId2
+        this.createProductService.UpdateProduct(null, productCatId1,productCatId2
         , productCatId3, serverStartTime, serverEndTime, preSellNumber, selledNumber
         , lowestNumber, onsellTime, productPrice, upsellTime, hotTip, productIntroduction, user);
         return ResponseEntity.ok().body(null);
@@ -116,6 +127,24 @@ public class CreateProductController {
     @GetMapping("queryCatById")
     public ResponseEntity<List<ProProductCat>> queryCatById(@RequestParam("catId") Integer catId){
         return ResponseEntity.ok(this.productCatService.queryCatById(catId));
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询用户是否和当前团的负责人一致
+    * @Param: [groupId]
+    * @Return: org.springframework.http.ResponseEntity<com.ttms.Entity.SysUser>
+    * @Author: 吴彬
+    * @Date: 13:31 13:31
+     */
+    @GetMapping("/AmIcharger/{groupId}")
+    public ResponseEntity<SysUser> AmIcharger(@PathVariable("groupId") Integer groupId){
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        Boolean amIcharger=this.groupService.AmIcharger(groupId,user.getId());
+        if(!amIcharger){
+            throw new TTMSException(ExceptionEnum.USER_NOT_GROUPCHARGEUSER);
+        }
+        return ResponseEntity.ok(user);
     }
 
 }
