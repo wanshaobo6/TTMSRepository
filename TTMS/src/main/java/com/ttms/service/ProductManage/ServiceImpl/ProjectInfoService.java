@@ -64,6 +64,7 @@ public class ProjectInfoService implements IProjectService {
     @Override
     @Transactional
     public Void addProject(ProProject project, SysUser user, Integer departmentId) {
+
         project.setCreatetime(new Date());
         project.setCreateuserid(user.getId());
         project.setUpdatetime(null);

@@ -1,5 +1,6 @@
 package com.ttms.Controller.ProduceManage;
 
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 import com.ttms.Entity.ProProject;
 import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysUser;
@@ -56,13 +57,14 @@ public class ProjectInfoController {
     * @Date: 10:10 10:10
      */
     @PostMapping("/add")
-    public ResponseEntity<Void> addProject(@RequestParam(value ="projectnumber" )String projectnumber,
+    public ResponseEntity<Void> addProject(Integer pid,
+                                            @RequestParam(value ="projectnumber" )String projectnumber,
                                            @RequestParam(value ="projectname" )String projectname,
                                            @RequestParam(required = false,value ="starttime" )  Date starttime,
                                            @RequestParam(required = false,value ="endtime" )   Date endtime,
                                            @RequestParam(value = "note",required = false) String note ,
                                            @RequestParam(required = false,value ="departmentId" ) Integer departmentId){
-        ProProject proProject = encapsulation(projectnumber, projectname, starttime, endtime, note, departmentId);
+        ProProject proProject = encapsulation(pid,projectnumber, projectname, starttime, endtime, note, departmentId);
         this.projectService.addProject(proProject, (SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
         return ResponseEntity.ok().build();
     }
@@ -75,7 +77,7 @@ public class ProjectInfoController {
                                            @RequestParam(required = false,value ="endtime" )Date endtime,
                                            @RequestParam(value = "note",required = false) String note ,
                                            @RequestParam(required = false,value ="departmentId" ) Integer departmentId){
-        ProProject project = encapsulation(projectnumber, projectname, starttime, endtime, note, departmentId);
+        ProProject project = encapsulation(pid,projectnumber, projectname, starttime, endtime, note, departmentId);
         this.projectService.editProject(project,(SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
         return ResponseEntity.ok().build();
     }
@@ -92,7 +94,7 @@ public class ProjectInfoController {
         return ResponseEntity.ok(projectService.getSubdepartmentProductDepartment());
     }
 
-    private ProProject encapsulation(String projectnumber, String projectname, Date starttime, Date endtime, String note, Integer departmentId){
+    private ProProject encapsulation(Integer pid, String projectnumber, String projectname, Date starttime, Date endtime, String note, Integer departmentId){
         SysUser user=(SysUser) SecurityUtils.getSubject().getPrincipal();
         //判断角色是否为产品部的产品经理。。。。。。
         //1.先判断角色是否为产品经理
@@ -109,6 +111,7 @@ public class ProjectInfoController {
         proProject.setStarttime(starttime);
         proProject.setEndtime(endtime);
         proProject.setNote(note);
+        proProject.setId(pid);
         return proProject;
 
     }

@@ -54,6 +54,7 @@ public class CreateProductService implements ICreateProductService {
         ProProduct proProduct = new ProProduct();
         //查询团号是否存在
         ProGroup proGroup = groupService.getGroupById(groupId);
+        proProduct.setCreateuserid(user.getId());
         //当前用户是否和团负责人一致
         if(!user.getId().equals(proGroup.getCreateuserid())){
             throw new TTMSException(ExceptionEnum.USER_NOT_GRUOPCHARGEUSER);
@@ -191,15 +192,17 @@ public class CreateProductService implements ICreateProductService {
      */
     @Override
     @Transactional
-    public void UpdateProduct(Integer groupId, Integer productCatId1, Integer productCatId2,
-                              Integer productCatId3, Date serverStartTime,
+    public void UpdateProduct(Integer pid,Integer groupId, Integer productCatId1, Integer productCatId2,
+                              Integer productCatId3, String productName, Date serverStartTime,
                               Date serverEndTime, Integer preSellNumber, Integer selledNumber,
                               Integer lowestNumber, Date onsellTime, Integer productPrice,
                               Date upsellTime, String hotTip, String productIntroduction, SysUser user) {
         ProProduct proProduct=new ProProduct();
+        proProduct.setId(pid);
         proProduct.setProductcatid1(productCatId1);
         proProduct.setProductcatid2(productCatId2);
         proProduct.setProductcatid3(productCatId3);
+        proProduct.setProductcatnames(productName);
         proProduct.setServerstarttime(serverStartTime);
         proProduct.setServerendtime(serverEndTime);
         proProduct.setOnselltime(onsellTime);

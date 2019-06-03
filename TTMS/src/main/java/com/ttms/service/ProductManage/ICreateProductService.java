@@ -6,6 +6,7 @@ import com.ttms.Entity.SysUser;
 import java.util.Date;
 import java.util.List;
 
+
 public interface ICreateProductService {
     //创建产品
     void createProduct(Integer groupId, Integer productCatId1, Integer productCatId2, Integer productCatId3, String productName,
@@ -15,10 +16,11 @@ public interface ICreateProductService {
     List<ProGroup> queryGroupByCuruser(SysUser user);
 
     //修改产品
-    void UpdateProduct(Integer groupId, Integer productCatId1, Integer productCatId2, Integer productCatId3,
+    void UpdateProduct(Integer pid,Integer groupId, Integer productCatId1, Integer productCatId2, Integer productCatId3,String productName,
                        Date serverStartTime, Date serverEndTime, Integer preSellNumber , Integer selledNumber, Integer lowestNumber,
                        Date onsellTime , Integer productPrice, Date upsellTime, String hotTip, String productIntroduction, SysUser user);
 
 
 
 }
+

@@ -110,8 +110,8 @@ public class CreateProductController {
             @RequestParam(value = "hotTip") String hotTip,
             @RequestParam(value = "productIntroduction") String productIntroduction){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        this.createProductService.UpdateProduct(null, productCatId1,productCatId2
-        , productCatId3, serverStartTime, serverEndTime, preSellNumber, selledNumber
+        createProductService.UpdateProduct(pid,null, productCatId1,productCatId2
+        , productCatId3,productName, serverStartTime, serverEndTime, preSellNumber, selledNumber
         , lowestNumber, onsellTime, productPrice, upsellTime, hotTip, productIntroduction, user);
         return ResponseEntity.ok().body(null);
     }
