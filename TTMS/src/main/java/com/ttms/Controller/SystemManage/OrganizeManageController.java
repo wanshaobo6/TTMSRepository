@@ -43,7 +43,7 @@ public class OrganizeManageController {
     public ResponseEntity<PageResult<SysDepartment>> queryDepartment(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                      @RequestParam(value = "rows", defaultValue = "5") Integer rows,
                                                                      @RequestParam(value = "departmentname", required = false) String  departmentname,
-                                                                     @RequestParam(value = "valid",required = false,defaultValue = "true")Boolean valid){
+                                                                     @RequestParam(value = "valid",required = false,defaultValue = "1") Integer valid){
         PageResult<SysDepartment> result = this.sysMenusService.queryDepartment(page,rows,departmentname,valid);
         return ResponseEntity.ok().body(result);
     }
