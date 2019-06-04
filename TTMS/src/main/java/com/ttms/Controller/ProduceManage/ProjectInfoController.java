@@ -8,6 +8,7 @@ import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.IProjectService;
+import net.sf.jsqlparser.expression.StringValue;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,12 +62,12 @@ public class ProjectInfoController {
      */
     @PostMapping("/add")
     public ResponseEntity<Void> addProject(Integer pid,
-                                            @RequestParam(value ="projectnumber" )String projectnumber,
-                                           @RequestParam(value ="projectname" )String projectname,
-                                           @RequestParam(required = false,value ="starttime" )  Date starttime,
-                                           @RequestParam(required = false,value ="endtime" )   Date endtime,
-                                           @RequestParam(value = "note",required = false) String note ,
-                                           @RequestParam(required = false,value ="departmentId" ) Integer departmentId){
+                                            @RequestParam String projectnumber,
+                                           @RequestParam String projectname,
+                                           @RequestParam Date starttime,
+                                           @RequestParam Date endtime,
+                                           @RequestParam String note ,
+                                           @RequestParam Integer departmentId){
         ProProject proProject = encapsulation(pid,projectnumber, projectname, starttime, endtime, note, departmentId);
         this.projectService.addProject(proProject, (SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
         return ResponseEntity.ok().build();
@@ -74,12 +75,12 @@ public class ProjectInfoController {
     @PutMapping("/{pid}")
     public ResponseEntity<Void> editProject(
             @PathVariable("pid") Integer pid,
-                                            @RequestParam(value ="projectnumber" )String projectnumber,
-                                           @RequestParam(value ="projectname" )String projectname,
-                                           @RequestParam(required = false,value ="starttime" ) Date starttime,
-                                           @RequestParam(required = false,value ="endtime" )Date endtime,
-                                           @RequestParam(value = "note",required = false) String note ,
-                                           @RequestParam(required = false,value ="departmentId" ) Integer departmentId){
+                                            @RequestParam String projectnumber,
+                                           @RequestParam String projectname,
+                                           @RequestParam Date starttime,
+                                           @RequestParam Date endtime,
+                                           @RequestParam String note ,
+                                           @RequestParam Integer departmentId){
         ProProject project = encapsulation(pid,projectnumber, projectname, starttime, endtime, note, departmentId);
         this.projectService.editProject(project,(SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
         return ResponseEntity.ok().build();
@@ -107,6 +108,8 @@ public class ProjectInfoController {
             throw new TTMSException(ExceptionEnum.PROJECT_CODE_NULL);
         }else if(StringUtils.isBlank(projectname)){
             throw new TTMSException(ExceptionEnum.PROJECT_NAME_NULL);
+        }else if(departmentId == null){
+            throw new TTMSException(ExceptionEnum.DEPATMENT_ID_NULL);
         }
         ProProject proProject=new ProProject();
         proProject.setProjectnumber(projectnumber);
@@ -115,6 +118,7 @@ public class ProjectInfoController {
         proProject.setEndtime(endtime);
         proProject.setNote(note);
         proProject.setId(pid);
+        proProject.setDepartmentid(departmentId);
         return proProject;
 
     }
