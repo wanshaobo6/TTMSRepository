@@ -10,6 +10,7 @@ import com.ttms.service.AllowVisitor.LoginService;
 import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.CodecUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
