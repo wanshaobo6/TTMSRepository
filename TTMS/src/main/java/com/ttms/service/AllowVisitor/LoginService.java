@@ -124,8 +124,12 @@ public class LoginService {
     * @Author: 吴彬
     * @Date: 14:53 14:53
      */
-    public void updatePwd(String newPassword, String salt) {
-        this.sysMenusService.updatePwd(newPassword, salt);
+    public Boolean updatePwd(String newPassword, String salt) {
+        Void pwd = this.sysMenusService.updatePwd(newPassword, salt);
+        if(pwd==null){
+            return true;
+        }
+        return false;
     }
 
     //权限探针
