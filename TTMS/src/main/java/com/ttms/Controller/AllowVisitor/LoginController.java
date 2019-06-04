@@ -1,24 +1,26 @@
 package com.ttms.Controller.AllowVisitor;
 
 import com.ttms.Config.MyThreadLocal;
+import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.ModulesVo;
 import com.ttms.service.AllowVisitor.LoginService;
+import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.CodecUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -87,6 +89,24 @@ public class LoginController {
               log.debug("用户" + user.getUsername() + "退出登录");
         }
         return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉获取当前用户
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<com.ttms.Entity.SysUser>
+     * @Author: 万少波
+     * @Date: 2019/6/4 8:14
+     */
+    @PostMapping("/getCuruser")
+    public ResponseEntity<SysUser> getCuruser(){
+        Subject subject = SecurityUtils.getSubject();
+        if(!subject.isAuthenticated()){
+            throw new TTMSException(ExceptionEnum.USER_UNLOGIN);
+        }
+        SysUser user = (SysUser)subject.getPrincipal();
+        return ResponseEntity.ok(user);
     }
 
   /**

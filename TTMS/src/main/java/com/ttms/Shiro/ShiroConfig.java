@@ -49,6 +49,7 @@ public class ShiroConfig {
         permissionMap.put("/login","anon");
         permissionMap.put("/anon/unlogin","anon");
         permissionMap.put("/anon/unahthority","anon");
+        permissionMap.put("/getCuruser","anon");
         /*授权拦截后 ， 自动跳到为授权拦截页面*/
        shiroFilterFactoryBean.setFilterChainDefinitionMap(permissionMap);
         return shiroFilterFactoryBean;

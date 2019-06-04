@@ -59,7 +59,7 @@ public class ProjectInfoController {
     * @Author: 吴彬
     * @Date: 10:10 10:10
      */
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Void> addProject(Integer pid,
                                             @RequestParam String projectnumber,
                                            @RequestParam String projectname,
@@ -119,7 +119,6 @@ public class ProjectInfoController {
         proProject.setId(pid);
         proProject.setDepartmentid(departmentId);
         return proProject;
-
     }
 
     @GetMapping("/validorinvalid/{pid}")

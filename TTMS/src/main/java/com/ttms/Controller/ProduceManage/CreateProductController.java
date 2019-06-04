@@ -42,9 +42,6 @@ public class CreateProductController {
     @GetMapping("/queryAllGroups")
     public ResponseEntity<List<ProGroup>> queryGroupByCuruser(){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        if(user==null){
-            throw new TTMSException(ExceptionEnum.USER_UNLOGIN);
-        }
         List<ProGroup> groups = this.createProductService.queryGroupByCuruser(user);
         return ResponseEntity.ok().body(groups);
     }

@@ -44,8 +44,9 @@ public class GroupService implements IGroupService {
      * @Author: lhf
      * @Date: 2019/5/28 8:56
      */
-    public void updateGroup(Integer groupId, String groupName, Integer belongProjectId,
-                            Integer chargeUserId, String groupNote) {
+    public void updateGroup(int groupId, String groupName, int belongProjectId, String groupNote) {
+        //获取当前用户
+        SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
         ProGroup proGroup = new ProGroup();
         proGroup.setId(groupId);
         //判断团名是否为空，为空抛异常
@@ -56,10 +57,6 @@ public class GroupService implements IGroupService {
         //判断当前项目是不是存在
         //查询belongProjectId是否为空，为空抛异常
         ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
-        //判断项目名是否为空
-        if (belongProjectId == null){
-            throw new TTMSException(ExceptionEnum.PROJECT_ID_NULL);
-        }
         if (projectInDb == null) {
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
@@ -73,9 +70,9 @@ public class GroupService implements IGroupService {
             throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_USER);
         }
         //判断用户是不是属于产品部
-        if (!curDepartmentStaffIds.contains(chargeUserId))
+        if (!curDepartmentStaffIds.contains(sysUser.getId()))
             throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
-        proGroup.setChargeuserid(chargeUserId);
+        proGroup.setChargeuserid(sysUser.getId());
         proGroup.setGroupnote(groupNote);
         proGroup.setValid((byte) 1);
         //获取当前用户
@@ -155,10 +152,6 @@ public class GroupService implements IGroupService {
         //判断当前项目是不是存在
         //查询belongProjectId是否为空，为空抛异常
         ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
-        //判断项目id是否为空
-        if (belongProjectId == null){
-            throw new TTMSException(ExceptionEnum.PROJECT_ID_NULL);
-        }
         if (projectInDb == null) {
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
@@ -210,7 +203,7 @@ public class GroupService implements IGroupService {
         }
         List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
                 getAllStaffIdsOfDepartment(project.getDepartmentid());
-        if(CollectionUtils.isEmpty(curDepartmentStaffIds)) {
+        if (CollectionUtils.isEmpty(curDepartmentStaffIds)) {
             throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_USER);
         }
         List<SysUser> users = this.sysUserMapper.selectByIdList(curDepartmentStaffIds);
