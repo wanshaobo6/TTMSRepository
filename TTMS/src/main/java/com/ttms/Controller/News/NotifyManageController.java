@@ -2,14 +2,12 @@ package com.ttms.Controller.News;
 
 import com.ttms.Entity.MesMessage;
 import com.ttms.Entity.SysUser;
+import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.INotifyManageService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +30,25 @@ public class NotifyManageController {
     @GetMapping("/queryAllnew")
     public ResponseEntity<List<MesMessage>> queryAllnew(){
         return ResponseEntity.ok(this.iNotifyManageService.queryAllnew());
+    }
+
+   /**
+   * 功能描述: <br>
+   * 〈〉消息类型，发布人，消息标题
+   * @Param: [messageclassname, messagetitle, sendName]
+   * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.MesMessage>>
+   * @Author: 吴彬
+   * @Date: 8:29 8:29
+    */
+    @GetMapping("/queryAllnew/page")
+    public ResponseEntity<PageResult<MesMessage>> queryAllnewPage(@RequestParam(value = "page" ,defaultValue = "1")
+                                                                        Integer page, @RequestParam(value = "rows" ,defaultValue = "5")
+                                                                Integer rows, @RequestParam String messageclassname,
+                                                                  @RequestParam String messagetitle,
+                                                                  @RequestParam String sendName
+                                                            ){
+        return ResponseEntity.ok(this.iNotifyManageService.queryAllnewPage
+                (page,rows,messageclassname,messagetitle,sendName));
     }
 
     /**

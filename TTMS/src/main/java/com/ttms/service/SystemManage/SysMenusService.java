@@ -497,17 +497,15 @@ public class SysMenusService {
     *Param
     *return
     **/
-    public PageResult<SysDepartment> queryDepartment(Integer page,Integer rows,
-                                                     String departmentname,Boolean valid){
+    public PageResult<SysDepartment> queryDepartment(Integer page, Integer rows,
+                                                     String departmentname, Integer valid){
         PageHelper.startPage(page,rows);
         Example example = new Example(SysDepartment.class);
         Example.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotBlank(departmentname)){
             criteria.andLike("departmentname","%"+departmentname+"%");
         }
-        if(valid.equals(false )){
-            criteria.andEqualTo("valid",valid);
-        }
+        criteria.andEqualTo("valid",valid);
         List<SysDepartment> list= this.sysDepartmentMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(list)){
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
