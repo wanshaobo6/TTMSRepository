@@ -2,6 +2,7 @@ package com.ttms.service.ProductManage;
 
 import com.ttms.Entity.MesMessage;
 import com.ttms.Entity.SysUser;
+import com.ttms.Vo.PageResult;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface INotifyManageService {
     List<MesMessage> querybyUser(SysUser user);
 
     Void updateState(Integer mid);
+
+    PageResult<MesMessage> queryAllnewPage(Integer page, Integer rows, String messageclassname, String messagetitle, String sendName);
 }

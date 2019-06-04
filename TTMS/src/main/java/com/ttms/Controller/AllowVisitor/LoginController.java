@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.List;
 
 @RestController
@@ -108,4 +107,34 @@ public class LoginController {
         SysUser user = (SysUser)subject.getPrincipal();
         return ResponseEntity.ok(user);
     }
+
+  /**
+  * 功能描述: <br>
+  * 〈〉修改用户的密码
+  * @Param: [oldPassword, newPassword]
+  * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+  * @Author: 吴彬
+  * @Date: 11:14 11:14
+   */
+    @PostMapping("/account/pwd")
+    public ResponseEntity<Void> updatePwd(@RequestParam String oldPassword,@RequestParam String newPassword){
+        if(StringUtils.isBlank(oldPassword)){
+            throw new TTMSException(ExceptionEnum.PASSWORD_NOT_NULL);
+        }
+        if(StringUtils.isBlank(newPassword)){
+            throw new TTMSException(ExceptionEnum.NEWPASSWORD_NOT_NULL);
+        }
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        // 校验原密码是否正确
+        SysUser sysUser = loginService.getUserByUserName(user.getUsername());
+
+        oldPassword = CodecUtils.md5Hex(oldPassword, sysUser.getSalt());
+        if(!oldPassword.equals(sysUser.getPassword())){
+            throw new TTMSException(ExceptionEnum.PASSWORD_ERROR);
+        }
+        //TODO 修改密码加密处理
+        this.loginService.updatePwd(newPassword,sysUser.getSalt());
+        return ResponseEntity.ok(null);
+    }
+
 }

@@ -16,15 +16,15 @@ public class SysRoles {
 
     private String note;
 
+    private Integer departmentid;
+
     private Date createdtime;
 
     private Date modifiedtime;
 
-    private int createduserId;
+    private Integer createduserid;
 
-    private int modifieduserId;
-
-    private Integer departmentId;
+    private Integer modifieduserid;
 
     @Transient
     private SysMenus sysMenus;

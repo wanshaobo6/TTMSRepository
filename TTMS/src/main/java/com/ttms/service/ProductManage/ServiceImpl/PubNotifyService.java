@@ -40,6 +40,7 @@ public class PubNotifyService implements IPubNotifyService {
         if(i!=1){
             throw new TTMSException(ExceptionEnum.MSG_RELEASE_FALI);
         }
+
         return null;
     }
 }

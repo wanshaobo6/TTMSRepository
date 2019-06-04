@@ -317,15 +317,14 @@ public class SysMenusService {
      * @Date: 17:32 17:32
      */
     @Transactional
-    public void AddRole(String name, String note, List<Integer> menuIds, int create_userid, Integer departmentId) {
+    public void AddRole(String name, String note, List<Integer> menuIds, Integer create_userid, Integer departmentId) {
         //添加角色
         SysRoles role=new SysRoles();
         role.setName(name);
         role.setNote(note);
         role.setCreatedtime(new Date());
-        role.setCreateduserId(create_userid);
-        //TODO
-        role.setDepartmentId(departmentId);
+        role.setCreateduserid(create_userid);
+        role.setDepartmentid(departmentId);
         role.setModifiedtime(null);
         int i = this.sysRolesMapper.insert(role);
         if(i!=1){
@@ -497,17 +496,15 @@ public class SysMenusService {
     *Param
     *return
     **/
-    public PageResult<SysDepartment> queryDepartment(Integer page,Integer rows,
-                                                     String departmentname,Boolean valid){
+    public PageResult<SysDepartment> queryDepartment(Integer page, Integer rows,
+                                                     String departmentname, Integer valid){
         PageHelper.startPage(page,rows);
         Example example = new Example(SysDepartment.class);
         Example.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotBlank(departmentname)){
             criteria.andLike("departmentname","%"+departmentname+"%");
         }
-        if(valid.equals(false )){
-            criteria.andEqualTo("valid",valid);
-        }
+        criteria.andEqualTo("valid",valid);
         List<SysDepartment> list= this.sysDepartmentMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(list)){
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
@@ -645,5 +642,29 @@ public class SysMenusService {
         criteria.andEqualTo("valid", 1);
         List<SysDepartment> sysDepartments = this.sysDepartmentMapper.selectByExample(example);
         return sysDepartments;
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉修改密码
+     * @Param: [newPassword, salt]
+     * @Return: java.lang.Void
+     * @Author: 吴彬
+     * @Date: 14:43 14:43
+     */
+    public Void updatePwd(String newPassword, String salt) {
+        //根据salt查找用户设置相应的密码
+        SysUser user=new SysUser();
+        user.setSalt(CodecUtils.generateSalt());
+        newPassword = CodecUtils.md5Hex(newPassword, user.getSalt());
+        user.setPassword(newPassword);
+        Example example=new Example(SysUser.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("salt", salt);
+        int i = this.sysUserMapper.updateByExampleSelective(user, example);
+        if(i!=1){
+            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+        }
+        return null;
     }
 }

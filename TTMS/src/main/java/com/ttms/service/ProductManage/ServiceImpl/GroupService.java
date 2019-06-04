@@ -49,6 +49,10 @@ public class GroupService implements IGroupService {
         SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
         ProGroup proGroup = new ProGroup();
         proGroup.setId(groupId);
+        //判断团名是否为空，为空抛异常
+        if(StringUtils.isEmpty(groupName)){
+            throw new TTMSException(ExceptionEnum.GROUPNAME_NOT_EMPTY);
+        }
         proGroup.setGroupname(groupName);
         //判断当前项目是不是存在
         //查询belongProjectId是否为空，为空抛异常
@@ -141,6 +145,10 @@ public class GroupService implements IGroupService {
         ProGroup proGroup = new ProGroup();
         SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
         proGroup.setGroupname(groupName);
+        //判断团名不能为空
+        if(StringUtils.isEmpty(groupName)){
+            throw new TTMSException(ExceptionEnum.GROUPNAME_NOT_EMPTY);
+        }
         //判断当前项目是不是存在
         //查询belongProjectId是否为空，为空抛异常
         ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
@@ -149,6 +157,7 @@ public class GroupService implements IGroupService {
         }
         proGroup.setProjectid(belongProjectId);
         proGroup.setProjectname(projectInDb.getProjectname());
+        //判断用户是不是属于产品部
         List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
                 getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
         if (!curDepartmentStaffIds.contains(sysUser.getId())) {
