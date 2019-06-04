@@ -655,9 +655,9 @@ public class SysMenusService {
     public Void updatePwd(String newPassword, String salt) {
         //根据salt查找用户设置相应的密码
         SysUser user=new SysUser();
-        user.setPassword(newPassword);
         user.setSalt(CodecUtils.generateSalt());
         newPassword = CodecUtils.md5Hex(newPassword, user.getSalt());
+        user.setPassword(newPassword);
         Example example=new Example(SysUser.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("salt", salt);
