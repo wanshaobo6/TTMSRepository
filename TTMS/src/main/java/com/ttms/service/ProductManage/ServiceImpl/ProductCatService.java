@@ -51,14 +51,9 @@ public class ProductCatService implements IProductCatService {
      */
     @Override
     public List<ProProductCat> queryCatById(Integer catId) {
-        ProProductCat proProductCat = this.proProductCatMapper.selectByPrimaryKey(catId);
-        if(proProductCat==null){
-            return null;
-        }
-        Integer id = proProductCat.getId();
         Example example=new Example(ProProductCat.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("parentid", id);
+        criteria.andEqualTo("parentid", catId);
         List<ProProductCat> list = this.proProductCatMapper.selectByExample(example);
         if(org.apache.commons.collections.CollectionUtils.isEmpty(list)){
             throw new TTMSException(ExceptionEnum.PRODUCT_CAT_NOT_FOUNDF);

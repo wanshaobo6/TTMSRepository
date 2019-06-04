@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.List;
 
 @RestController
@@ -88,5 +89,23 @@ public class LoginController {
               log.debug("用户" + user.getUsername() + "退出登录");
         }
         return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉获取当前用户
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<com.ttms.Entity.SysUser>
+     * @Author: 万少波
+     * @Date: 2019/6/4 8:14
+     */
+    @PostMapping("/getCuruser")
+    public ResponseEntity<SysUser> getCuruser(){
+        Subject subject = SecurityUtils.getSubject();
+        if(!subject.isAuthenticated()){
+            throw new TTMSException(ExceptionEnum.USER_UNLOGIN);
+        }
+        SysUser user = (SysUser)subject.getPrincipal();
+        return ResponseEntity.ok(user);
     }
 }

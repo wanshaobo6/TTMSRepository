@@ -122,7 +122,7 @@ public class CreateProductService implements ICreateProductService {
     @Override
     public List<ProGroup> queryGroupByCuruser(SysUser user) {
         Example example=new Example(ProGroup.class);
-        example.createCriteria().andEqualTo("chargeUserId", user.getId());
+        example.createCriteria().andEqualTo("chargeuserid", user.getId());
         List<ProGroup> proGroups = this.groupMapper.selectByExample(example);
         return proGroups;
     }

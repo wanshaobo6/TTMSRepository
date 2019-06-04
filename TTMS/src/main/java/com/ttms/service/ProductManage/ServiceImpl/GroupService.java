@@ -44,8 +44,9 @@ public class GroupService implements IGroupService {
      * @Author: lhf
      * @Date: 2019/5/28 8:56
      */
-    public void updateGroup(int groupId, String groupName, int belongProjectId,
-                            int chargeUserId, String groupNote) {
+    public void updateGroup(int groupId, String groupName, int belongProjectId, String groupNote) {
+        //获取当前用户
+        SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
         ProGroup proGroup = new ProGroup();
         proGroup.setId(groupId);
         proGroup.setGroupname(groupName);
@@ -65,9 +66,9 @@ public class GroupService implements IGroupService {
             throw new TTMSException(ExceptionEnum.DEPARTMENT_NOT_USER);
         }
         //判断用户是不是属于产品部
-        if (!curDepartmentStaffIds.contains(chargeUserId))
+        if (!curDepartmentStaffIds.contains(sysUser.getId()))
             throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
-        proGroup.setChargeuserid(chargeUserId);
+        proGroup.setChargeuserid(sysUser.getId());
         proGroup.setGroupnote(groupNote);
         proGroup.setValid((byte) 1);
         //获取当前用户
@@ -148,7 +149,6 @@ public class GroupService implements IGroupService {
         }
         proGroup.setProjectid(belongProjectId);
         proGroup.setProjectname(projectInDb.getProjectname());
-        //判断用户是不是属于产品部
         List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
                 getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
         if (!curDepartmentStaffIds.contains(sysUser.getId())) {

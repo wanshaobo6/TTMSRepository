@@ -10,8 +10,7 @@ import java.util.List;
 
 public interface IGroupService {
         ///修改团信息
-        void updateGroup(int groupId ,String groupName, int belongProjectId,
-              int chargeUserId, String groupNote);
+        void updateGroup(int groupId ,String groupName, int belongProjectId, String groupNote);
 
         //启动禁用团状态
         void ValidOrInvalidGroup(Integer gid);

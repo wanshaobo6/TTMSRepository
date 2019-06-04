@@ -29,9 +29,8 @@ public class GroupController {
      * @Date: 2019/5/28 8:59
      */
     @PutMapping
-    public ResponseEntity<Void> updateGroup(@RequestParam int groupId, @RequestParam String groupName, @RequestParam int belongProjectId,
-                                            @RequestParam int chargeUserId, @RequestParam String groupNote){
-        this.groupService.updateGroup(groupId,groupName,belongProjectId,chargeUserId,groupNote);
+    public ResponseEntity<Void> updateGroup(@RequestParam int groupId, @RequestParam String groupName, @RequestParam int belongProjectId, @RequestParam String groupNote){
+        this.groupService.updateGroup(groupId,groupName,belongProjectId,groupNote);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
