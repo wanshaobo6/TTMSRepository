@@ -8,7 +8,6 @@ import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.IProjectService;
-import net.sf.jsqlparser.expression.StringValue;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,12 +74,12 @@ public class ProjectInfoController {
     @PutMapping("/{pid}")
     public ResponseEntity<Void> editProject(
             @PathVariable("pid") Integer pid,
-                                            @RequestParam String projectnumber,
-                                           @RequestParam String projectname,
-                                           @RequestParam Date starttime,
-                                           @RequestParam Date endtime,
-                                           @RequestParam String note ,
-                                           @RequestParam Integer departmentId){
+            @RequestParam String projectnumber,
+            @RequestParam String projectname,
+            @RequestParam Date starttime,
+            @RequestParam Date endtime,
+            @RequestParam String note ,
+            @RequestParam Integer departmentId){
         ProProject project = encapsulation(pid,projectnumber, projectname, starttime, endtime, note, departmentId);
         this.projectService.editProject(project,(SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
         return ResponseEntity.ok().build();

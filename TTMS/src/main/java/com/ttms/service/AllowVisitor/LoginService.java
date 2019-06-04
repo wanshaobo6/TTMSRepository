@@ -116,6 +116,18 @@ public class LoginService {
         return menusItems;
     }
 
+    /**
+    * 功能描述: <br>
+    * 〈〉修改密码
+    * @Param: [newPassword, salt]
+    * @Return: void
+    * @Author: 吴彬
+    * @Date: 14:53 14:53
+     */
+    public void updatePwd(String newPassword, String salt) {
+        this.sysMenusService.updatePwd(newPassword, salt);
+    }
+
     //权限探针
     class pointer{
         private boolean isNull = false;

@@ -1,25 +1,24 @@
 package com.ttms.Controller.AllowVisitor;
 
 import com.ttms.Config.MyThreadLocal;
-import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.ModulesVo;
 import com.ttms.service.AllowVisitor.LoginService;
-import com.ttms.service.SystemManage.SysMenusService;
 import com.ttms.utils.CodecUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -89,4 +88,34 @@ public class LoginController {
         }
         return ResponseEntity.ok(null);
     }
+
+  /**
+  * 功能描述: <br>
+  * 〈〉修改用户的密码
+  * @Param: [oldPassword, newPassword]
+  * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+  * @Author: 吴彬
+  * @Date: 11:14 11:14
+   */
+    @PostMapping("/account/pwd")
+    public ResponseEntity<Void> updatePwd(@RequestParam String oldPassword,@RequestParam String newPassword){
+        if(StringUtils.isBlank(oldPassword)){
+            throw new TTMSException(ExceptionEnum.PASSWORD_NOT_NULL);
+        }
+        if(StringUtils.isBlank(newPassword)){
+            throw new TTMSException(ExceptionEnum.NEWPASSWORD_NOT_NULL);
+        }
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        // 校验原密码是否正确
+        SysUser sysUser = loginService.getUserByUserName(user.getUsername());
+
+        oldPassword = CodecUtils.md5Hex(oldPassword, sysUser.getSalt());
+        if(!oldPassword.equals(sysUser.getPassword())){
+            throw new TTMSException(ExceptionEnum.PASSWORD_ERROR);
+        }
+        //TODO 修改密码加密处理
+        this.loginService.updatePwd(newPassword,sysUser.getSalt());
+        return ResponseEntity.ok(null);
+    }
+
 }
