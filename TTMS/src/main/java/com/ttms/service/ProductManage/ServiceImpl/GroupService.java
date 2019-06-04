@@ -44,14 +44,22 @@ public class GroupService implements IGroupService {
      * @Author: lhf
      * @Date: 2019/5/28 8:56
      */
-    public void updateGroup(int groupId, String groupName, int belongProjectId,
-                            int chargeUserId, String groupNote) {
+    public void updateGroup(Integer groupId, String groupName, Integer belongProjectId,
+                            Integer chargeUserId, String groupNote) {
         ProGroup proGroup = new ProGroup();
         proGroup.setId(groupId);
+        //判断团名是否为空，为空抛异常
+        if(StringUtils.isEmpty(groupName)){
+            throw new TTMSException(ExceptionEnum.GROUPNAME_NOT_EMPTY);
+        }
         proGroup.setGroupname(groupName);
         //判断当前项目是不是存在
         //查询belongProjectId是否为空，为空抛异常
         ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
+        //判断项目名是否为空
+        if (belongProjectId == null){
+            throw new TTMSException(ExceptionEnum.PROJECT_ID_NULL);
+        }
         if (projectInDb == null) {
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
@@ -147,6 +155,10 @@ public class GroupService implements IGroupService {
         //判断当前项目是不是存在
         //查询belongProjectId是否为空，为空抛异常
         ProProject projectInDb = this.proProjectMapper.selectByPrimaryKey(belongProjectId);
+        //判断项目id是否为空
+        if (belongProjectId == null){
+            throw new TTMSException(ExceptionEnum.PROJECT_ID_NULL);
+        }
         if (projectInDb == null) {
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
