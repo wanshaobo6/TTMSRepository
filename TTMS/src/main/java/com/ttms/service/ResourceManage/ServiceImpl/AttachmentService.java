@@ -42,8 +42,8 @@ public class AttachmentService implements IAttachmentService {
         attachment.setUploadtime(new Date());
         attachment.setUploaduserid(userId);
         int i = resoAttachMentMapper.insert(attachment);
-        if(i != 1){
-            throw new TTMSException(ExceptionEnum.ATTACHMENT_INSERT_FAIL);
+        if (i != 1) {
+            throw new AssertionError(ExceptionEnum.ATTACHMENT_INSERT_FAIL);
         }
         return null;
     }

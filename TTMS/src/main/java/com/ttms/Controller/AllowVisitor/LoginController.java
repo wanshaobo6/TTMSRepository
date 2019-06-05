@@ -125,6 +125,7 @@ public class LoginController {
         if(StringUtils.isBlank(newPassword)){
             throw new TTMSException(ExceptionEnum.NEWPASSWORD_NOT_NULL);
         }
+        Subject subject = SecurityUtils.getSubject();
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
         // 校验原密码是否正确
         SysUser sysUser = loginService.getUserByUserName(user.getUsername());
@@ -133,8 +134,18 @@ public class LoginController {
         if(!oldPassword.equals(sysUser.getPassword())){
             throw new TTMSException(ExceptionEnum.PASSWORD_ERROR);
         }
-        //TODO 修改密码加密处理
-        this.loginService.updatePwd(newPassword,sysUser.getSalt());
+        // 修改密码加密处理
+        Boolean aBoolean = this.loginService.updatePwd(newPassword, sysUser.getSalt());
+        if(aBoolean){
+            //封装用户名和密码
+            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(sysUser.getUsername(), oldPassword);
+            try {
+                subject.login(usernamePasswordToken);    //只要没有任何异常则表示登录成功
+                log.debug("用户" + user.getUsername() + "修改密码成功");
+            }catch (Exception e){
+                throw new TTMSException(ExceptionEnum.USER_EDIT_NEWPASSWORD_SUCC);
+            }
+        }
         return ResponseEntity.ok(null);
     }
 

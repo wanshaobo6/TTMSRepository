@@ -22,6 +22,7 @@ public enum ExceptionEnum {
     PASSWORD_ERROR(500,"原密码错误"),
     PASSWORD_NOT_NULL(500,"密码不能为空"),
     NEWPASSWORD_NOT_NULL(500,"新密码不能为空"),
+    USER_EDIT_NEWPASSWORD_SUCC(200,"修改密码成功,请重新登录"),
     USER_NOT_FOUND(404,"查询用户不存在"),
     USER_NAME_DUPLICATED(501,"用户名重复"),
     USER_DELETE_FAIL(500,"查询用户失败"),
