@@ -322,8 +322,11 @@ public class SysMenusService {
         SysRoles role=new SysRoles();
         role.setName(name);
         role.setNote(note);
-        role.setCreatedtime(new Date());
+        Date now = new Date();
+        role.setCreatedtime(now);
+        role.setModifiedtime(now);
         role.setCreateduserid(create_userid);
+        role.setModifieduserid(create_userid);
         role.setDepartmentid(departmentId);
         role.setModifiedtime(null);
         int i = this.sysRolesMapper.insert(role);

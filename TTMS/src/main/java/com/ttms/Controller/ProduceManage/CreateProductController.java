@@ -58,18 +58,18 @@ public class CreateProductController {
     public ResponseEntity<Void> createProduct(@RequestParam(name = "groupId") Integer groupId,
                                               @RequestParam Integer productCatId1,
                                               @RequestParam Integer productCatId2,
-                                              @RequestParam(value = "productCatId3") Integer productCatId3,
-                                              @RequestParam(value = "productName") String productName,
-                                              @RequestParam(value = "serverStartTime") Date serverStartTime,
-                                              @RequestParam(value = "serverEndTime") Date serverEndTime,
-                                              @RequestParam(value = "preSellNumber") Integer preSellNumber,
-                                              @RequestParam(value = "selledNumber") Integer selledNumber,
-                                              @RequestParam(value = "lowestNumber") Integer lowestNumber,
-                                              @RequestParam(value = "onsellTime") Date onsellTime,
-                                              @RequestParam(value = "projectPrice") Integer productPrice,
-                                              @RequestParam(value = "upsellTime") Date upsellTime,
-                                              @RequestParam(value = "hotTip") String hotTip,
-                                              @RequestParam(value = "productIntroduction") String productIntroduction){
+                                              @RequestParam Integer productCatId3,
+                                              @RequestParam String productName,
+                                              @RequestParam Date serverStartTime,
+                                              @RequestParam Date serverEndTime,
+                                              @RequestParam Integer preSellNumber,
+                                              @RequestParam Integer selledNumber,
+                                              @RequestParam Integer lowestNumber,
+                                              @RequestParam Date onsellTime,
+                                              @RequestParam Integer productPrice,
+                                              @RequestParam Date upsellTime,
+                                              @RequestParam String hotTip,
+                                              @RequestParam String productIntroduction){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
         if(user==null){
             throw new TTMSException(ExceptionEnum.USER_UNLOGIN);
