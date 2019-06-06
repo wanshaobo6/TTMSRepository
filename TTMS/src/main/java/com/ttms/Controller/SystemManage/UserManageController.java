@@ -25,7 +25,7 @@ public class UserManageController {
     /**
     * 功能描述: <br>
     * 〈〉查询该子部门下的所有角色
-    * @Param: [departmentId]
+    * @Param: [departmentId]fdsfd
     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysRoles>>
     * @Author: 吴彬
     * @Date: 10:56 10:56
@@ -34,6 +34,7 @@ public class UserManageController {
     public ResponseEntity<List<SysRoles>> getRolesByDepartmentId(@RequestParam Integer departmentId){
        return  ResponseEntity.ok(this
         .sysMenusService.getRolesByDepartmentId(departmentId));
+
 
     }
 
