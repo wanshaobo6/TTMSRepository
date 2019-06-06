@@ -1,5 +1,6 @@
 package com.ttms.Controller.SystemManage;
 
+import com.ttms.Entity.SysDepartment;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.Vo.PageResult;
@@ -20,6 +21,37 @@ public class UserManageController {
 
     @Autowired
     private SysMenusService sysMenusService;
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询该子部门下的所有角色
+    * @Param: [departmentId]
+    * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysRoles>>
+    * @Author: 吴彬
+    * @Date: 10:56 10:56
+     */
+    @GetMapping("/getRolesByDepartmentId")
+    public ResponseEntity<List<SysRoles>> getRolesByDepartmentId(@RequestParam Integer departmentId){
+       return  ResponseEntity.ok(this
+        .sysMenusService.getRolesByDepartmentId(departmentId));
+
+    }
+
+
+
+    /**
+     * 功能描述: <br>
+     * 〈〉根据父部门id查询所有子部门
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysDepartment>>
+     * @Author: 吴彬
+     * @Date: 15:53 15:53
+     */
+    @GetMapping("/getDepartmentBypid")
+    public ResponseEntity<List<SysDepartment>> queryAllDepartmentBypid(@RequestParam Integer pid){
+        return ResponseEntity.ok(this.sysMenusService.queryAllDepartmentBypid(pid));
+    }
+
 
     /*功能描述：分页查询已注册的用户 --------------ok
      *@author罗占

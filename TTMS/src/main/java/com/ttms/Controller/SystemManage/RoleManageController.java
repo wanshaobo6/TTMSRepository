@@ -86,17 +86,5 @@ public class RoleManageController {
     }
 
 
-    /**
-    * 功能描述: <br>
-    * 〈〉根据父部门id查询所有子部门
-    * @Param: []
-    * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SysDepartment>>
-    * @Author: 吴彬
-    * @Date: 15:53 15:53
-     */
-    @GetMapping("/getDepartmentBypid")
-    public ResponseEntity<List<SysDepartment>> queryAllDepartmentBypid(@RequestParam Integer pid){
-        return ResponseEntity.ok(this.sysMenusService.queryAllDepartmentBypid(pid));
-    }
 
 }

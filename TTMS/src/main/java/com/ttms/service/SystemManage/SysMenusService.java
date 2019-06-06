@@ -209,7 +209,8 @@ public class SysMenusService {
         }
         List<SysUser> list = sysUserMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(list)){
-            throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
+            return null;
+            //throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
         }
         PageInfo<SysUser> pageInfo = new PageInfo<>(list);
         System.out.println(pageInfo.getList());
@@ -507,6 +508,7 @@ public class SysMenusService {
         criteria.andEqualTo("valid",valid);
         List<SysDepartment> list= this.sysDepartmentMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(list)){
+
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
         PageInfo<SysDepartment> pageInfo = new PageInfo<>(list);
@@ -666,5 +668,18 @@ public class SysMenusService {
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
         return null;
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询子部门下的所有角色
+    * @Param: [departmentId]
+    * @Return: java.util.List<com.ttms.Entity.SysRoles>
+    * @Author: 吴彬
+    * @Date: 10:58 10:58
+     */
+    public List<SysRoles> getRolesByDepartmentId(Integer departmentId) {
+        List<SysRoles> roles = this.sysDepartmentMapper.getRolesByDepartmentId(departmentId);
+        return roles;
     }
 }

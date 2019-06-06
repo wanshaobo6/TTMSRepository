@@ -1,7 +1,7 @@
 package com.ttms.Mapper;
 
 import com.ttms.Entity.SysDepartment;
-import com.ttms.Entity.SysUser;
+import com.ttms.Entity.SysRoles;
 import com.ttms.utils.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -19,4 +19,8 @@ public interface SysDepartmentMapper extends BaseMapper<SysDepartment> {
     @Select("SELECT depart.departmentname FROM sys_department depart WHERE  depart.id IN" +
             "( SELECT r.departmentId FROM sys_user u, sys_roles r,sys_user_roles s WHERE u.id=s.user_id AND s.role_id=r.id AND u.id=#{Uid})")
     public SysDepartment IsBelongProduceManager(@Param("Uid")Integer Uid);
+
+    //查询该部门下的所有角色
+    @Select("SELECT r.* FROM sys_roles r,sys_department d WHERE r.`departmentId`=d.`id` AND d.`isparent`=0 AND d.`id`=#{departmentId}")
+    List<SysRoles> getRolesByDepartmentId(@Param("departmentId") Integer departmentId);
 }
