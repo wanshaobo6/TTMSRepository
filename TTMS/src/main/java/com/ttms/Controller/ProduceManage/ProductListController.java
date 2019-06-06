@@ -3,6 +3,7 @@ package com.ttms.Controller.ProduceManage;
 import com.ttms.Entity.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
+import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,22 @@ import java.util.List;
 public class ProductListController {
     @Autowired
     private IProductListService productListService;
+
+    @Autowired
+    private IProductCatService productCatService;
+
+    /**
+     * 功能描述: <br>
+     * 〈〉根据id查询所有
+     * @Param: [catId]
+     * @Return: java.util.List<com.ttms.Entity.ProProductCat>
+     * @Author: 吴彬
+     * @Date: 11:10 11:10
+     */
+    @GetMapping("queryCatById")
+    public ResponseEntity<List<ProProductCat>> queryCatById(@RequestParam("catId") Integer catId){
+        return ResponseEntity.ok(this.productCatService.queryCatById(catId));
+    }
 
     /**
      * 功能描述: <br>

@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface SysDepartmentMapper extends BaseMapper<SysDepartment> {
     //查询部门下的所有成员
-    @Select("SELECT su.* FROM sys_user su WHERE su.`roleId` IN  " +
+    @Select("SELECT su.id FROM sys_user su WHERE su.`roleId` IN  " +
             "(SELECT sr.id FROM sys_department sd JOIN sys_roles sr  ON sd.id " +
             "= sr.departmentId WHERE sd.id = #{departmentId})")
-    public List<Integer> getAllStaffIdsOfDepartment(@Param("departmentId") int departmentId);
+    public List<Integer> getAllStaffIdsOfDepartment(@Param("departmentId") Integer departmentId);
 
     //判断该用户是否属于产品部门
     @Select("SELECT depart.departmentname FROM sys_department depart WHERE  depart.id IN" +
