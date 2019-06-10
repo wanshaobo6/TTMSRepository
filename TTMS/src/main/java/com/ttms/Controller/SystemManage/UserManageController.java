@@ -1,10 +1,12 @@
 package com.ttms.Controller.SystemManage;
 
 import com.ttms.Entity.SysDepartment;
+import com.ttms.Entity.SysMenus;
 import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.SystemManage.SysMenusService;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -155,4 +157,11 @@ public class UserManageController {
         sysMenusService.validOrInvalid(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    @GetMapping("/getMenusIdByRoleId")
+    @ResponseBody
+    public ResponseEntity<List<Integer>> getMenusIdByRoleId(@RequestParam Integer RoleId){
+        return ResponseEntity.ok().body(sysMenusService.getMenusIdByRoleId(RoleId));
+    }
+
 }

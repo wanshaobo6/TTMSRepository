@@ -16,11 +16,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -684,5 +687,19 @@ public class SysMenusService {
     public List<SysRoles> getRolesByDepartmentId(Integer departmentId) {
         List<SysRoles> roles = this.sysDepartmentMapper.getRolesByDepartmentId(departmentId);
         return roles;
+    }
+
+    public List<Integer> getMenusIdByRoleId(Integer RoleId){
+        //获取该角色id对应的所有对象
+        //List<SysRoleMenus> sysRoleMenus1 = sysRoleMenusMapper.selectByExample(RoleId);
+        List<SysMenus> menusListByRoleId = sysRoleMenusMapper.getMenusListByRoleId(RoleId);
+        List<Integer> sys = new ArrayList<>();
+        menusListByRoleId .forEach(n -> sys.add(n.getId()));
+
+        //遍历list集合获取menusId
+        //for(SysRoleMenus sysRoleMenus:sysRoleMenus1){
+        //    sysRoleMenus.getMenuId();
+        //}
+        return sys;
     }
 }
