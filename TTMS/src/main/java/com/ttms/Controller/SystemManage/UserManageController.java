@@ -157,11 +157,4 @@ public class UserManageController {
         sysMenusService.validOrInvalid(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
-    @GetMapping("/getMenusIdByRoleId")
-    @ResponseBody
-    public ResponseEntity<List<Integer>> getMenusIdByRoleId(@RequestParam Integer RoleId){
-        return ResponseEntity.ok().body(sysMenusService.getMenusIdByRoleId(RoleId));
-    }
-
 }

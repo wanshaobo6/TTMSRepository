@@ -16,11 +16,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -720,7 +723,7 @@ public class SysMenusService {
     public void updateRoleAndMenus(SysRoles role, List<Integer> menuIds) {
         SysRoleMenus roleMenus = null;
         Example example = new Example(SysRoleMenus.class);
-        example.createCriteria().andEqualTo("roleId",role.getId());
+        example.createCriteria().andEqualTo("roleId", role.getId());
         sysRoleMenusMapper.deleteByExample(example);
         for (Integer id : menuIds) {
             roleMenus = new SysRoleMenus();
@@ -733,5 +736,13 @@ public class SysMenusService {
             }
 
         }
+    }
+    public List<Integer> getMenusIdByRoleId(Integer RoleId){
+        //获取该角色id对应的所有对象
+        //List<SysRoleMenus> sysRoleMenus1 = sysRoleMenusMapper.selectByExample(RoleId);
+        List<SysMenus> menusListByRoleId = sysRoleMenusMapper.getMenusListByRoleId(RoleId);
+        List<Integer> sys = new ArrayList<>();
+        menusListByRoleId .forEach(n -> sys.add(n.getId()));
+        return sys;
     }
 }

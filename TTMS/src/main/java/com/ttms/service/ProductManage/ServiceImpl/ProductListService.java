@@ -181,7 +181,7 @@ public class ProductListService implements IProductListService {
     public Void deleteProductGuide(Integer productId, Integer guideId) {
         ProProductGuide proProductGuide = new ProProductGuide();
         proProductGuide.setProductid(productId);
-        proProductGuide.setGuideid(productId);
+        proProductGuide.setGuideid(guideId);
         int delete = productGuideMapper.delete(proProductGuide);
         if(delete != 1){
             throw new TTMSException(ExceptionEnum.PRODUCT_GUIDE_DELETE_FAIL);

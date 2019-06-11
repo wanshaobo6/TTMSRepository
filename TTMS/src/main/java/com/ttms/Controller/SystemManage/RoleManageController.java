@@ -98,6 +98,19 @@ public class RoleManageController {
     public ResponseEntity<List<SysDepartment>> queryAllDepartmentBypid(@RequestParam Integer pid){
         return ResponseEntity.ok(this.sysMenusService.queryAllDepartmentBypid(pid));
     }
+    /**
+     * 功能描述: <br>
+     * 〈〉
+     * @Param: [RoleId]
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<java.lang.Integer>>
+     * @Author: lhf
+     * @Date: 2019/6/11 15:24
+     */
+    @GetMapping("/getMenusIdByRoleId/{RoleId}")
+    @ResponseBody
+    public ResponseEntity<List<Integer>> getMenusIdByRoleId(@PathVariable Integer RoleId){
+        return ResponseEntity.ok().body(sysMenusService.getMenusIdByRoleId(RoleId));
+    }
 
     /*
     *功能描述：修改角色
