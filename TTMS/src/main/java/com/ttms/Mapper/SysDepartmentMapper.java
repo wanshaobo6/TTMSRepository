@@ -23,4 +23,7 @@ public interface SysDepartmentMapper extends BaseMapper<SysDepartment> {
     //查询该部门下的所有角色
     @Select("SELECT r.* FROM sys_roles r,sys_department d WHERE r.`departmentId`=d.`id` AND d.`isparent`=0 AND d.`id`=#{departmentId}")
     List<SysRoles> getRolesByDepartmentId(@Param("departmentId") Integer departmentId);
+
+    @Select(("SELECT  sr.departmentId FROM sys_roles sr  WHERE sr.id  =( SELECT su.roleId FROM sys_user su  WHERE su.id=#{userId})"))
+    Integer getDepartmentId(@Param("userId") Integer userId);
 }

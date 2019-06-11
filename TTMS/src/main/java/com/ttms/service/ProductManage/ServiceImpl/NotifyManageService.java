@@ -102,7 +102,7 @@ public class NotifyManageService implements INotifyManageService {
         // 根据发布人姓名查询id
         SysUser user = this.sysMenusService.getUserByUserName(sendName);
         if(user!=null){
-            criteria.andEqualTo("sendId", user.getId());
+            criteria.andEqualTo("senderid", user.getId());
         }
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
         PageInfo<MesMessage> info=new PageInfo<>(mesMessages);

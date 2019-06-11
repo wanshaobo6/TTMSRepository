@@ -158,11 +158,22 @@ public class GroupService implements IGroupService {
         proGroup.setProjectid(belongProjectId);
         proGroup.setProjectname(projectInDb.getProjectname());
         //判断用户是不是属于产品部
-        List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
-                getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
-        if (!curDepartmentStaffIds.contains(sysUser.getId())) {
+        //1.查询用户所属的部门
+        Integer departmentId = sysDepartmentMapper.getDepartmentId(sysUser.getId());
+
+        //项目归属的部门
+        Integer departmentid = projectInDb.getDepartmentid();
+
+        //如果用户所在的部门和项目所在的部门有交集的话
+        Boolean booleand = this.sysMenusService.findDepartmentByid(departmentId, departmentid);
+        if(!booleand){
             throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
         }
+
+      /*  List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
+                getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
+        if (!curDepartmentStaffIds.contains(sysUser.getId())) {
+        }*/
         proGroup.setChargeuserid(sysUser.getId());
         proGroup.setGroupnote(groupNote);
         proGroup.setValid((byte) 1);

@@ -685,4 +685,56 @@ public class SysMenusService {
         List<SysRoles> roles = this.sysDepartmentMapper.getRolesByDepartmentId(departmentId);
         return roles;
     }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉根据主键查询部门
+    * @Param: [did]，[departmentid]
+    * @Return: java.lang.Boolean
+    * @Author: 吴彬
+    * @Date: 16:53 16:53
+     */
+    public Boolean findDepartmentByid(Integer did, Integer departmentid){
+        SysDepartment sysDepartment = getDeaprtmentByid(did);
+        if(sysDepartment!=null) {
+            //如果是父部门的话
+            if (sysDepartment.getIsparent() == 1 ) {
+                //查询所有的子部门
+                List<SysDepartment> sysDepartments = queryAllDepartmentBypid(did);
+                if (sysDepartments == null) {
+                    return false;
+                }
+                if (sysDepartments.contains(departmentid) || departmentid==1) {
+                    return true;
+                }else {
+                    return false;
+                }
+
+            } else {
+                SysDepartment deaprtmentByid = getDeaprtmentByid(sysDepartment.getParentid());
+                //查询出部门
+                List<SysDepartment> sysDepartments = queryAllDepartmentBypid(deaprtmentByid.getId());
+                if (sysDepartments == null) {
+                    return false;
+                } else if (sysDepartments.contains(departmentid) || departmentid==1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+    /**
+    * 功能描述: <br>
+    * 〈〉根据主键查询部门
+    * @Param: [pid]
+    * @Return: com.ttms.Entity.SysDepartment
+    * @Author: 吴彬
+    * @Date: 17:20 17:20
+     */
+    public SysDepartment getDeaprtmentByid(Integer pid){
+        SysDepartment sysDepartment = this.sysDepartmentMapper.selectByPrimaryKey(pid);
+        return sysDepartment;
+    }
 }

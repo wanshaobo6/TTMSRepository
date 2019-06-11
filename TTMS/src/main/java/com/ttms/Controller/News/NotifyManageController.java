@@ -43,9 +43,9 @@ public class NotifyManageController {
     @GetMapping("/queryAllnew/page")
     public ResponseEntity<PageResult<MesMessage>> queryAllnewPage(@RequestParam(value = "page" ,defaultValue = "1")
                                                                         Integer page, @RequestParam(value = "rows" ,defaultValue = "5")
-                                                                Integer rows, @RequestParam String messageclassname,
-                                                                  @RequestParam String messagetitle,
-                                                                  @RequestParam String sendName
+                                                                Integer rows, @RequestParam(required = false) String messageclassname,
+                                                                  @RequestParam(required = false) String messagetitle,
+                                                                  @RequestParam(required = false) String sendName
                                                             ){
         return ResponseEntity.ok(this.iNotifyManageService.queryAllnewPage
                 (page,rows,messageclassname,messagetitle,sendName));
