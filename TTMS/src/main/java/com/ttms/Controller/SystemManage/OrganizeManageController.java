@@ -42,11 +42,12 @@ public class OrganizeManageController {
     *return
     **/
     @GetMapping("/page")
-    public ResponseEntity<PageResult<SysDepartment>> queryDepartment(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                                     @RequestParam(value = "rows", defaultValue = "5") Integer rows,
-                                                                     @RequestParam(value = "departmentname", required = false) String  departmentname,
-                                                                     @RequestParam(value = "valid",required = false,defaultValue = "1") Integer valid){
-        PageResult<SysDepartment> result = this.sysMenusService.queryDepartment(page,rows,departmentname,valid);
+    public ResponseEntity<PageResult<SysDepartment>> queryDepartment(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                                     @RequestParam(name = "rows", defaultValue = "5") Integer rows,
+                                                                     @RequestParam(name = "departmentname", required = false) String  departmentname,
+                                                                     @RequestParam(name = "valid",required = false ,defaultValue = "-1") Integer valid,
+                                                                     @RequestParam(required = false , defaultValue = "0")Integer pid){
+        PageResult<SysDepartment> result = this.sysMenusService.queryDepartment(page,rows,departmentname,valid,pid);
         return ResponseEntity.ok().body(result);
     }
 

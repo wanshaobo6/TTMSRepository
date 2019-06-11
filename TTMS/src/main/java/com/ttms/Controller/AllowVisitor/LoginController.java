@@ -58,9 +58,11 @@ public class LoginController {
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
         try {
             subject.login(usernamePasswordToken);    //只要没有任何异常则表示登录成功
-            log.debug("用户" + currUser.getUsername() + "退出登录");
+            log.debug("用户" + currUser.getUsername() + "登录");
+            List<ModulesVo> result = loginService.getUserMenusVo();
+            System.out.println("完成登录请求"+System.currentTimeMillis());
             //查询用户能访问到的菜单并返回
-            return ResponseEntity.ok(loginService.getUserMenusVo());
+            return ResponseEntity.ok(result);
         }catch (LockedAccountException e) {
             //该账户已被锁定
             throw new TTMSException(ExceptionEnum.USER_ACCOUNT_LOCK);

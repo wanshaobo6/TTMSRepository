@@ -55,7 +55,7 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         try{
-            System.out.println("执行认证逻辑");
+            System.out.println("接收登录请求"+System.currentTimeMillis());
             //如果这里返回null shiro底层会抛出一个UnknowAccountException
             UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
             String username = token.getUsername();

@@ -92,7 +92,8 @@ public enum ExceptionEnum {
     PRODUCT_PRICE_POLICY_INSERT_FAIL(501,"为产品增加优惠政策失败"),
     PRICE_POLICY_NOT_FOUND(404,"价格政策不存在"),
     PRODUCT_ROUTE_SET_FAIL(404,"行程设置失败"),
-    PRODUCT_ROUTE_UPDATE_FAIL(404,"行程更新失败")
+    PRODUCT_ROUTE_UPDATE_FAIL(404,"行程更新失败"),
+    ROLERS_UPDATE_FAIL(404,"角色修改失败")
     ;
     private int status;
     private String message;

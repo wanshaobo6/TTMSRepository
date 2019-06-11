@@ -66,7 +66,7 @@ public class LoginService {
         for (SysMenus sysMenus : subMenusTrees){
             Menus menu = new Menus();
             menu.setMenuId(sysMenus.getId());
-            menu.setAction("Menus");
+            menu.setAction(sysMenus.getNote());
             menu.setTitle(sysMenus.getName());
             menu.setPath("/"+sysMenus.getUrl());
             if(recursive){
