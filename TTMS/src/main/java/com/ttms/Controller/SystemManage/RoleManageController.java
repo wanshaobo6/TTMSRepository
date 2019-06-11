@@ -99,5 +99,19 @@ public class RoleManageController {
         return ResponseEntity.ok(this.sysMenusService.queryAllDepartmentBypid(pid));
     }
 
+    /*
+    *功能描述：修改角色
+    *@author罗占
+    *@Description
+    *Date15:53 2019/6/10
+    *Param
+    *return
+    **/
+    @PutMapping("/{rid}")
+    public ResponseEntity<Void> updateRole(@RequestParam("name") String name , @RequestParam(required = false,name = "note") String note ,
+                                           @RequestParam(name = "menuIds") List<Integer> menuIds,@RequestParam("departmentId") Integer departmentId,@PathVariable("rid") Integer rid ){
 
+        this.sysMenusService.updateRole(name,note,menuIds,departmentId,rid);
+        return ResponseEntity.ok().body(null);
+    }
 }

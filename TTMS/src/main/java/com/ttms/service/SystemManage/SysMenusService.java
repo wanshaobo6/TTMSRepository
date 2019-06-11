@@ -685,4 +685,53 @@ public class SysMenusService {
         List<SysRoles> roles = this.sysDepartmentMapper.getRolesByDepartmentId(departmentId);
         return roles;
     }
+
+    /*
+    *功能描述：修改角色
+    *@author罗占
+    *@Description
+    *Date15:59 2019/6/10
+    *Param
+    *return
+    **/
+    public void updateRole(String name, String note, List<Integer> menuIds,Integer departmentId, Integer rid){
+        SysRoles role = new SysRoles();
+        role.setId(Long.valueOf(rid));
+        role.setName(name);
+        role.setNote(note);
+        Date now = new Date();
+        role.setCreatedtime(now);
+        role.setModifiedtime(now);
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        role.setCreateduserid(user.getId());
+        role.setModifieduserid(user.getId());
+        role.setDepartmentid(departmentId);
+        role.setModifiedtime(null);
+        int i = this.sysRolesMapper.updateByPrimaryKey(role);
+        if(i !=1){
+            throw new TTMSException(ExceptionEnum.ROLERS_UPDATE_FAIL);
+        }
+        //添加角色和菜单的关联表
+        updateRoleAndMenus(role,menuIds);
+
+    }
+
+    @Transactional
+    public void updateRoleAndMenus(SysRoles role, List<Integer> menuIds) {
+        SysRoleMenus roleMenus = null;
+        Example example = new Example(SysRoleMenus.class);
+        example.createCriteria().andEqualTo("roleId",role.getId());
+        sysRoleMenusMapper.deleteByExample(example);
+        for (Integer id : menuIds) {
+            roleMenus = new SysRoleMenus();
+            String s = String.valueOf(role.getId());
+            roleMenus.setRoleId(Integer.parseInt(s));
+            roleMenus.setMenuId(id);
+            int i = this.sysRoleMenusMapper.insert(roleMenus);
+            if (i != 1) {
+                throw new TTMSException(ExceptionEnum.ROLERS_UPDATE_FAIL);
+            }
+
+        }
+    }
 }
