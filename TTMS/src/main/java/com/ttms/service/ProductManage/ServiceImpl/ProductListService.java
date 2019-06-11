@@ -416,7 +416,7 @@ public class ProductListService implements IProductListService {
         //查询
         List<ProProduct> proProducts = productMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(proProducts)){
-            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+            throw new TTMSException(ExceptionEnum.PRODUCT_NOT_FOUND);
         }
         PageInfo<ProProduct> pageinfo = new PageInfo<>(proProducts);
         //封装数据
