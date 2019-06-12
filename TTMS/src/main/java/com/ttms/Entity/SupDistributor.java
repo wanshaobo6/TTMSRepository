@@ -24,5 +24,7 @@ public class SupDistributor {
 
     private String distributoraddress;
 
+    private String loginname;
 
+    private String loginpass;
 }

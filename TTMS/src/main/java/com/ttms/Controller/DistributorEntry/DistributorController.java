@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
+
+/*----------------------------------------分销商入口---------------------------------------------------*/
 @RestController
 @RequestMapping("/distributorEntry")
 public class DistributorController {
@@ -25,8 +28,9 @@ public class DistributorController {
 
     @PostMapping("/login")
     public ResponseEntity<Void> distributorLogin(@RequestParam String distributorname,
-                                                 @RequestParam String password){
-        return ResponseEntity.ok(distributorService.login(distributorname,password));
+                                                 @RequestParam String password,
+                                                 HttpServletRequest request){
+        return ResponseEntity.ok(distributorService.login(distributorname,password,request));
     }
 
     /**
@@ -37,7 +41,7 @@ public class DistributorController {
     * @Author: 吴彬
     * @Date: 8:38 8:38
      */
-    @GetMapping("/getAvailableProducts")
+    @GetMapping("/auth/getAvailableProducts")
     public ResponseEntity<PageResult<ProProduct>> getAvailableProducts(
             @RequestParam(required = false,defaultValue = "-1") int status,
             @RequestParam(required = false,defaultValue = "-1") int productCatId1,
