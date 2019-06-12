@@ -35,6 +35,7 @@ public class ContributorServiceImpl implements IDistributorService {
         //登录成功
         //将用户信息存session
         System.out.println("supDistributors.get(0) = " + supDistributors.get(0));
+        request.getSession().setAttribute("curdistributor",supDistributors.get(0));
         return null;
     }
 

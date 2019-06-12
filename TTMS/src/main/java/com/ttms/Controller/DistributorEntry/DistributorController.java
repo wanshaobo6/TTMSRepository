@@ -3,6 +3,8 @@ package com.ttms.Controller.DistributorEntry;
 import com.ttms.Entity.DisTourist;
 import com.ttms.Entity.ProProduct;
 import com.ttms.Entity.SupDistributor;
+import com.ttms.Enum.ExceptionEnum;
+import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.DistributorEntry.IDistributorService;
 import com.ttms.service.ProductManage.IProductListService;
@@ -78,7 +80,7 @@ public class DistributorController {
   * @Author: 吴彬
   * @Date: 9:14 9:14
    */
-    @GetMapping("/showMySignUpTourist")
+    @GetMapping("/auth/showMySignUpTourist")
     public ResponseEntity<List<DisTourist>> getMySignUpTourist(){
         SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
         return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId()));
@@ -96,5 +98,22 @@ public class DistributorController {
     public ResponseEntity<Void> loginout(HttpServletRequest request){
         request.getSession().invalidate();
         return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉获得当前登录的用户信息
+     * @Param: [request]
+     * @Return: org.springframework.http.ResponseEntity<com.ttms.Entity.SupDistributor>
+     * @Author: 万少波
+     * @Date: 2019/6/12 9:53
+     */
+    @GetMapping("/getCurDistributor")
+    public ResponseEntity<SupDistributor> getCurDistributor(HttpServletRequest request){
+        SupDistributor curdistributor = (SupDistributor) request.getSession().getAttribute("curdistributor");
+        if(curdistributor == null ){
+            throw new TTMSException(ExceptionEnum.USER_UNLOGIN);
+        }
+        return ResponseEntity.ok(curdistributor);
     }
 }
