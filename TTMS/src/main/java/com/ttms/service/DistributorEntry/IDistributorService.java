@@ -9,4 +9,6 @@ public interface IDistributorService {
     Void login(String distributorname, String password , HttpServletRequest request);
 
     List<DisTourist> getMySignUpTourist(Integer id);
+
+    List<DisTourist> getMySignUpTourist(Integer id, Integer productId);
 }
