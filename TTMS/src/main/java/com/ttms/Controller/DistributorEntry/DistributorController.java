@@ -1,4 +1,4 @@
-package com.ttms.Controller.Distributor;
+package com.ttms.Controller.DistributorEntry;
 
 import com.ttms.Entity.DisTourist;
 import com.ttms.Entity.ProProduct;
