@@ -59,20 +59,34 @@ public class DistributorController {
                 serverEndTime,page,size));
     }
 
-  /**
-  * 功能描述: <br>
-  * 〈〉查询该分销商下 的所有报名 的游客
-  * @Param: []
-  * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
-  * @Author: 吴彬
-  * @Date: 9:14 9:14
-   */
-    @GetMapping("/showMySignUpTourist")
-    public ResponseEntity<List<DisTourist>> getMySignUpTourist(){
-        SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
-        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId()));
-    }
+//  /**
+//  * 功能描述: <br>
+//  * 〈〉查询该分销商下 的所有报名 的游客
+//  * @Param: []
+//  * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
+//  * @Author: 吴彬
+//  * @Date: 9:14 9:14
+//   */
+//    @GetMapping("/showMySignUpTourist")
+//    public ResponseEntity<List<DisTourist>> getMySignUpTourist(){
+//        SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
+//        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId()));
+//    }
 
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询该分销商下该产品的报名游客的人
+    * @Param: [productId]
+    * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
+    * @Author: 吴彬
+    * @Date: 9:35 9:35
+     */
+    @GetMapping("/getAvailableProducts/signUptourist")
+    public ResponseEntity<List<DisTourist>> getMySignUpTourist(@RequestParam(name = "productId",required = false,defaultValue = "null") Integer productId){
+        SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
+        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId(),productId));
+    }
     /**
     * 功能描述: <br>
     * 〈〉分销商退出

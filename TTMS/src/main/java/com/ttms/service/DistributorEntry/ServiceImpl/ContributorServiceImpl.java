@@ -35,4 +35,25 @@ public class ContributorServiceImpl implements IDistributorService {
         List<DisTourist> disTourists = this.disToruistMapper.selectByExample(example);
         return disTourists;
     }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉查询该分销商下该产品的报名游客的人
+     * @Param: [productId]
+     * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
+     * @Author: 吴彬
+     * @Date: 9:35 9:35
+     */
+    @Override
+    public List<DisTourist> getMySignUpTourist(Integer id, Integer productId) {
+        Example example=new Example(DisTourist.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("distributorid", id);
+        if(productId!=null){
+            criteria.andEqualTo("productid", productId);
+        }
+        List<DisTourist> disTourists = this.disToruistMapper.selectByExample(example);
+        return disTourists;
+    }
+
 }

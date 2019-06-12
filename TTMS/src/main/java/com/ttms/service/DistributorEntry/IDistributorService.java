@@ -8,4 +8,6 @@ public interface IDistributorService {
     Void login(String distributorname, String password);
 
     List<DisTourist> getMySignUpTourist(Integer id);
+
+    List<DisTourist> getMySignUpTourist(Integer id, Integer productId);
 }
