@@ -2,9 +2,12 @@ package com.ttms.Controller.DistributorEntry;
 
 import com.ttms.Entity.DisTourist;
 import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.SupDistributor;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.DistributorEntry.IDistributorService;
 import com.ttms.service.ProductManage.IProductListService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +69,24 @@ public class DistributorController {
    */
     @GetMapping("/showMySignUpTourist")
     public ResponseEntity<List<DisTourist>> getMySignUpTourist(){
+        SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
+        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId()));
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉分销商退出
+    * @Param: []
+    * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+    * @Author: 吴彬
+    * @Date: 9:26 9:26
+     */
+    @GetMapping("/loginout")
+    public ResponseEntity<Void> loginout(){
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            subject.logout();
+        }
         return ResponseEntity.ok(null);
     }
 }
