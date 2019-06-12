@@ -2,13 +2,11 @@ package com.ttms.Controller.DistributorEntry;
 
 import com.ttms.Entity.ProProduct;
 import com.ttms.Vo.PageResult;
+import com.ttms.service.DistributorEntry.IDistributorService;
 import com.ttms.service.ProductManage.IProductListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -18,6 +16,17 @@ public class DistributorController {
 
     @Autowired
     private IProductListService productListService;
+
+    @Autowired
+    private IDistributorService distributorService;
+
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> distributorLogin(@RequestParam String distributorname,
+                                                 @RequestParam String password){
+        return ResponseEntity.ok(distributorService.login(distributorname,password));
+    }
+
     /**
     * 功能描述: <br>
     * 〈〉查询所有可用的产品
