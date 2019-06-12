@@ -81,7 +81,7 @@ public class DistributorController {
   * @Date: 9:14 9:14
    */
     @GetMapping("/auth/showMySignUpTourist")
-    public ResponseEntity<List<DisTourist>> getMySignUpTourist(){
+    public ResponseEntity<List<DisTourist>> getMySignUpTourist() {
 //  /**
 //  * 功能描述: <br>
 //  * 〈〉查询该分销商下 的所有报名 的游客
@@ -95,7 +95,8 @@ public class DistributorController {
 //        SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
 //        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId()));
 //    }
-
+        return null;
+    }
 
     /**
     * 功能描述: <br>
