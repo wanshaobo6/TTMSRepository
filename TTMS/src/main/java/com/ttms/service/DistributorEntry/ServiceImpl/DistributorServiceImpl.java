@@ -118,7 +118,7 @@ public class DistributorServiceImpl implements IDistributorService {
         //减去剩余数量  增加已购数量
         product.setLowestnumber(product.getLowestnumber()-1);
         product.setSellednumber(product.getSellednumber()+1);
-        int count = proProductMapper.insert(product);
+        int count = proProductMapper.updateByPrimaryKey(product);
         if(count != 1)
             throw new TTMSException(ExceptionEnum.TOURIST_SIGNUP_FAIL);
         return null;
