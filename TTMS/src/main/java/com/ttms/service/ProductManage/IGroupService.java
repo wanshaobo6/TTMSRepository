@@ -7,6 +7,7 @@ import com.ttms.Vo.GroupManageVo;
 import com.ttms.Vo.PageResult;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IGroupService {
         ///修改团信息
@@ -33,4 +34,5 @@ public interface IGroupService {
     //更新团中的项目名（当修改项目信息后）
     Void updateRedundancyWordProjectName(Integer id, String projectname);
 
+    List<ProGroup> getGroupsByIds(List<Integer> groupIdsList);
 }

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
-@Table(name = "dis_tourist")
+@Table(name = "dis_tourist_record")
 @Data
 public class DisTourist {
     @Id
@@ -31,5 +31,8 @@ public class DisTourist {
 
     private Date signuptime;
 
+    private Integer pricepolicyid;
+
+    private Integer acutalpay;
 
 }

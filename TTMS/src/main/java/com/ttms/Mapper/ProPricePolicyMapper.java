@@ -13,4 +13,7 @@ public interface ProPricePolicyMapper extends BaseMapper<ProPricepolicy> {
     @Select("SELECT pp.*,ppp.`priceAfterDiscount`  FROM pro_product_pricepolicy ppp " +
             "JOIN pro_pricepolicy pp ON ppp.`pricePolicyId` = pp.`id` WHERE ppp.`productId` = #{pid}")
     List<ProPricepolicy> getProPricepoliciesByProductId(@Param(value = "pid") Integer pid);
+
+    @Select("SELECT * FROM pro_pricepolicy pp JOIN pro_product_pricepolicy ppp ON ppp.`pricePolicyId` = pp.`id` WHERE ppp.`productId` = #{productId}")
+    List<ProPricepolicy> getPricePolicyByProductId(@Param("productId") Integer productId);
 }

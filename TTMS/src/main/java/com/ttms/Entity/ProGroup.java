@@ -1,6 +1,7 @@
 package com.ttms.Entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Table(name = "pro_group")
 @Data
+@NoArgsConstructor
 public class ProGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

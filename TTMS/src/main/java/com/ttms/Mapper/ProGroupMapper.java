@@ -10,7 +10,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
-public interface ProGroupMapper extends Mapper<ProGroup> {
+public interface ProGroupMapper extends BaseMapper<ProGroup> {
     @Update("update pro_group pg set pg.projectName = #{projectname} where pg.projectId =#{id}")
     int updateRedundancyWordProjectName(@Param("id")Integer id,@Param("projectname") String projectname);
 }

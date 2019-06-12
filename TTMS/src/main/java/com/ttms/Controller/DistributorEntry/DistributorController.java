@@ -1,6 +1,7 @@
 package com.ttms.Controller.DistributorEntry;
 
 import com.ttms.Entity.DisTourist;
+import com.ttms.Entity.ProPricepolicy;
 import com.ttms.Entity.ProProduct;
 import com.ttms.Entity.SupDistributor;
 import com.ttms.Enum.ExceptionEnum;
@@ -72,31 +73,6 @@ public class DistributorController {
                 serverEndTime,page,size));
     }
 
-  /**
-  * 功能描述: <br>
-  * 〈〉查询该分销商下 的所有报名 的游客
-  * @Param: []
-  * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
-  * @Author: 吴彬
-  * @Date: 9:14 9:14
-   */
-    @GetMapping("/auth/showMySignUpTourist")
-    public ResponseEntity<List<DisTourist>> getMySignUpTourist() {
-//  /**
-//  * 功能描述: <br>
-//  * 〈〉查询该分销商下 的所有报名 的游客
-//  * @Param: []
-//  * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
-//  * @Author: 吴彬
-//  * @Date: 9:14 9:14
-//   */
-//    @GetMapping("/showMySignUpTourist")
-//    public ResponseEntity<List<DisTourist>> getMySignUpTourist(){
-//        SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
-//        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId()));
-//    }
-        return null;
-    }
 
     /**
     * 功能描述: <br>
@@ -106,10 +82,10 @@ public class DistributorController {
     * @Author: 吴彬
     * @Date: 9:35 9:35
      */
-    @GetMapping("/getAvailableProducts/signUptourist")
-    public ResponseEntity<List<DisTourist>> getMySignUpTourist(@RequestParam(name = "productId",required = false,defaultValue = "null") Integer productId){
-        SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
-        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId()));
+    @GetMapping("/auth/getAvailableProducts/signUptourist")
+    public ResponseEntity<List<DisTourist>> getMySignUpTourist(@RequestParam(name = "productId") Integer productId,HttpServletRequest request){
+        SupDistributor distributor = (SupDistributor) request.getSession().getAttribute("curdistributor");
+        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(distributor.getId(),productId));
     }
 
     /**
@@ -141,5 +117,40 @@ public class DistributorController {
             throw new TTMSException(ExceptionEnum.USER_UNLOGIN);
         }
         return ResponseEntity.ok(curdistributor);
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉获取产品下的价格政策
+     * @Param: [productId]
+     * @Return: org.springframework.http.ResponseEntity<com.ttms.Entity.ProPricepolicy>
+     * @Author: 万少波
+     * @Date: 2019/6/12 15:48
+     */
+    @GetMapping("/auth/getPricePolicyByProductId/{productId}")
+    public ResponseEntity<List<ProPricepolicy>> getPricePolicyByProductId(@PathVariable Integer productId){
+        return ResponseEntity.ok(distributorService.getPricePolicyByProductId(productId));
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉
+     * @Param: 报名
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/12 17:24
+     */
+    @PostMapping("/auth/signup")
+    public ResponseEntity<Void> signup(@RequestParam(required = false) Integer pricePolicy,
+                                       @RequestParam String name,
+                                       @RequestParam Byte sex,
+                                       @RequestParam String idcard,
+                                       @RequestParam String phone,
+                                       @RequestParam String desc,
+                                       @RequestParam Integer productId,
+                                       HttpServletRequest request){
+        //获取当前分销商id
+        SupDistributor curdistributor = (SupDistributor) request.getSession().getAttribute("curdistributor");
+        return ResponseEntity.ok(distributorService.signup(pricePolicy,name,sex,idcard,phone,desc,productId,curdistributor.getId()));
     }
 }

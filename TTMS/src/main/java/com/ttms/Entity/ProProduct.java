@@ -16,6 +16,9 @@ public class ProProduct {
 
     private Integer groupid;
 
+    @Transient
+    private String groupname;
+
     private Integer productcatid1;
 
     private Integer productcatid2;

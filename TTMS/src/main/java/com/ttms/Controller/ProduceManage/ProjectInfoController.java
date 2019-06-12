@@ -71,6 +71,15 @@ public class ProjectInfoController {
         this.projectService.addProject(proProject, (SysUser) SecurityUtils.getSubject().getPrincipal(), departmentId);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉
+     * @Param: [pid, projectnumber, projectname, starttime, endtime, note, departmentId]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 吴彬
+     * @Date: 2019/6/12 10:04
+     */
     @PutMapping("/{pid}")
     public ResponseEntity<Void> editProject(
             @PathVariable("pid") Integer pid,

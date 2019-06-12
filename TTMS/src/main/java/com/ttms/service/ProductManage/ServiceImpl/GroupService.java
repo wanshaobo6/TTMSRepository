@@ -317,6 +317,15 @@ public class GroupService implements IGroupService {
         return null;
     }
 
+    @Override
+    public List<ProGroup> getGroupsByIds(List<Integer> groupIdsList) {
+        List<ProGroup> proGroups = proGroupMapper.selectByIdList(groupIdsList);
+        if (CollectionUtils.isEmpty(proGroups)) {
+            throw new TTMSException(ExceptionEnum.GROUP_NOT_FOUND);
+        }
+        return proGroups;
+    }
+
 }
 
 

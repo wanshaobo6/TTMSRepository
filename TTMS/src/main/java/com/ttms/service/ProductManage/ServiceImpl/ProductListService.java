@@ -8,6 +8,7 @@ import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
+import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.IPricePolicyService;
 import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
@@ -26,6 +27,8 @@ import tk.mybatis.mapper.util.StringUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toMap;
+
 @Service
 public class ProductListService implements IProductListService {
     @Autowired
@@ -36,6 +39,9 @@ public class ProductListService implements IProductListService {
 
     @Autowired
     private ProProductGuideMapper productGuideMapper;
+
+    @Autowired
+    private IGroupService groupService;
 
     @Autowired
     private ProProductPricepolicyMapper productPricepolicyMapper;
@@ -305,7 +311,7 @@ public class ProductListService implements IProductListService {
         //获取价格政策相关信息
         List<ProPricepolicy> dbPricepolicy = pricePolicyService.getPricePolicyByIds(pricepolicyIds);
         Map<Integer,ProPricepolicy> dbPricepolicyMap =dbPricepolicy.stream().
-                collect(Collectors.toMap(ProPricepolicy::getId,(p)->p));
+                collect(toMap(ProPricepolicy::getId,(p)->p));
         //插入记录
         List<ProProductPricepolicy> insertpolicies = new ArrayList<>();
         Date now = new Date();
@@ -422,12 +428,19 @@ public class ProductListService implements IProductListService {
         //封装数据
         result.setTotalPage(pageinfo.getPages());
         result.setTotal(pageinfo.getTotal());
+        //所需要的团id
+        Set<Integer> groupIdsSet = proProducts.stream().map(ProProduct::getGroupid).collect(Collectors.toSet());
+        Map<Integer,ProGroup> groupMap = (Map<Integer, ProGroup>) groupService.getGroupsByIds
+                (new LinkedList(groupIdsSet)).stream().collect(Collectors.toMap(ProGroup::getId,item->item));
+        System.out.println("groupMap = " + groupMap);
         for (ProProduct proProduct:proProducts){
             List<Integer> ids = Arrays.asList(proProduct.getProductcatid1(),
                     proProduct.getProductcatid2(), proProduct.getProductcatid3());
             proProduct.setProductcatnames(StringUtils.join(productCatService.
                     getProductCatByIds(ids).stream().map(ProProductCat::getProductcatname)
                     .collect(Collectors.toList()),"-"));
+            //封装团名称
+            proProduct.setGroupname(groupMap.get(proProduct.getGroupid()).getGroupname());
         }
         result.setItems(proProducts);
         return result;
