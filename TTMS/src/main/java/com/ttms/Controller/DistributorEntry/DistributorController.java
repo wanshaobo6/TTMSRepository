@@ -1,4 +1,4 @@
-package com.ttms.Controller.Distributor;
+package com.ttms.Controller.DistributorEntry;
 
 import com.ttms.Entity.ProProduct;
 import com.ttms.Vo.PageResult;
