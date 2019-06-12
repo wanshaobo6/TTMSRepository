@@ -2,10 +2,7 @@ package com.ttms.Entity;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Table(name = "dis_tourist_record")
@@ -32,6 +29,9 @@ public class DisTourist {
     private Date signuptime;
 
     private Integer pricepolicyid;
+
+    @Transient
+    private String pricePolicyName;
 
     private Integer acutalpay;
 

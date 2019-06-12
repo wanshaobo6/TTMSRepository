@@ -7,6 +7,7 @@ import com.ttms.Entity.SupDistributor;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.DisToruistMapper;
+import com.ttms.Mapper.ProProductMapper;
 import com.ttms.Mapper.SupDistributorMapper;
 import com.ttms.service.DistributorEntry.IDistributorService;
 import com.ttms.service.ProductManage.IPricePolicyService;
@@ -14,14 +15,12 @@ import com.ttms.service.ProductManage.IProductListService;
 import com.ttms.service.ProductManage.ServiceImpl.PricePolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +33,8 @@ public class DistributorServiceImpl implements IDistributorService {
     private IPricePolicyService pricePolicyService;
     @Autowired
     private IProductListService productService;
-
+    @Autowired
+    private ProProductMapper proProductMapper;
 
     @Override
     public Void login(String distributorname, String password, HttpServletRequest request) {
@@ -69,6 +69,19 @@ public class DistributorServiceImpl implements IDistributorService {
         if(CollectionUtils.isEmpty(disTourists)){
             throw new TTMSException(ExceptionEnum.TOURIST_RECORD_NOTFOUND);
         }
+        //如果参与了活动  则显示活动名称
+        Set<Integer> pricePolicyIdSet = disTourists.stream().map(
+                DisTourist::getPricepolicyid).collect(Collectors.toSet());
+        List<ProPricepolicy> pricePolicyList = pricePolicyService.
+                getPricePolicyByIds(new LinkedList<>(pricePolicyIdSet));
+        Map<Integer, String> pricePolicymap = pricePolicyList.stream().
+                collect(Collectors.toMap(ProPricepolicy::getId, ProPricepolicy::getPolicyname));
+        //遍历填充
+        for (DisTourist disTourist : disTourists) {
+            Integer pricePolicyId = disTourist.getPricepolicyid();
+            if(pricePolicyId != null)
+                disTourist.setPricePolicyName(pricePolicymap.get(pricePolicyId));
+        }
         return disTourists;
     }
 
@@ -78,6 +91,7 @@ public class DistributorServiceImpl implements IDistributorService {
         return pricePolicyService.getPricePolicyByProductId(productId);
     }
 
+    @Transactional
     @Override
     public Void signup(Integer pricePolicyId , String name, Byte sex, String idcard, String phone, String desc, Integer productId, Integer did) {
         DisTourist disTourist = new DisTourist();
@@ -92,15 +106,21 @@ public class DistributorServiceImpl implements IDistributorService {
         //查看当前的产品是否有该价格政策
         Map<Integer, ProPricepolicy> ProPricepolicieyMap = getPricePolicyByProductId(productId).stream().collect(Collectors.toMap(ProPricepolicy::getId, item -> item));
         Set<Integer> ids = ProPricepolicieyMap.keySet();
+        ProProduct product = productService.getProductById(productId);
         if(pricePolicyId != null && ids.contains(pricePolicyId)){
             disTourist.setPricepolicyid(pricePolicyId);
             disTourist.setAcutalpay(ProPricepolicieyMap.get(pricePolicyId).getPriceafterdiscount());
         }else{
-            ProProduct product = productService.getProductById(productId);
             disTourist.setAcutalpay(product.getProductprice());
         }
         //查看当前价格政策是否属于当前产品
         disToruistMapper.insert(disTourist);
+        //减去剩余数量  增加已购数量
+        product.setLowestnumber(product.getLowestnumber()-1);
+        product.setSellednumber(product.getSellednumber()+1);
+        int count = proProductMapper.insert(product);
+        if(count != 1)
+            throw new TTMSException(ExceptionEnum.TOURIST_SIGNUP_FAIL);
         return null;
     }
 
