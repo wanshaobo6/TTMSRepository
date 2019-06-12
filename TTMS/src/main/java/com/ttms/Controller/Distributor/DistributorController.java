@@ -1,5 +1,6 @@
 package com.ttms.Controller.Distributor;
 
+import com.ttms.Entity.DisTourist;
 import com.ttms.Entity.ProProduct;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.IProductListService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/distributorEntry")
@@ -45,6 +47,16 @@ public class DistributorController {
                 serverEndTime,page,size));
     }
 
-   /* @GetMapping("/showMySignUpTourist")
-    public ResponseEntity<List<>>*/
+  /**
+  * 功能描述: <br>
+  * 〈〉查询该分销商下 的所有报名 的游客
+  * @Param: []
+  * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
+  * @Author: 吴彬
+  * @Date: 9:14 9:14
+   */
+    @GetMapping("/showMySignUpTourist")
+    public ResponseEntity<List<DisTourist>> getMySignUpTourist(){
+        return ResponseEntity.ok(null);
+    }
 }
