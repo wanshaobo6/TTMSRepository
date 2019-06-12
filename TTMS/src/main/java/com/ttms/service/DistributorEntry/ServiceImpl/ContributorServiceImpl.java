@@ -4,6 +4,7 @@ import com.ttms.Entity.DisTourist;
 import com.ttms.Entity.SupDistributor;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
+import com.ttms.Mapper.DisToruistMapper;
 import com.ttms.Mapper.SupDistributorMapper;
 import com.ttms.service.DistributorEntry.IDistributorService;
 import org.springframework.beans.factory.annotation.Autowired;

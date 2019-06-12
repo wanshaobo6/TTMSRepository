@@ -28,7 +28,14 @@ public class DistributorController {
     @Autowired
     private IDistributorService distributorService;
 
-
+    /**
+     * 功能描述: <br>
+     * 〈〉万少波
+     * @Param: [distributorname, password, request]
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/12 9:46
+     */
     @PostMapping("/login")
     public ResponseEntity<Void> distributorLogin(@RequestParam String distributorname,
                                                  @RequestParam String password,
@@ -86,11 +93,8 @@ public class DistributorController {
     * @Date: 9:26 9:26
      */
     @GetMapping("/loginout")
-    public ResponseEntity<Void> loginout(){
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isAuthenticated()) {
-            subject.logout();
-        }
+    public ResponseEntity<Void> loginout(HttpServletRequest request){
+        request.getSession().invalidate();
         return ResponseEntity.ok(null);
     }
 }
