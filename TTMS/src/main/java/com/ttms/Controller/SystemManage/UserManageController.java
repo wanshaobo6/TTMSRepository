@@ -6,6 +6,7 @@ import com.ttms.Entity.SysRoles;
 import com.ttms.Entity.SysUser;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.SystemManage.SysMenusService;
+import com.ttms.utils.CodecUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,15 +126,22 @@ public class UserManageController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<SysUser> updateUserById(@PathVariable("id") Integer id,
-                                                  String username, String image, String password, String mail,
-                                                  String phonenumber){
+                                                   @RequestParam  String username,
+                                                  @RequestParam  String image,
+                                                  @RequestParam String password,
+                                                  @RequestParam String mail,
+                                                  @RequestParam  String phonenumber,
+                                                  @RequestParam  Integer roleId){
         //更新用户表
         SysUser user = new SysUser();
         user.setId(id);
         user.setUsername(username);
         user.setImage(image);
-        user.setPassword(password);
+        user.setSalt(CodecUtils.generateSalt());
+        user.setPassword(CodecUtils.md5Hex(password,user.getSalt()));
+        user.setValid((byte) 1);
         user.setEmail(mail);
+        user.setRoleid(roleId);
         user.setMobile(phonenumber);
         user.setModifiedtime(new Date());
         SysUser curUser = (SysUser) SecurityUtils.getSubject().getPrincipal();

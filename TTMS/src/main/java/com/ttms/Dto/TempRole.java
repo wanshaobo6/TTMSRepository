@@ -8,6 +8,9 @@ public class TempRole {
     //角色id
     private Integer id;
 
+    //角色名称
+    private String name;
+
     //子部门id
     private Integer cdepartmentid;
 
