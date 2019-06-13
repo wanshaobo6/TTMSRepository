@@ -72,16 +72,21 @@ public class DistributorServiceImpl implements IDistributorService {
         //如果参与了活动  则显示活动名称
         Set<Integer> pricePolicyIdSet = disTourists.stream().map(
                 DisTourist::getPricepolicyid).collect(Collectors.toSet());
-        List<ProPricepolicy> pricePolicyList = pricePolicyService.
-                getPricePolicyByIds(new LinkedList<>(pricePolicyIdSet));
-        Map<Integer, String> pricePolicymap = pricePolicyList.stream().
-                collect(Collectors.toMap(ProPricepolicy::getId, ProPricepolicy::getPolicyname));
-        //遍历填充
-        for (DisTourist disTourist : disTourists) {
-            Integer pricePolicyId = disTourist.getPricepolicyid();
-            if(pricePolicyId != null)
-                disTourist.setPricePolicyName(pricePolicymap.get(pricePolicyId));
-        }
+       try{
+           List<ProPricepolicy> pricePolicyList = pricePolicyService.
+                   getPricePolicyByIds(new LinkedList<>(pricePolicyIdSet));
+           Map<Integer, String> pricePolicymap = pricePolicyList.stream().
+                   collect(Collectors.toMap(ProPricepolicy::getId, ProPricepolicy::getPolicyname));
+           //遍历填充
+           for (DisTourist disTourist : disTourists) {
+               Integer pricePolicyId = disTourist.getPricepolicyid();
+               if(pricePolicyId != null)
+                   disTourist.setPricePolicyName(pricePolicymap.get(pricePolicyId));
+           }
+       }catch (TTMSException e){
+            //列表中不存在价格政策
+       }
+
         return disTourists;
     }
 
