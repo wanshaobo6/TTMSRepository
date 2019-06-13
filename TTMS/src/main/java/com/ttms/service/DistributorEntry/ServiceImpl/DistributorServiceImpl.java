@@ -104,7 +104,12 @@ public class DistributorServiceImpl implements IDistributorService {
         disTourist.setTSex(sex);
         disTourist.setProductid(productId);
         //查看当前的产品是否有该价格政策
-        Map<Integer, ProPricepolicy> ProPricepolicieyMap = getPricePolicyByProductId(productId).stream().collect(Collectors.toMap(ProPricepolicy::getId, item -> item));
+        Map<Integer, ProPricepolicy> ProPricepolicieyMap = null;
+        try{
+            ProPricepolicieyMap = getPricePolicyByProductId(productId).stream().collect(Collectors.toMap(ProPricepolicy::getId, item -> item));
+        }catch (TTMSException e){
+
+        }
         Set<Integer> ids = ProPricepolicieyMap.keySet();
         ProProduct product = productService.getProductById(productId);
         if(pricePolicyId != null && ids.contains(pricePolicyId)){
