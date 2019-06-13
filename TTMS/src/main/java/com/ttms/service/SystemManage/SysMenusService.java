@@ -10,21 +10,18 @@ import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Enum.RedisKeyPrefixEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.*;
+import com.ttms.Vo.PageResult;
 import com.ttms.utils.CodecUtils;
 import com.ttms.utils.JsonUtils;
-import com.ttms.Vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -243,6 +240,21 @@ public class SysMenusService {
     public SysUser getUserById(Integer id){
         SysUser user = sysUserMapper.selectByPrimaryKey(id);
         if(user == null){
+            throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
+        }
+        return user;
+    }
+    /**
+    * 功能描述: <br>
+    * 〈〉根据主键id查询所有用户
+    * @Param: [ids]
+    * @Return: java.util.List<com.ttms.Entity.SysUser>
+    * @Author: 吴彬
+    * @Date: 10:35 10:35
+     */
+    public List<SysUser> getUserListById(List<Integer> ids){
+        List<SysUser> user = sysUserMapper.selectByIdList(ids);
+        if(CollectionUtils.isEmpty(user)){
             throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
         }
         return user;
@@ -682,7 +694,7 @@ public class SysMenusService {
         criteria.andEqualTo("salt", salt);
         int i = this.sysUserMapper.updateByExampleSelective(user, example);
         if(i!=1){
-            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+            throw new TTMSException(ExceptionEnum.EDIT_PASSWORD_FAIL);
         }
         return null;
     }
