@@ -110,14 +110,20 @@ public class DistributorServiceImpl implements IDistributorService {
         }catch (TTMSException e){
 
         }
-        Set<Integer> ids = ProPricepolicieyMap.keySet();
         ProProduct product = productService.getProductById(productId);
-        if(pricePolicyId != null && ids.contains(pricePolicyId)){
-            disTourist.setPricepolicyid(pricePolicyId);
-            disTourist.setAcutalpay(ProPricepolicieyMap.get(pricePolicyId).getPriceafterdiscount());
+        //存在价格政策
+        if(!CollectionUtils.isEmpty(ProPricepolicieyMap)){
+            Set<Integer> ids = ProPricepolicieyMap.keySet();
+            if(pricePolicyId != null && ids.contains(pricePolicyId)){
+                disTourist.setPricepolicyid(pricePolicyId);
+                disTourist.setAcutalpay(ProPricepolicieyMap.get(pricePolicyId).getPriceafterdiscount());
+            }else{
+                disTourist.setAcutalpay(product.getProductprice());
+            }
         }else{
             disTourist.setAcutalpay(product.getProductprice());
         }
+
         //查看当前价格政策是否属于当前产品
         disToruistMapper.insert(disTourist);
         //减去剩余数量  增加已购数量
