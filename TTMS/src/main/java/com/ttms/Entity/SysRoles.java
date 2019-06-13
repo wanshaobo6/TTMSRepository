@@ -1,5 +1,6 @@
 package com.ttms.Entity;
 
+import com.ttms.Dto.TempRole;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,7 +19,6 @@ public class SysRoles {
 
     private Integer departmentid;
 
-
     private Date createdtime;
 
     private Date modifiedtime;
@@ -29,4 +29,7 @@ public class SysRoles {
 
     @Transient
     private SysMenus sysMenus;
+
+    @Transient   //角色管理页面所需显示数据
+    private TempRole tempRole;
 }

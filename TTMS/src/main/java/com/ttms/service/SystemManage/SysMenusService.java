@@ -324,10 +324,20 @@ public class SysMenusService {
         if(CollectionUtils.isEmpty(sysRoles)){
             throw new TTMSException(ExceptionEnum.ROLERS_NOT_FOUND);
         }
+        //封装部门信息
+          //获取所有id
+        Set<Long> roleIdSet = sysRoles.stream().map(SysRoles::getId).collect(Collectors.toSet());
+         //获取部门信息
+        Map<Integer,TempRole> tempRoleMap = (Map<Integer, TempRole>) this.getRoleAndDePartInfoByRoleIds(
+                new LinkedList(roleIdSet)).stream().collect(Collectors.toMap(TempRole::getId, item->item));
+         //遍历填充
+        for (SysRoles sysRole : sysRoles) {
+                sysRole.setTempRole(tempRoleMap.get(sysRole.getId().intValue()));
+        }
 
         PageInfo<SysRoles> list=new PageInfo<>(sysRoles);
         PageResult<SysRoles> result = new PageResult<SysRoles>();
-        result.setItems(list.getList());
+        result.setItems(sysRoles);
         result.setTotal(list.getTotal());
         result.setTotalPage(list.getPages());
         return result;
@@ -821,6 +831,7 @@ public class SysMenusService {
         return sysDepartment;
     }
 
+    //通过roleid获取部门和角色名相关信息
     public List<TempRole> getRoleAndDePartInfoByRoleIds(List<Integer> rids){
         if(CollectionUtils.isEmpty(rids)){
             throw new TTMSException(ExceptionEnum.TEMPROLE_NOT_FOUND);
@@ -830,7 +841,7 @@ public class SysMenusService {
         String idsstr = StringUtils.join(rids, ",");
         sb.append("(").append(idsstr).append(")");
         //查询
-        List<TempRole> tempRoles = sysRoleMenusMapper.getRoleAndDePartInfoByRoleId(sb.toString());
+        List<TempRole> tempRoles = sysRolesMapper.getRoleAndDePartInfoByRoleId(sb.toString());
         if (CollectionUtils.isEmpty(tempRoles)) {
             throw new TTMSException(ExceptionEnum.TEMPROLE_NOT_FOUND);
         }
