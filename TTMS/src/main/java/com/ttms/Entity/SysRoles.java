@@ -18,6 +18,7 @@ public class SysRoles {
 
     private Integer departmentid;
 
+
     private Date createdtime;
 
     private Date modifiedtime;

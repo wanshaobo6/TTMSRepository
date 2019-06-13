@@ -4,6 +4,7 @@ package com.ttms.service.SystemManage;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ttms.Config.MenuIdPermsMap;
+import com.ttms.Dto.TempRole;
 import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Enum.RedisKeyPrefixEnum;
@@ -212,12 +213,19 @@ public class SysMenusService {
         }
         List<SysUser> list = sysUserMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(list)){
-            return null;
-            //throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
+            throw new TTMSException(ExceptionEnum.USER_NOT_FOUND);
         }
         PageInfo<SysUser> pageInfo = new PageInfo<>(list);
-        System.out.println(pageInfo.getList());
         PageResult<SysUser> result=new PageResult<>();
+        //封装角色,部门相关信息
+          //获取所需的角色id
+        Set<Integer> idsset = list.stream().map(SysUser::getRoleid).collect(Collectors.toSet());
+        Map<Integer, TempRole> tempRoleMap = this.getRoleAndDePartInfoByRoleIds(
+                new LinkedList<>(idsset)).stream().collect(Collectors.toMap(TempRole::getId, item -> item));
+        //查询好的相关数据赋给用户
+        list.forEach(item->{
+            item.setTempRole(tempRoleMap.get(item.getRoleid()));
+        });
         result.setTotal(pageInfo.getTotal());
         result.setTotalPage(pageInfo.getPages());
         result.setItems(pageInfo.getList());
@@ -799,5 +807,21 @@ public class SysMenusService {
     public SysDepartment getDeaprtmentByid(Integer pid){
         SysDepartment sysDepartment = this.sysDepartmentMapper.selectByPrimaryKey(pid);
         return sysDepartment;
+    }
+
+    public List<TempRole> getRoleAndDePartInfoByRoleIds(List<Integer> rids){
+        if(CollectionUtils.isEmpty(rids)){
+            throw new TTMSException(ExceptionEnum.TEMPROLE_NOT_FOUND);
+        }
+        //封装
+        StringBuffer sb = new StringBuffer();
+        String idsstr = StringUtils.join(rids, ",");
+        sb.append("(").append(idsstr).append(")");
+        //查询
+        List<TempRole> tempRoles = sysRoleMenusMapper.getRoleAndDePartInfoByRoleId(sb.toString());
+        if (CollectionUtils.isEmpty(tempRoles)) {
+            throw new TTMSException(ExceptionEnum.TEMPROLE_NOT_FOUND);
+        }
+        return tempRoles;
     }
 }

@@ -1,6 +1,7 @@
 package com.ttms.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ttms.Dto.TempRole;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,10 +16,9 @@ public class SysUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "用户名不能为空")
     private String username;
 
-    @NotNull(message = "密码不能为空")
+    //@NotNull(message = "密码不能为空")
     @JsonIgnore
     private String password;
 
@@ -29,10 +29,10 @@ public class SysUser {
 
     private String email;
 
-    @Pattern(regexp = "^1[35678]\\d{9}$", message = "手机号格式不正确")
+    //@Pattern(regexp = "^1[35678]\\d{9}$", message = "手机号格式不正确")
     private String mobile;
 
-    @NotNull(message = "角色不能为空")
+   // @NotNull(message = "角色不能为空")
     private Integer roleid;
 
     private Byte valid;
@@ -42,6 +42,10 @@ public class SysUser {
     private Date modifiedtime;
 
     private Integer createduserid;
+
+    //用户信息管理所需要数据
+    @Transient
+    private TempRole tempRole;
 
     @Transient
     private SysRoles sysRole;

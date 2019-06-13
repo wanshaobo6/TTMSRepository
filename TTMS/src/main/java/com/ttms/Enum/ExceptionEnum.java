@@ -95,7 +95,8 @@ public enum ExceptionEnum {
     PRODUCT_ROUTE_UPDATE_FAIL(404,"行程更新失败"),
     ROLERS_UPDATE_FAIL(404,"角色修改失败"),
     TOURIST_RECORD_NOTFOUND(404,"您没有报名记录"),
-    TOURIST_SIGNUP_FAIL(500,"报名失败,请稍后重试")
+    TOURIST_SIGNUP_FAIL(500,"报名失败,请稍后重试"),
+    TEMPROLE_NOT_FOUND(404,"不存在该角色")
     ;
     private int status;
     private String message;
