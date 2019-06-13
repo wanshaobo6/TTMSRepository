@@ -9,8 +9,6 @@ import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.DistributorEntry.IDistributorService;
 import com.ttms.service.ProductManage.IProductListService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +71,31 @@ public class DistributorController {
                 serverEndTime,page,size));
     }
 
+  /**
+  * 功能描述: <br>
+  * 〈〉查询该分销商下 的所有报名 的游客
+  * @Param: []
+  * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
+  * @Author: 吴彬
+  * @Date: 9:14 9:14
+   */
+    @GetMapping("/auth/showMySignUpTourist")
+    public ResponseEntity<List<DisTourist>> getMySignUpTourist() {
+//  /**
+//  * 功能描述: <br>
+//  * 〈〉查询该分销商下 的所有报名 的游客
+//  * @Param: []
+//  * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.DisTourist>>
+//  * @Author: 吴彬
+//  * @Date: 9:14 9:14
+//   */
+//    @GetMapping("/showMySignUpTourist")
+//    public ResponseEntity<List<DisTourist>> getMySignUpTourist(){
+//        SupDistributor supDistributor = (SupDistributor) SecurityUtils.getSubject().getPrincipal();
+//        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(supDistributor.getId()));
+//    }
+        return null;
+    }
 
     /**
     * 功能描述: <br>
@@ -82,10 +105,13 @@ public class DistributorController {
     * @Author: 吴彬
     * @Date: 9:35 9:35
      */
-    @GetMapping("/auth/getAvailableProducts/signUptourist")
-    public ResponseEntity<List<DisTourist>> getMySignUpTourist(@RequestParam(name = "productId") Integer productId,HttpServletRequest request){
-        SupDistributor distributor = (SupDistributor) request.getSession().getAttribute("curdistributor");
-        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(distributor.getId(),productId));
+    @GetMapping("auth/getAvailableProducts/signUptourist")
+    public ResponseEntity<List<DisTourist>> getMySignUpTourist(@RequestParam(name = "productId") Integer productId,HttpServletRequest req){
+        SupDistributor curdistributor = (SupDistributor) req.getSession().getAttribute("curdistributor");
+        if(curdistributor == null ){
+            throw new TTMSException(ExceptionEnum.USER_UNLOGIN);
+        }
+        return ResponseEntity.ok(this.distributorService.getMySignUpTourist(curdistributor.getId(), productId));
     }
 
     /**
@@ -152,5 +178,18 @@ public class DistributorController {
         //获取当前分销商id
         SupDistributor curdistributor = (SupDistributor) request.getSession().getAttribute("curdistributor");
         return ResponseEntity.ok(distributorService.signup(pricePolicy,name,sex,idcard,phone,desc,productId,curdistributor.getId()));
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉取消报名
+    * @Param: [productId]
+    * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+    * @Author: 吴彬
+    * @Date: 14:48 14:48
+     */
+    @GetMapping("/auth/cancelSign")
+    public ResponseEntity<Void> cancelSignUp(@RequestParam(name = "touristId") Integer touristId,@RequestParam(name = "productId") Integer productId){
+        return ResponseEntity.ok(this.distributorService.cancelSignUp(touristId,productId));
     }
 }

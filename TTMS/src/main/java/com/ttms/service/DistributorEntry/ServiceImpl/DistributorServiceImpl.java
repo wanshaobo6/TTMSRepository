@@ -12,7 +12,6 @@ import com.ttms.Mapper.SupDistributorMapper;
 import com.ttms.service.DistributorEntry.IDistributorService;
 import com.ttms.service.ProductManage.IPricePolicyService;
 import com.ttms.service.ProductManage.IProductListService;
-import com.ttms.service.ProductManage.ServiceImpl.PricePolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +88,25 @@ public class DistributorServiceImpl implements IDistributorService {
 
         return disTourists;
     }
+
+    @Override
+    @Transactional
+    public Void cancelSignUp(Integer touristId,Integer productId) {
+        int i = this.disToruistMapper.deleteByPrimaryKey(touristId);
+        if(i!=1){
+            throw new TTMSException(ExceptionEnum.CANCEL_SIGN_FAIL);
+        }
+        ProProduct proProduct = this.proProductMapper.selectByPrimaryKey(productId);
+        proProduct.setUpdatetime(new Date());
+        proProduct.setSellednumber(proProduct.getSellednumber()+1);
+        proProduct.setLowestnumber(proProduct.getLowestnumber()-1);
+        int j = this.proProductMapper.updateByPrimaryKeySelective(proProduct);
+        if(j!=1){
+            throw new TTMSException(ExceptionEnum.PRODUCT_EDIT_FAIL);
+        }
+        return null;
+    }
+
 
     @Override
     public List<ProPricepolicy> getPricePolicyByProductId(Integer productId) {

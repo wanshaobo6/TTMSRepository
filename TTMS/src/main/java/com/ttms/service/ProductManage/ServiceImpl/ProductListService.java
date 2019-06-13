@@ -15,6 +15,7 @@ import com.ttms.service.ProductManage.IProductListService;
 import com.ttms.service.ResourceManage.IAttachmentService;
 import com.ttms.service.ResourceManage.IGuideInfoManageService;
 import com.ttms.service.SupplyManage.IDistributorManageService;
+import com.ttms.service.SystemManage.SysMenusService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,9 @@ public class ProductListService implements IProductListService {
 
     @Autowired
     private ProRouteMapper proRouteMapper;
+
+    @Autowired
+    private SysMenusService menusService;
 
     /**
      * 功能描述: <br>
@@ -432,6 +436,10 @@ public class ProductListService implements IProductListService {
         Set<Integer> groupIdsSet = proProducts.stream().map(ProProduct::getGroupid).collect(Collectors.toSet());
         Map<Integer,ProGroup> groupMap = (Map<Integer, ProGroup>) groupService.getGroupsByIds
                 (new LinkedList(groupIdsSet)).stream().collect(Collectors.toMap(ProGroup::getId,item->item));
+        //那个用户创建的产品
+        Set<Integer> userId = proProducts.stream().map(ProProduct::getCreateuserid).collect(Collectors.toSet());
+        Map<Integer,SysUser> sysuserMap = (Map<Integer, SysUser>) this.menusService.getUserListById(new LinkedList(userId)).stream().collect(toMap(SysUser::getId, item -> item));
+
         System.out.println("groupMap = " + groupMap);
         for (ProProduct proProduct:proProducts){
             List<Integer> ids = Arrays.asList(proProduct.getProductcatid1(),
@@ -441,6 +449,7 @@ public class ProductListService implements IProductListService {
                     .collect(Collectors.toList()),"-"));
             //封装团名称
             proProduct.setGroupname(groupMap.get(proProduct.getGroupid()).getGroupname());
+            proProduct.setCreateproductname(sysuserMap.get(proProduct.getCreateuserid()).getUsername());
         }
         result.setItems(proProducts);
         return result;

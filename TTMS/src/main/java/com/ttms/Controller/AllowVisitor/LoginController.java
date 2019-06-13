@@ -57,7 +57,8 @@ public class LoginController {
         //封装用户名和密码
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
         try {
-            subject.login(usernamePasswordToken);    //只要没有任何异常则表示登录成功
+            subject.login(usernamePasswordToken);
+            //只要没有任何异常则表示登录成功
             log.debug("用户" + currUser.getUsername() + "登录");
             List<ModulesVo> result = loginService.getUserMenusVo();
             System.out.println("完成登录请求"+System.currentTimeMillis());
@@ -137,16 +138,11 @@ public class LoginController {
         }
         // 修改密码加密处理
         Boolean aBoolean = this.loginService.updatePwd(newPassword, sysUser.getSalt());
-        if(aBoolean){
-            //封装用户名和密码
-            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(sysUser.getUsername(), oldPassword);
-            try {
-                subject.login(usernamePasswordToken);    //只要没有任何异常则表示登录成功
-                log.debug("用户" + user.getUsername() + "修改密码成功");
-            }catch (Exception e){
-                throw new TTMSException(ExceptionEnum.USER_EDIT_NEWPASSWORD_SUCC);
-            }
+        if(!aBoolean) {
+            throw new TTMSException(ExceptionEnum.EDIT_PASSWORD_FAIL);
         }
+        //退出
+        SecurityUtils.getSubject().logout();
         return ResponseEntity.ok(null);
     }
 

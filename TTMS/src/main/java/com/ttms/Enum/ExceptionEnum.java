@@ -23,6 +23,7 @@ public enum ExceptionEnum {
     PASSWORD_NOT_NULL(500,"密码不能为空"),
     NEWPASSWORD_NOT_NULL(500,"新密码不能为空"),
     USER_EDIT_NEWPASSWORD_SUCC(200,"修改密码成功,请重新登录"),
+    EDIT_PASSWORD_FAIL(200,"修改密码失败"),
     USER_NOT_FOUND(404,"查询用户不存在"),
     USER_NAME_DUPLICATED(501,"用户名重复"),
     USER_DELETE_FAIL(500,"查询用户失败"),
@@ -94,6 +95,7 @@ public enum ExceptionEnum {
     PRODUCT_ROUTE_SET_FAIL(404,"行程设置失败"),
     PRODUCT_ROUTE_UPDATE_FAIL(404,"行程更新失败"),
     ROLERS_UPDATE_FAIL(404,"角色修改失败"),
+    CANCEL_SIGN_FAIL(404,"删除失败"),
     TOURIST_RECORD_NOTFOUND(404,"您没有报名记录"),
     TOURIST_SIGNUP_FAIL(500,"报名失败,请稍后重试")
     ;
