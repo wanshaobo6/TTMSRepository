@@ -74,7 +74,15 @@ public class OrganizeManageController {
     *return
     **/
     @PutMapping("/update/dartment")
-    public ResponseEntity<Void> updateDepartment(SysDepartment department){
+    public ResponseEntity<Void> updateDepartment(@RequestParam Integer id,
+                                                 @RequestParam String departmentName,
+                                                 @RequestParam String departmentCode,
+                                                 @RequestParam String departmentNote){
+        SysDepartment department = new SysDepartment();
+        department.setId(id);
+        department.setDepartmentname(departmentName);
+        department.setDepartmentcode(departmentCode);
+        department.setNote(departmentNote);
         this.sysMenusService.updateDepartment(department);
         return ResponseEntity.ok().body(null);
     }
