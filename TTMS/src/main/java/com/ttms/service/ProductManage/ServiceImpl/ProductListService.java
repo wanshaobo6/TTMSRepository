@@ -437,6 +437,10 @@ public class ProductListService implements IProductListService {
         if(serverEndTime != null){
             criteria.andLessThan("serverendtime",serverEndTime);
         }
+        //限制分销商字段
+        if(!CollectionUtils.isEmpty(prodicuIdList)){
+            criteria.andIn("id",prodicuIdList);
+        }
         //查询
         List<ProProduct> proProducts = productMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(proProducts)){
