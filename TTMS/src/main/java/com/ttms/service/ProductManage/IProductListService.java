@@ -8,7 +8,10 @@ import java.util.Date;
 import java.util.List;
 
 public interface IProductListService {
-    PageResult<ProProduct> queryProjectByPage(int status, int productCatId1, int productCatId2, int productCatId3, String projectName, String productNumber, String productName, Date serverStartTime, Date serverEndTime, int page, int size);
+    PageResult<ProProduct> queryProjectByPage(int status, int productCatId1, int productCatId2,
+                                              int productCatId3, String projectName, String productNumber,
+                                              String productName, Date serverStartTime, Date serverEndTime ,
+                                              List<Integer> prodicuIdList, int page, int size);
 
     void updateproductStatus(Integer productId, Integer pstatus);
 
@@ -54,6 +57,8 @@ public interface IProductListService {
 
     //添加行程
     Void addRount(Integer productId, String name, String content, String stayMessage, String breakfast, String lunch, String supper);
+
+    List<Integer> getProductIdsByDistributorId(Integer did);
 
     //为产品添加分销商之后产品的数量更改  修改产品的数量
    // Void updataProductNumber(Integer productId);

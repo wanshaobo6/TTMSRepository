@@ -376,6 +376,20 @@ public class ProductListService implements IProductListService {
         return null;
     }
 
+    //获取分销商能够报名的产品
+    @Override
+    public List<Integer> getProductIdsByDistributorId(Integer did) {
+        Example example = new Example(ProProductDistributor.class);
+        example.createCriteria().andEqualTo("distributorid",did);
+        List<ProProductDistributor> proProductDistributors = proProductDistributorMapper.
+                selectByExample(example);
+        if(CollectionUtils.isEmpty(proProductDistributors)){
+            throw new TTMSException(ExceptionEnum.DISTRIBUTOR_PRODUCT_NOT_FOUND);
+        }
+        return proProductDistributors.stream().map(ProProductDistributor::getProductid).
+                collect(Collectors.toList());
+    }
+
     @Override
     public List<ResoAttachment> getAttachmentsByPid(int pid) {
         return attachmentService.getAttachmentsByPid(pid);
@@ -389,7 +403,7 @@ public class ProductListService implements IProductListService {
     @Override
     public PageResult<ProProduct> queryProjectByPage(int status, int productCatId1,
            int productCatId2, int productCatId3, String projectName, String productNumber,
-            String productName, Date serverStartTime, Date serverEndTime, int page, int size) {
+            String productName, Date serverStartTime, Date serverEndTime,List<Integer> prodicuIdList, int page, int size) {
         PageResult<ProProduct> result = new PageResult<>();
         //分页
         PageHelper.startPage(page,size);

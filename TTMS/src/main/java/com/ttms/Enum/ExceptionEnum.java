@@ -78,6 +78,7 @@ public enum ExceptionEnum {
     INSERT_DISTRIBUTOR_FAIL(404,"新增分销商失败"),
     PRODUCT_ATTACHMENT_NOT_FOUND(404,"产品下不存在附件"),
     PRODUCT_DISTRIBUTOR_NOT_FOUND(404,"没有为该产品分销的分销商"),
+    DISTRIBUTOR_PRODUCT_NOT_FOUND(404,"您没有为任何产品分销，请联系管理员"),
     PRODUCTDISTRIBUTOR_NOT_MATCH(401,"产品没有被该分销商分销"),
     SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到"),
     ATTACHMENT_INSERT_FAIL(500,"新增附件失败"),

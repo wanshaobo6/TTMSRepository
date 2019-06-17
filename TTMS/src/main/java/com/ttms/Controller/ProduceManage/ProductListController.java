@@ -104,7 +104,7 @@ public class ProductListController {
 
         return ResponseEntity.ok(productListService.queryProjectByPage(status,productCatId1,
                 productCatId2,productCatId3,projectName,productNumber,productName,serverStartTime,
-                serverEndTime,page,size));
+                serverEndTime,null,page,size));
     }
 
     /**

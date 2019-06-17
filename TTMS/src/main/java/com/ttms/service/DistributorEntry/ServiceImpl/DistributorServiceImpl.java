@@ -36,7 +36,7 @@ public class DistributorServiceImpl implements IDistributorService {
     private ProProductMapper proProductMapper;
 
     @Override
-    public Void login(String distributorname, String password, HttpServletRequest request) {
+    public SupDistributor login(String distributorname, String password, HttpServletRequest request) {
         Example example = new Example(SupDistributor.class);
         example.createCriteria().andEqualTo("loginname",distributorname).andEqualTo("loginpass",password);
         List<SupDistributor> supDistributors = distributorMapper.selectByExample(example);
@@ -45,9 +45,8 @@ public class DistributorServiceImpl implements IDistributorService {
             throw new TTMSException(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         //登录成功
         //将用户信息存session
-        System.out.println("supDistributors.get(0) = " + supDistributors.get(0));
         request.getSession().setAttribute("curdistributor",supDistributors.get(0));
-        return null;
+        return supDistributors.get(0);
     }
 
 
@@ -157,5 +156,7 @@ public class DistributorServiceImpl implements IDistributorService {
             throw new TTMSException(ExceptionEnum.TOURIST_SIGNUP_FAIL);
         return null;
     }
+
+
 
 }

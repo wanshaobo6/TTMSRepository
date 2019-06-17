@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,9 +41,10 @@ public class DistributorController {
      * @Date: 2019/6/12 9:46
      */
     @PostMapping("/login")
-    public ResponseEntity<Void> distributorLogin(@RequestParam String distributorname,
-                                                 @RequestParam String password,
-                                                 HttpServletRequest request){
+    public ResponseEntity<SupDistributor> distributorLogin(
+                            @RequestParam String distributorname,
+                             @RequestParam String password,
+                             HttpServletRequest request){
         return ResponseEntity.ok(distributorService.login(distributorname,password,request));
     }
 
@@ -56,6 +58,7 @@ public class DistributorController {
      */
     @GetMapping("/auth/getAvailableProducts")
     public ResponseEntity<PageResult<ProProduct>> getAvailableProducts(
+            @RequestParam Integer did,
             @RequestParam(required = false,defaultValue = "-1") int status,
             @RequestParam(required = false,defaultValue = "-1") int productCatId1,
             @RequestParam(required = false,defaultValue = "-1") int productCatId2,
@@ -68,9 +71,12 @@ public class DistributorController {
             @RequestParam(required = false ,defaultValue = "1") int page ,
             @RequestParam(required = false , defaultValue = "5") int size
     ){
+        //查询出该分销商有权报名的所有产品id
+        List<Integer> idList = null;
+        idList = productListService.getProductIdsByDistributorId(did);
         return ResponseEntity.ok(this.productListService.queryProjectByPage(status,productCatId1,
                 productCatId2,productCatId3,projectName,productNumber,productName,serverStartTime,
-                serverEndTime,page,size));
+                serverEndTime,idList,page,size));
     }
 
   /**
@@ -126,7 +132,7 @@ public class DistributorController {
      */
     @GetMapping("/loginout")
     public ResponseEntity<Void> loginout(HttpServletRequest request){
-        request.getSession().invalidate();
+        request.getSession().setAttribute("curdistributor",null);
         return ResponseEntity.ok(null);
     }
 
