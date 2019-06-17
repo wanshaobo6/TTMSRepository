@@ -98,8 +98,8 @@ public class DistributorServiceImpl implements IDistributorService {
         }
         ProProduct proProduct = this.proProductMapper.selectByPrimaryKey(productId);
         proProduct.setUpdatetime(new Date());
-        proProduct.setSellednumber(proProduct.getSellednumber()+1);
-        proProduct.setLowestnumber(proProduct.getLowestnumber()-1);
+        proProduct.setSellednumber(proProduct.getSellednumber()-1);
+        proProduct.setLowestnumber(proProduct.getLowestnumber()+1);
         int j = this.proProductMapper.updateByPrimaryKeySelective(proProduct);
         if(j!=1){
             throw new TTMSException(ExceptionEnum.PRODUCT_EDIT_FAIL);
