@@ -26,6 +26,9 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
@@ -100,8 +103,15 @@ public class ProductListService implements IProductListService {
     @Override
     public List<ProductVo> getDistributorsByPid(Integer pid) {
         List<ProductVo> productVoList = this.productMapper.getDistributorsByPid(pid);
-        return productVoList;
+        List<ProductVo> voList = productVoList.stream().filter(distinctByKey(b -> b.getId())).collect(Collectors.toList());
+        return voList;
     }
+
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
 
     /**
      * 功能描述: <br>
@@ -141,7 +151,7 @@ public class ProductListService implements IProductListService {
 
     @Override
     @Transactional
-    public Void deleteProductDistribute(int pid, int productDistributorId) {
+    public Void deleteProductDistribute(Integer pid, Integer productDistributorId) {
         //查询出该产品
         ProProduct product = getProductById(pid);
         //根据id查询产品的分销商

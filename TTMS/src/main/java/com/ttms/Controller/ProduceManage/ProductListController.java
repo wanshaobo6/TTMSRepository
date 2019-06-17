@@ -116,7 +116,7 @@ public class ProductListController {
      * @Date: 2019/6/1 13:55
      */
     @DeleteMapping("/privilege/distributor")
-    public ResponseEntity<Void> deleteProductDistribute(@RequestParam int productId ,@RequestParam int productDistributorId){
+    public ResponseEntity<Void> deleteProductDistribute(@RequestParam Integer productId ,@RequestParam Integer productDistributorId){
         return ResponseEntity.ok(productListService.deleteProductDistribute(productId,productDistributorId));
     }
 
