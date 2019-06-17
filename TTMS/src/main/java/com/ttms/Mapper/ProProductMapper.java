@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ProProductMapper extends Mapper<ProProduct> {
     //查询所有分销此产品的分销商
-    @Select("SELECT p.`productName`,p.`serverStartTime`,p.`serverEndTime` ,sd.* FROM pro_product p,pro_product_distributor d,sup_distributor sd WHERE d.`productId`=p.`id` AND sd.`id`=d.`id` AND d.`productId`=#{projectId}")
+    @Select("SELECT p.`productName`,p.`serverStartTime`,p.`serverEndTime` ,sd.* FROM pro_product p,pro_product_distributor d,sup_distributor sd WHERE d.`productId`=p.`id` AND sd.`id` = d.`distributorId`  AND d.`productId`=#{projectId}")
     List<ProductVo> getDistributorsByPid(@Param("projectId") Integer parjectId);
 
     //更新产品中的项目名（当修改项目信息后）
