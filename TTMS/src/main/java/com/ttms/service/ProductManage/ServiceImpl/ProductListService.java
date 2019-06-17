@@ -113,11 +113,10 @@ public class ProductListService implements IProductListService {
      */
     @Override
     @Transactional
-    public void addProductDistribute(Integer pid, Integer distributorId, Integer distributorNumber, Date startTime, Date endTime) {
+    public void addProductDistribute(Integer pid, Integer distributorId, Date startTime, Date endTime) {
         ProProductDistributor proProductDistributor=new ProProductDistributor();
         proProductDistributor.setProductid(pid);
         proProductDistributor.setDistributorid(distributorId);
-        proProductDistributor.setDistributenum(distributorNumber);
         proProductDistributor.setStarttime(startTime);
         proProductDistributor.setEndtime(endTime);
         proProductDistributor.setCreatetime(new Date());
@@ -131,8 +130,6 @@ public class ProductListService implements IProductListService {
         //查询产品的售出数量
         ProProduct productById = getProductById(pid);
         product.setId(pid);
-        product.setSellednumber(productById.getSellednumber()+distributorNumber);
-        product.setLowestnumber(productById.getLowestnumber()-distributorNumber);
         int update = this.productMapper.updateByPrimaryKeySelective(product);
         if(update!=1){
             throw new TTMSException(ExceptionEnum.PRODUCT_UPDATE_NUM_FAIL);
@@ -153,9 +150,6 @@ public class ProductListService implements IProductListService {
         if (product.getId() != proProductDistributor.getProductid()) {
             throw new TTMSException(ExceptionEnum.PRODUCTDISTRIBUTOR_NOT_MATCH);
         }
-        //修改数量
-        product.setSellednumber(product.getSellednumber()-proProductDistributor.getDistributenum());
-        product.setLowestnumber(product.getLowestnumber()+proProductDistributor.getDistributenum());
         //更新产品数量
         productMapper.updateByPrimaryKey(product);
         //删除记录

@@ -17,7 +17,7 @@ public interface IProductListService {
 
     List<ProductVo> getDistributorsByPid(Integer pid);
 
-    void addProductDistribute(Integer pid, Integer distributorId, Integer distributorNumber, Date startTime, Date endTime);
+    void addProductDistribute(Integer pid, Integer distributorNumber, Date startTime, Date endTime);
 
 
     Void deleteProductDistribute(int pid, int productDistributorId);
