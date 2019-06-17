@@ -1,7 +1,6 @@
 package com.ttms.service.ProductManage;
 
 import com.ttms.Entity.ProPricepolicy;
-import com.ttms.Entity.ResGuide;
 
 import java.util.Date;
 import java.util.List;
@@ -14,4 +13,7 @@ public interface IPricePolicyService {
     List<ProPricepolicy> getPricePolicyByIds(List<Integer> pricepolicyIds);
 
     List<ProPricepolicy> getPricePolicyByProductId(Integer productId);
+
+    List<ProPricepolicy> getPricePolicyByProductIdEnable(Integer productId);
+
 }

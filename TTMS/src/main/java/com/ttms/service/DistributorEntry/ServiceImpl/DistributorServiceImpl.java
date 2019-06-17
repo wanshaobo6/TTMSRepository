@@ -111,7 +111,7 @@ public class DistributorServiceImpl implements IDistributorService {
     @Override
     public List<ProPricepolicy> getPricePolicyByProductId(Integer productId) {
   //SELECT * FROM pro_pricepolicy pp JOIN pro_product_pricepolicy ppp ON ppp.`pricePolicyId` = pp.`id` WHERE ppp.`productId` = 1
-        return pricePolicyService.getPricePolicyByProductId(productId);
+        return pricePolicyService.getPricePolicyByProductIdEnable(productId);
     }
 
     @Transactional

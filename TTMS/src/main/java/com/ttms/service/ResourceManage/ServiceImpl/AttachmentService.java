@@ -5,7 +5,6 @@ import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.ResoAttachMentMapper;
 import com.ttms.service.ProductManage.IProductListService;
-import com.ttms.service.ProductManage.IProjectService;
 import com.ttms.service.ResourceManage.IAttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class AttachmentService implements IAttachmentService {
         return resoAttachments;
     }
 
-    public Void addAttachment(int pid, String fileName, String fileUrl, String attachementName , int userId) {
+    public Void addAttachment(Integer pid, String fileName, String fileUrl, String attachementName , Integer userId) {
         ResoAttachment attachment = new ResoAttachment();
         attachment.setProductId(pid);
         attachment.setAttachmenttitle(attachementName);
@@ -47,4 +46,15 @@ public class AttachmentService implements IAttachmentService {
         }
         return null;
     }
+
+    @Override
+    public ResoAttachment getResoAttachmentByproductId(Integer proudctId) {
+        ResoAttachment resoAttachment = this.resoAttachMentMapper.getResoAttachmentByproductId(proudctId);
+        if(resoAttachment==null){
+            return null;
+            //throw new TTMSException(ExceptionEnum.ATTACHMENT_INSERT_FAIL);
+        }
+        return resoAttachment;
+    }
+
 }

@@ -71,4 +71,21 @@ public class PricePolicyService implements IPricePolicyService {
         }
         return proPricepolicies;
     }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询当前产品可用的所有价格政策
+    * @Param: [productId]
+    * @Return: java.util.List<com.ttms.Entity.ProPricepolicy>
+    * @Author: 吴彬
+    * @Date: 19:29 19:29
+     */
+    @Override
+    public List<ProPricepolicy> getPricePolicyByProductIdEnable(Integer productId) {
+        List<ProPricepolicy> proPricepolicies = pricePolicyMapper.getPricePolicyByProductIdEnable(productId);
+        if (CollectionUtils.isEmpty(proPricepolicies)) {
+            throw new TTMSException(ExceptionEnum.PRICE_POLICY_NOT_FOUND);
+        }
+        return proPricepolicies;
+    }
 }

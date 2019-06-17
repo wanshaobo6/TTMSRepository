@@ -4,7 +4,6 @@ import com.ttms.Entity.ProPricepolicy;
 import com.ttms.utils.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
@@ -16,4 +15,9 @@ public interface ProPricePolicyMapper extends BaseMapper<ProPricepolicy> {
 
     @Select("SELECT * FROM pro_pricepolicy pp JOIN pro_product_pricepolicy ppp ON ppp.`pricePolicyId` = pp.`id` WHERE ppp.`productId` = #{productId}")
     List<ProPricepolicy> getPricePolicyByProductId(@Param("productId") Integer productId);
+
+    //查询当前产品可用的所有价格政策
+    @Select("SELECT * FROM pro_pricepolicy pp JOIN pro_product_pricepolicy ppp ON ppp.`pricePolicyId` = pp.`id` WHERE  pp.startTime<=(SELECT NOW()) AND pp.endTime>=(SELECT NOW())" +
+            " AND pp.minNum>0 AND ppp.`productId` =#{productId}  ORDER BY pp.policyDiscount DESC ")
+    List<ProPricepolicy> getPricePolicyByProductIdEnable(@Param("productId") Integer productId);
 }

@@ -44,7 +44,7 @@ public class ProductListController {
      * @Date: 17:18 17:18
      */
     @PutMapping("/privilege/updateproductStatus")
-    public ResponseEntity<Void> updateproductStatus(@RequestParam int productId ,@RequestParam Integer pstatus){
+    public ResponseEntity<Void> updateproductStatus(@RequestParam Integer productId ,@RequestParam Integer pstatus){
         productListService.updateproductStatus(productId,pstatus);
         return  ResponseEntity.ok().build();
     }
