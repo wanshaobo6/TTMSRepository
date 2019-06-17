@@ -4,6 +4,7 @@ import com.ttms.Entity.ResoAttachment;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.ResoAttachMentMapper;
+import com.ttms.Vo.ResoAttachmentVo;
 import com.ttms.service.ProductManage.IProductListService;
 import com.ttms.service.ResourceManage.IAttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class AttachmentService implements IAttachmentService {
         return resoAttachments;
     }
 
+
+
     public Void addAttachment(Integer pid, String fileName, String fileUrl, String attachementName , Integer userId) {
         ResoAttachment attachment = new ResoAttachment();
         attachment.setProductId(pid);
@@ -54,6 +57,26 @@ public class AttachmentService implements IAttachmentService {
             return null;
             //throw new TTMSException(ExceptionEnum.ATTACHMENT_INSERT_FAIL);
         }
+        return resoAttachment;
+    }
+
+    @Override
+    public List<ResoAttachmentVo> getResoAttachmentByproductIdAndUerName(Integer proudctId) {
+        List<ResoAttachmentVo> resoAttachmentByproductIdAndUerName = this.resoAttachMentMapper.getResoAttachmentByproductIdAndUerName(proudctId);
+        return resoAttachmentByproductIdAndUerName;
+    }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉根据主键查询附件下载
+    * @Param: [id]
+    * @Return: com.ttms.Entity.ResoAttachment
+    * @Author: 吴彬
+    * @Date: 10:59 10:59
+     */
+    @Override
+    public ResoAttachment getResoAttchmentById(Integer id) {
+        ResoAttachment resoAttachment = this.resoAttachMentMapper.selectByPrimaryKey(id);
         return resoAttachment;
     }
 

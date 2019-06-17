@@ -53,8 +53,8 @@ public class UploadService {
     }
 
     //http://114.115.204.56/group1/M00/00/00/rBAA3F0FtUOAPcmoAAA8K_c90Hg367.txt
-    public DownLoad downloadFile(Integer productId){
-        ResoAttachment attachment= attachmentService.getResoAttachmentByproductId(productId);
+    public DownLoad downloadFile(Integer attachmentId){
+        ResoAttachment attachment= attachmentService.getResoAttchmentById(attachmentId);
         DownLoad downLoad=null;
         if(attachment!=null) {
             try {

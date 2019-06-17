@@ -1,14 +1,13 @@
 package com.ttms.Controller.DistributorEntry;
 
-import com.ttms.Entity.DisTourist;
-import com.ttms.Entity.ProPricepolicy;
-import com.ttms.Entity.ProProduct;
-import com.ttms.Entity.SupDistributor;
+import com.ttms.Entity.*;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
+import com.ttms.Vo.ResoAttachmentVo;
 import com.ttms.service.DistributorEntry.IDistributorService;
 import com.ttms.service.ProductManage.IProductListService;
+import com.ttms.service.ResourceManage.IAttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +27,9 @@ public class DistributorController {
 
     @Autowired
     private IDistributorService distributorService;
+
+    @Autowired
+    private IAttachmentService attachmentService;
 
     /**
      * 功能描述: <br>
@@ -192,4 +194,18 @@ public class DistributorController {
     public ResponseEntity<Void> cancelSignUp(@RequestParam(name = "touristId") Integer touristId,@RequestParam(name = "productId") Integer productId){
         return ResponseEntity.ok(this.distributorService.cancelSignUp(touristId,productId));
     }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询所有附件
+    * @Param: [pid]
+    * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.ResoAttachment>>
+    * @Author: 吴彬
+    * @Date: 10:35 10:35
+     */
+    @GetMapping("/allAttachment/{pid}")
+    public ResponseEntity<List<ResoAttachmentVo>> getAttachmentsByPid(@PathVariable(value = "pid") int pid){
+        return ResponseEntity.ok(this.attachmentService.getResoAttachmentByproductIdAndUerName(pid));
+    }
+
 }
