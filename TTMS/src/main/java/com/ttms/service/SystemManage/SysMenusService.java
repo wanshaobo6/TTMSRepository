@@ -567,15 +567,21 @@ public class SysMenusService {
     *return
     **/
     public void  updateDepartmentValidOrInvalid(Integer id) {
-
         SysDepartment department = this.sysDepartmentMapper.selectByPrimaryKey(id);
         department.setValid((byte) (department.getValid() ^ 1));
         int i = this.sysDepartmentMapper.updateByPrimaryKeySelective(department);
+        //如果该部门是一级部门，将其中子部门修改为同样的状态
+        if(department.getParentid() == 0){
+            Example example = new Example(SysDepartment.class);
+            example.createCriteria().andEqualTo("parentid",department.getId());
+            SysDepartment sysDepartment = new SysDepartment();
+            sysDepartment.setValid(department.getValid());
+            sysDepartmentMapper.updateByExampleSelective(sysDepartment,example);
+        }
         if (i != 1) {
             throw new TTMSException(ExceptionEnum.DEPARTMENT_VALID_MODIFY_ERROR);
         }
-
-        }
+     }
 
 
 

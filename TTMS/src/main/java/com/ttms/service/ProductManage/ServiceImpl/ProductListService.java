@@ -438,11 +438,8 @@ public class ProductListService implements IProductListService {
                 (new LinkedList(groupIdsSet)).stream().collect(Collectors.toMap(ProGroup::getId,item->item));
         //那个用户创建的产品
         Set<Integer> userId = proProducts.stream().map(ProProduct::getCreateuserid).collect(Collectors.toSet());
-        Map<Integer,SysUser> sysuserMap =
-                (Map<Integer, SysUser>) this.menusService.getUserListById(new LinkedList(userId)).stream()
-                        .collect(toMap(SysUser::getId, item -> item));
-
-        System.out.println("groupMap = " + groupMap);
+        Map<Integer,SysUser> sysuserMap = (Map<Integer, SysUser>) this.menusService.getUserListById(new LinkedList(userId)).stream().collect(toMap(SysUser::getId, item -> item));
+        System.out.println("sysuserMap = " + sysuserMap);
         for (ProProduct proProduct:proProducts){
             List<Integer> ids = Arrays.asList(proProduct.getProductcatid1(),
                     proProduct.getProductcatid2(), proProduct.getProductcatid3());
@@ -451,9 +448,7 @@ public class ProductListService implements IProductListService {
                     .collect(Collectors.toList()),"-"));
             //封装团名称
             proProduct.setGroupname(groupMap.get(proProduct.getGroupid()).getGroupname());
-            if(sysuserMap!=null) {
-                proProduct.setCreateproductname(sysuserMap.get(proProduct.getCreateuserid()).getUsername());
-            }
+            proProduct.setCreateusername(sysuserMap.get(proProduct.getCreateuserid()).getUsername());
         }
         result.setItems(proProducts);
         return result;

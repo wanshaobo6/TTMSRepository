@@ -29,8 +29,6 @@ public class ProProduct {
     @Transient
     private String productcatnames;
 
-    @Transient
-    private String createproductname;
 
     private Integer projectid;
 
@@ -66,8 +64,9 @@ public class ProProduct {
 
     private Integer createuserid;
 
+    @Transient
+    private String createusername;
+
     private Integer updateuserid;
-
-
 
 }
