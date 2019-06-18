@@ -95,12 +95,12 @@ public class NotifyManageService implements INotifyManageService {
     * @Date: 8:34 8:34
      */
     @Override
-    public PageResult<MesMessage> queryAllnewPage(Integer page, Integer rows, String messageclassname, String messagetitle, String sendName) {
+    public PageResult<MesMessage> queryAllnewPage(Integer page, Integer rows, Integer messageclassname, String messagetitle, String sendName) {
         PageHelper.startPage(page, rows);
         Example example=new Example(MesMessage.class);
         Example.Criteria criteria = example.createCriteria();
         if(messageclassname!=null) {
-            criteria.andEqualTo("messageclassname", messageclassname);
+            criteria.andEqualTo("sendtype", messageclassname);
         }
         if(sendName!=null){
             criteria.andLike("messagetitle", "%"+messagetitle+"%");

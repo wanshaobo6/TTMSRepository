@@ -103,12 +103,6 @@
             <artifactId>persistence-api</artifactId>
             <version>1.0</version>
         </dependency>
-        <!--热启动-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <version>2.0.3.RELEASE</version>
-        </dependency>
         <!--中文转换器-->
         <dependency>
             <groupId>com.belerweb</groupId>
@@ -116,4 +110,16 @@
             <version>2.5.0</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.ttms.TTMSApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
