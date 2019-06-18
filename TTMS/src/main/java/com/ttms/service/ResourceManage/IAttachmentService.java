@@ -15,4 +15,6 @@ public interface IAttachmentService {
     List<ResoAttachmentVo> getResoAttachmentByproductIdAndUerName(Integer proudctId);
 
     ResoAttachment getResoAttchmentById(Integer id);
+
+    Void deleteAttachmentsByid(Integer pid);
 }

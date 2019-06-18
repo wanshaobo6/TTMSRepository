@@ -80,4 +80,16 @@ public class AttachmentService implements IAttachmentService {
         return resoAttachment;
     }
 
+    @Override
+    public Void deleteAttachmentsByid(Integer pid) {
+        ResoAttachment attachment=new ResoAttachment();
+        attachment.setId(pid);
+        attachment.setInvalid((byte)0);
+        int i = this.resoAttachMentMapper.updateByPrimaryKeySelective(attachment);
+        if(i!=1){
+            throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
+        }
+        return null;
+    }
+
 }

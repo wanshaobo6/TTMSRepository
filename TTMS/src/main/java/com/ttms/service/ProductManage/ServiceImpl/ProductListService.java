@@ -8,6 +8,7 @@ import com.ttms.Exception.TTMSException;
 import com.ttms.Mapper.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
+import com.ttms.Vo.ResoAttachmentVo;
 import com.ttms.service.ProductManage.IGroupService;
 import com.ttms.service.ProductManage.IPricePolicyService;
 import com.ttms.service.ProductManage.IProductCatService;
@@ -401,8 +402,14 @@ public class ProductListService implements IProductListService {
     }
 
     @Override
-    public List<ResoAttachment> getAttachmentsByPid(int pid) {
-        return attachmentService.getAttachmentsByPid(pid);
+    public Void deleteAttachmentsByid(Integer pid) {
+        return  this.attachmentService.deleteAttachmentsByid(pid);
+
+    }
+
+    @Override
+    public List<ResoAttachmentVo> getAttachmentsByPid(int pid) {
+        return attachmentService.getResoAttachmentByproductIdAndUerName(pid);
     }
 
     @Override
