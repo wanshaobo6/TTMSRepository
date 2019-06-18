@@ -9,7 +9,7 @@ import java.util.List;
 public interface INotifyManageService {
 
     //查询所有通知
-    public List<MesMessage> queryAllnew();
+    public List<MesMessage> queryAllnew(int size);
 
     //查询所有有关自己的通知
     List<MesMessage> querybyUser(SysUser user);

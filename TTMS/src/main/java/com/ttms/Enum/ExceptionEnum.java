@@ -100,7 +100,8 @@ public enum ExceptionEnum {
     TOURIST_RECORD_NOTFOUND(404,"您没有报名记录"),
     TOURIST_SIGNUP_FAIL(500,"报名失败,请稍后重试"),
     TEMPROLE_NOT_FOUND(404,"不存在该角色"),
-    FILE_DOWNLOAD_FAIL(404,"文件下载失败")
+    FILE_DOWNLOAD_FAIL(404,"文件下载失败"),
+    MESSAGE_DID_NOT_EXIST(404,"没有最新消息")
     ;
     private int status;
     private String message;
