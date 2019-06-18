@@ -96,6 +96,7 @@ public enum ExceptionEnum {
     PRODUCT_ROUTE_SET_FAIL(404,"行程设置失败"),
     PRODUCT_ROUTE_UPDATE_FAIL(404,"行程更新失败"),
     ROLERS_UPDATE_FAIL(404,"角色修改失败"),
+    ROLES_USER_NOT_FOUND(404,"该角色下没有员工"),
     CANCEL_SIGN_FAIL(404,"删除失败"),
     TOURIST_RECORD_NOTFOUND(404,"您没有报名记录"),
     TOURIST_SIGNUP_FAIL(500,"报名失败,请稍后重试"),

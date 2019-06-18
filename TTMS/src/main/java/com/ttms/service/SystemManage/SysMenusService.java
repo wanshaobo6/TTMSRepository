@@ -853,4 +853,14 @@ public class SysMenusService {
         }
         return tempRoles;
     }
+
+    public List<SysUser> getUsersByRoleId(Integer rid) {
+        Example example = new Example(SysUser.class);
+        example.createCriteria().andEqualTo("roleid",rid);
+        List<SysUser> sysUsers = sysUserMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(sysUsers)) {
+            throw new TTMSException(ExceptionEnum.ROLES_USER_NOT_FOUND);
+        }
+        return sysUsers;
+    }
 }
