@@ -40,7 +40,7 @@ public class NotifyManageService implements INotifyManageService {
         PageHelper.startPage(1,size);
         Example example=new Example(MesMessage.class);
         example.setOrderByClause("sendTime DESC");
-        example.createCriteria().andEqualTo("sendtype",0);
+       // example.createCriteria().andEqualTo("sendtype",0);
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(mesMessages)) {
             throw new TTMSException(ExceptionEnum.MESSAGE_DID_NOT_EXIST);
@@ -95,12 +95,12 @@ public class NotifyManageService implements INotifyManageService {
     * @Date: 8:34 8:34
      */
     @Override
-    public PageResult<MesMessage> queryAllnewPage(Integer page, Integer rows, String messageclassname, String messagetitle, String sendName) {
+    public PageResult<MesMessage> queryAllnewPage(Integer page, Integer rows, Integer messageclassname, String messagetitle, String sendName) {
         PageHelper.startPage(page, rows);
         Example example=new Example(MesMessage.class);
         Example.Criteria criteria = example.createCriteria();
         if(messageclassname!=null) {
-            criteria.andEqualTo("messageclassname", messageclassname);
+            criteria.andEqualTo("sendtype", messageclassname);
         }
         if(sendName!=null){
             criteria.andLike("messagetitle", "%"+messagetitle+"%");
@@ -110,7 +110,12 @@ public class NotifyManageService implements INotifyManageService {
         if(user!=null){
             criteria.andEqualTo("senderid", user.getId());
         }
+        String userDepartment = this.sysMenusService.selectUserDepartment(user.getId());
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
+        for(MesMessage msg:mesMessages){
+            msg.setSenderName(user.getUsername());
+            msg.setUserDepartment(userDepartment);
+        }
         PageInfo<MesMessage> info=new PageInfo<>(mesMessages);
         PageResult<MesMessage> result=new PageResult<>();
         result.setItems(info.getList());

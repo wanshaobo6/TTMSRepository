@@ -2,10 +2,7 @@ package com.ttms.Entity;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Table(name = "mes_message")
@@ -30,6 +27,12 @@ public class MesMessage {
     private Byte valid;
 
     private Date updatetime;
+
+    @Transient
+    private String senderName;
+
+    @Transient
+    private String userDepartment;
 
     public Integer getId() {
         return id;

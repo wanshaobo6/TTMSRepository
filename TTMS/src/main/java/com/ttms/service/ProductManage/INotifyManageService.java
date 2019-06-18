@@ -16,5 +16,5 @@ public interface INotifyManageService {
 
     Void updateState(Integer mid);
 
-    PageResult<MesMessage> queryAllnewPage(Integer page, Integer rows, String messageclassname, String messagetitle, String sendName);
+    PageResult<MesMessage> queryAllnewPage(Integer page, Integer rows, Integer messageclassname, String messagetitle, String sendName);
 }

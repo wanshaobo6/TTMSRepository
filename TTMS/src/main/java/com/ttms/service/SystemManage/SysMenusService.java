@@ -853,4 +853,17 @@ public class SysMenusService {
         }
         return tempRoles;
     }
+
+    /**
+    * 功能描述: <br>
+    * 〈〉查询用户所属的部门
+    * @Param: [id]
+    * @Return: java.lang.String
+    * @Author: 吴彬
+    * @Date: 10:25 10:25
+     */
+    public String selectUserDepartment(Integer id) {
+        String s = this.sysDepartmentMapper.selectUserDepartment(id);
+        return s;
+    }
 }

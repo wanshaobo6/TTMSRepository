@@ -1,15 +1,11 @@
 package com.ttms.Controller.News;
 
 import com.ttms.Entity.MesMessage;
-import com.ttms.Entity.SysUser;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.INotifyManageService;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 //----------------------消息中心-通知管理-通知管理------------------------
 @RestController
@@ -31,12 +27,12 @@ public class NotifyManageController {
     @GetMapping("/queryAllnew/page")
     public ResponseEntity<PageResult<MesMessage>> queryAllnewPage(@RequestParam(value = "page" ,defaultValue = "1")
                                                                         Integer page, @RequestParam(value = "rows" ,defaultValue = "5")
-                                                                Integer rows, @RequestParam(required = false) String messageclassname,
+                                                                Integer rows, @RequestParam(required = false,defaultValue = "1") Integer sendtype,
                                                                   @RequestParam(required = false) String messagetitle,
                                                                   @RequestParam(required = false) String sendName
                                                             ){
         return ResponseEntity.ok(this.iNotifyManageService.queryAllnewPage
-                (page,rows,messageclassname,messagetitle,sendName));
+                (page,rows,sendtype,messagetitle,sendName));
     }
 
 
