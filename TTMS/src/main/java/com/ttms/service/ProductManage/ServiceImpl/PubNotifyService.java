@@ -30,7 +30,6 @@ public class PubNotifyService implements IPubNotifyService {
     public Void publicMsg(String messageClassName, String messageTitle, String messageContent,SysUser user) {
         MesMessage mesMessage=new MesMessage();
         mesMessage.setValid((byte)1);
-        mesMessage.setMessageclassname(messageClassName);
         mesMessage.setMessagecontent(messageContent);
         mesMessage.setMessagetitle(messageTitle);
         mesMessage.setSenderid(user.getId());

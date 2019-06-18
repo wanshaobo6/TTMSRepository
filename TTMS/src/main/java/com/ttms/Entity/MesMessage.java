@@ -15,13 +15,15 @@ public class MesMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String messageclassname;
-
     private String messagetitle;
 
     private String messagecontent;
 
     private Integer senderid;
+
+    private Integer sendtype;
+
+    private Integer toid;
 
     private Date sendtime;
 
@@ -35,10 +37,6 @@ public class MesMessage {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getMessageclassname() {
-        return messageclassname;
     }
 
 }

@@ -73,10 +73,10 @@ public class ProductListController {
      */
     @PostMapping("/privilege/distributor")
     public ResponseEntity<Void> addProductDistribute(Integer productId ,Integer distributorId ,
-                                                     Integer distributorNumber, Date startTime, Date endTime){
+                                                      Date startTime, Date endTime){
 
         // 没有完成需要查询产品的数量是否够分销  需要加一次判断
-        this.productListService.addProductDistribute(productId,distributorId,distributorNumber,startTime,endTime);
+        this.productListService.addProductDistribute(productId,distributorId,startTime,endTime);
         return   ResponseEntity.ok().build();
     }
 

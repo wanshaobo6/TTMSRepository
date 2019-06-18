@@ -19,18 +19,6 @@ public class NotifyManageController {
     @Autowired
     private INotifyManageService iNotifyManageService;
 
-    /**
-    * 功能描述: <br>
-    * 〈〉查询所有消息
-    * @Param: []
-    * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.MesMessage>>
-    * @Author: 吴彬
-    * @Date: 10:03 10:03
-     */
-    @GetMapping("/queryAllnew")
-    public ResponseEntity<List<MesMessage>> queryAllnew(){
-        return ResponseEntity.ok(this.iNotifyManageService.queryAllnew());
-    }
 
    /**
    * 功能描述: <br>
@@ -51,19 +39,7 @@ public class NotifyManageController {
                 (page,rows,messageclassname,messagetitle,sendName));
     }
 
-    /**
-    * 功能描述: <br>
-    * 〈〉查询所有有关自己的通知
-    * @Param: []
-    * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.MesMessage>>
-    * @Author: 吴彬
-    * @Date: 10:04 10:04
-     */
-    @GetMapping("/ofme")
-    public ResponseEntity<List<MesMessage>> querybyUser(){
-        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        return ResponseEntity.ok(this.iNotifyManageService.querybyUser(user));
-    }
+
 
     @GetMapping("{mid}")
     public ResponseEntity<Void> updateState(@PathVariable("mid") Integer mid){

@@ -23,8 +23,6 @@ public class ProProductDistributor {
 
     private Integer distributorid;
 
-    private Integer distributenum;
-
     private Date starttime;
 
     private Date endtime;

@@ -13,6 +13,7 @@ import com.ttms.service.SystemManage.SysMenusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -35,10 +36,15 @@ public class NotifyManageService implements INotifyManageService {
     * @Date: 10:02 10:02
      */
     @Override
-    public List<MesMessage> queryAllnew() {
+    public List<MesMessage> queryAllnew(int size) {
+        PageHelper.startPage(1,size);
         Example example=new Example(MesMessage.class);
         example.setOrderByClause("sendTime DESC");
+        example.createCriteria().andEqualTo("sendtype",0);
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(mesMessages)) {
+            throw new TTMSException(ExceptionEnum.MESSAGE_DID_NOT_EXIST);
+        }
         return mesMessages;
     }
 
@@ -54,7 +60,7 @@ public class NotifyManageService implements INotifyManageService {
     public List<MesMessage> querybyUser(SysUser user) {
         Example example=new Example(MesMessage.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("senderid", user.getId());
+        criteria.andEqualTo("toid", user.getId());
         criteria.andEqualTo("valid", 1);
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
         return mesMessages;
