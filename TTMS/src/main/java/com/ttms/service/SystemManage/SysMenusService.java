@@ -13,6 +13,7 @@ import com.ttms.Mapper.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.utils.CodecUtils;
 import com.ttms.utils.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class SysMenusService {
     @Autowired

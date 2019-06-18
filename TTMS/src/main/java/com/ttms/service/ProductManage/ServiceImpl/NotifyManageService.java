@@ -10,6 +10,7 @@ import com.ttms.Mapper.MesMessageMapper;
 import com.ttms.Vo.PageResult;
 import com.ttms.service.ProductManage.INotifyManageService;
 import com.ttms.service.SystemManage.SysMenusService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,14 +107,15 @@ public class NotifyManageService implements INotifyManageService {
             criteria.andLike("messagetitle", "%"+messagetitle+"%");
         }
         // 根据发布人姓名查询id
-        SysUser user = this.sysMenusService.getUserByUserName(sendName);
+   /*     SysUser user = this.sysMenusService.getUserByUserName(sendName);
         if(user!=null){
             criteria.andEqualTo("senderid", user.getId());
-        }
-        String userDepartment = this.sysMenusService.selectUserDepartment(user.getId());
+        }*/
+        SysUser curUser  = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        String userDepartment = this.sysMenusService.selectUserDepartment(curUser.getId());
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
         for(MesMessage msg:mesMessages){
-            msg.setSenderName(user.getUsername());
+            msg.setSenderName(curUser.getUsername());
             msg.setUserDepartment(userDepartment);
         }
         PageInfo<MesMessage> info=new PageInfo<>(mesMessages);
