@@ -402,6 +402,22 @@ public class ProductListService implements IProductListService {
     }
 
     @Override
+    public List<SupDistributor> getAllDistributorInfoNotInThisProduct(Integer pid) {
+        //查询出该产品下的已经添加的分销商的id
+        Example example = new Example(ProProductDistributor.class);
+        example.createCriteria().andEqualTo("productid",pid);
+        List<ProProductDistributor> productDistributors = proProductDistributorMapper.selectByExample(example);
+        //获取所有id
+        List<Integer> ids = null;
+        if(!CollectionUtils.isEmpty(productDistributors)){
+            ids = productDistributors.stream().map(ProProductDistributor::getDistributorid).collect(Collectors.toList());
+        }
+        //获取未添加的分销商
+        List<SupDistributor> supDistributors = distributorManageService.getAllDistributorInfoNotInThisProduct(ids);
+        return supDistributors;
+    }
+
+    @Override
     public List<ResoAttachmentVo> getAttachmentsByPid(int pid) {
         return attachmentService.getResoAttachmentByproductIdAndUerName(pid);
     }

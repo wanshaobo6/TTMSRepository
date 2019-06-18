@@ -66,6 +66,8 @@ public interface IProductListService {
 
     Void deleteAttachmentsByid(Integer pid);
 
+    List<SupDistributor> getAllDistributorInfoNotInThisProduct(Integer pid);
+
     //为产品添加分销商之后产品的数量更改  修改产品的数量
    // Void updataProductNumber(Integer productId);
 

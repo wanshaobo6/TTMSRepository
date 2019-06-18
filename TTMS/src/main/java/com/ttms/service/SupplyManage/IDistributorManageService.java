@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IDistributorManageService {
     List<SupDistributor> getAllDistributor();
+
+    List<SupDistributor> getAllDistributorInfoNotInThisProduct(List<Integer> ids);
 }

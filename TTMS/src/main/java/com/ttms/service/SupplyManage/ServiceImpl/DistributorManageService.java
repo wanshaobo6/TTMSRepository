@@ -8,6 +8,7 @@ import com.ttms.service.SupplyManage.IDistributorManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -21,6 +22,16 @@ public class DistributorManageService implements IDistributorManageService {
         if (CollectionUtils.isEmpty(supDistributors)) {
             throw new TTMSException(ExceptionEnum.SUPDISTRIBUTOR_NOT_FOUND);
         }
+        return supDistributors;
+    }
+
+    @Override
+    public List<SupDistributor> getAllDistributorInfoNotInThisProduct(List<Integer> ids) {
+        Example example = new Example(SupDistributor.class);
+        example.createCriteria().andNotIn("id",ids);
+        List<SupDistributor> supDistributors = supDistributorMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(supDistributors))
+            throw new TTMSException(ExceptionEnum.SUPDISTRIBUTOR_NOT_FOUND);
         return supDistributors;
     }
 }

@@ -123,16 +123,17 @@ public class ProductListController {
 
     /**
      * 功能描述: <br>
-     * 〈〉获取所有的分销商
+     * 〈〉获取该产品中没有添加的分销商
      * @Param: []
      * @Return: org.springframework.http.ResponseEntity<java.util.List<com.ttms.Entity.SupDistributor>>
      * @Author: 万少波
      * @Date: 2019/6/1 14:39
      */
     @GetMapping("/distributors")
-    public ResponseEntity<List<SupDistributor>> getAllDistributorInfo(){
-        return ResponseEntity.ok(productListService.getAllDistributorInfo());
+    public ResponseEntity<List<SupDistributor>> getAllDistributorInfoNotInThisProduct(@RequestParam Integer pid){
+        return ResponseEntity.ok(productListService.getAllDistributorInfoNotInThisProduct(pid));
     }
+
 
     /**
      * 功能描述: <br>
