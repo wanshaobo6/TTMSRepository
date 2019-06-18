@@ -1,6 +1,9 @@
 package com.ttms.Controller.DistributorEntry;
 
-import com.ttms.Entity.*;
+import com.ttms.Entity.DisTourist;
+import com.ttms.Entity.ProPricepolicy;
+import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.SupDistributor;
 import com.ttms.Enum.ExceptionEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.PageResult;
@@ -13,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

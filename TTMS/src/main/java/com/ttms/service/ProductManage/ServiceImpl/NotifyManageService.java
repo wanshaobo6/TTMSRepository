@@ -40,7 +40,7 @@ public class NotifyManageService implements INotifyManageService {
         PageHelper.startPage(1,size);
         Example example=new Example(MesMessage.class);
         example.setOrderByClause("sendTime DESC");
-        example.createCriteria().andEqualTo("sendtype",0).andEqualTo("valid",1);
+        example.createCriteria().andEqualTo("sendtype",0);
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(mesMessages)) {
             throw new TTMSException(ExceptionEnum.MESSAGE_DID_NOT_EXIST);
@@ -110,7 +110,12 @@ public class NotifyManageService implements INotifyManageService {
         if(user!=null){
             criteria.andEqualTo("senderid", user.getId());
         }
+        String userDepartment = this.sysMenusService.selectUserDepartment(user.getId());
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
+        for(MesMessage msg:mesMessages){
+            msg.setSenderName(user.getUsername());
+            msg.setUserDepartment(userDepartment);
+        }
         PageInfo<MesMessage> info=new PageInfo<>(mesMessages);
         PageResult<MesMessage> result=new PageResult<>();
         result.setItems(info.getList());

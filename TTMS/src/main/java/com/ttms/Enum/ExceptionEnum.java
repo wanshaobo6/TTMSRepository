@@ -82,6 +82,7 @@ public enum ExceptionEnum {
     PRODUCTDISTRIBUTOR_NOT_MATCH(401,"产品没有被该分销商分销"),
     SUPDISTRIBUTOR_NOT_FOUND(404,"产品分销商没有找到"),
     ATTACHMENT_INSERT_FAIL(500,"新增附件失败"),
+    ATTACHMENT_UPDATE_FAIL(500,"删除附件失败"),
     RESGUIDE_NOT_FOUND(404,"导游不存在"),
     MSG_UPDATE_FALI(404,"消息更新失败"),
     MSG_RELEASE_FALI(404,"消息发布失败"),

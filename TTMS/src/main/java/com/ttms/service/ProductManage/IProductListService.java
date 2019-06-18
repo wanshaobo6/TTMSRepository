@@ -1,8 +1,12 @@
 package com.ttms.service.ProductManage;
 
-import com.ttms.Entity.*;
+import com.ttms.Entity.ProPricepolicy;
+import com.ttms.Entity.ProProduct;
+import com.ttms.Entity.ResGuide;
+import com.ttms.Entity.SupDistributor;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
+import com.ttms.Vo.ResoAttachmentVo;
 
 import java.util.Date;
 import java.util.List;
@@ -24,7 +28,7 @@ public interface IProductListService {
 
     List<SupDistributor> getAllDistributorInfo();
 
-    List<ResoAttachment> getAttachmentsByPid(int pid);
+    List<ResoAttachmentVo> getAttachmentsByPid(int pid);
 
     Void addAttachement( int pid , String fileName , String fileUrl,String attachmentname);
 
@@ -59,6 +63,8 @@ public interface IProductListService {
     Void addRount(Integer productId, String name, String content, String stayMessage, String breakfast, String lunch, String supper);
 
     List<Integer> getProductIdsByDistributorId(Integer did);
+
+    Void deleteAttachmentsByid(Integer pid);
 
     //为产品添加分销商之后产品的数量更改  修改产品的数量
    // Void updataProductNumber(Integer productId);

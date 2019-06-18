@@ -3,6 +3,7 @@ package com.ttms.Controller.ProduceManage;
 import com.ttms.Entity.*;
 import com.ttms.Vo.PageResult;
 import com.ttms.Vo.ProductVo;
+import com.ttms.Vo.ResoAttachmentVo;
 import com.ttms.service.ProductManage.IProductCatService;
 import com.ttms.service.ProductManage.IProductListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,8 +143,13 @@ public class ProductListController {
      * @Date: 2019/6/1 14:49
      */
     @GetMapping("/allAttachment/{pid}")
-    public ResponseEntity<List<ResoAttachment>> getAttachmentsByPid(@PathVariable int pid){
+    public ResponseEntity<List<ResoAttachmentVo>> getAttachmentsByPid(@PathVariable int pid){
         return ResponseEntity.ok(productListService.getAttachmentsByPid(pid));
+    }
+
+    @DeleteMapping("/del/Attachment/{pid}")
+    public ResponseEntity<Void> deleteAttachmentsByPid(@PathVariable Integer pid){
+        return ResponseEntity.ok(productListService.deleteAttachmentsByid(pid));
     }
 
     /**
