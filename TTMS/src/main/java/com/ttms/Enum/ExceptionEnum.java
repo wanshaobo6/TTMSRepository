@@ -44,6 +44,7 @@ public enum ExceptionEnum {
     PROJECT_NOT_EXIST(404,"项目不存在"),
     PROJECT_ID_NULL(500,"项目id不能为空"),
     USER_NOT_BELONG_PRODUCT_DEP(403,"用户不属于产品部"),
+    USER_IS_PRODUCT_MANAGER(403,"用户是产品经理无权操作"),
     DEPARTMENT_NOT_USER(404,"该部门下没有人"),
     USER_NOT_NULL(404,"用户不能为空"),
     GROUP_VALID_MODIFY_ERROR(500,"团启动状态更新失败"),

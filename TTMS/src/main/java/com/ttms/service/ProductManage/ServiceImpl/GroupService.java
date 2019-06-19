@@ -169,6 +169,12 @@ public class GroupService implements IGroupService {
         if(!booleand){
             throw new TTMSException(ExceptionEnum.USER_NOT_BELONG_PRODUCT_DEP);
         }
+        String s = this.sysDepartmentMapper.judgeUserIsProductManager(sysUser.getId());
+
+        if(s.equals("产品经理")){
+            throw new TTMSException(ExceptionEnum.USER_IS_PRODUCT_MANAGER);
+        }
+
 
       /*  List<Integer> curDepartmentStaffIds = sysDepartmentMapper.
                 getAllStaffIdsOfDepartment(projectInDb.getDepartmentid());
