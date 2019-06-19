@@ -28,9 +28,10 @@ public class ProductCatController {
     * @Date: 20:42 20:42
      */
     @PostMapping("/add")
-    public ResponseEntity<Void> addProProductCat(@RequestParam(defaultValue = "0",required = false) Integer parentId,@RequestParam String name){
+    public ResponseEntity<Void> addProProductCat(@RequestParam(defaultValue = "0",required = false) Integer parentId,
+                                                 @RequestParam String name,@RequestParam String note){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-         this.productCatService.addProductCat(parentId, name, user);
+         this.productCatService.addProductCat(parentId, name, user,note);
          return ResponseEntity.ok().build();
     }
     /**
@@ -56,9 +57,9 @@ public class ProductCatController {
     * @Date: 21:55 21:55
      */
     @PutMapping("{productId}")
-    public ResponseEntity<Void> updateProProductCat(@PathVariable("productId") Integer productId,@RequestParam String name){
+    public ResponseEntity<Void> updateProProductCat(@PathVariable("productId") Integer productId,@RequestParam String name,@RequestParam String note){
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        this.productCatService.updateProProductCat(productId,name,user);
+        this.productCatService.updateProProductCat(productId,name,user,note);
         return  ResponseEntity.ok().build();
     }
 

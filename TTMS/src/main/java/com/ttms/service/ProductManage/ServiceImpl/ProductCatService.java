@@ -63,7 +63,7 @@ public class ProductCatService implements IProductCatService {
 
     @Override
     @Transactional
-    public Void addProductCat(Integer parentId, String name, SysUser user) {
+    public Void addProductCat(Integer parentId, String name, SysUser user, String note) {
         //添加内容分类补全数据
         ProProductCat productCat=new ProProductCat();
         productCat.setCreatetime(new Date());
@@ -72,6 +72,7 @@ public class ProductCatService implements IProductCatService {
         productCat.setParentid(parentId);
         productCat.setUpdatetime(null);
         productCat.setProductcatname(name);
+        productCat.setNote(note);
         int i = this.proProductCatMapper.insert(productCat);
         if(i!=1){
             throw new TTMSException(ExceptionEnum.PRODUCT_CAT_ADD_FAIL);
@@ -103,6 +104,7 @@ public class ProductCatService implements IProductCatService {
     * @Date: 21:36 21:36
      */
     @Override
+    @Transactional
     public Void deleteProProductCat(Integer productCatId) {
         //判断该分类下有没产品存在 有提示删除失败
         Example example=new Example(ProProduct.class);
@@ -126,12 +128,14 @@ public class ProductCatService implements IProductCatService {
      * @Date: 21:56 21:56
      */
     @Override
-    public Void updateProProductCat(Integer productId, String name, SysUser user) {
+    @Transactional
+    public Void updateProProductCat(Integer productId, String name, SysUser user, String note) {
         ProProductCat productCat=new ProProductCat();
         productCat.setUpdateuserid(user.getId());
         productCat.setId(productId);
         productCat.setUpdatetime(new Date());
         productCat.setProductcatname(name);
+        productCat.setNote(note);
         int i = this.proProductCatMapper.updateByPrimaryKeySelective(productCat);
         if(i!=1){
             throw new TTMSException(ExceptionEnum.PRODUCT_CAT_UPDATE_FAIL);

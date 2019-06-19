@@ -12,9 +12,9 @@ public interface IProductCatService {
 
     List<ProProductCat> queryCatById(Integer catId);
 
-    Void addProductCat(Integer parentId, String name, SysUser user);
+    Void addProductCat(Integer parentId, String name, SysUser user, String note);
 
     Void deleteProProductCat(Integer productId);
 
-    Void updateProProductCat(Integer productId, String name, SysUser user);
+    Void updateProProductCat(Integer productId, String name, SysUser user, String note);
 }
