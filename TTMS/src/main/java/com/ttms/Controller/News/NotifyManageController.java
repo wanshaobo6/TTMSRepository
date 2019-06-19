@@ -27,7 +27,7 @@ public class NotifyManageController {
     @GetMapping("/queryAllnew/page")
     public ResponseEntity<PageResult<MesMessage>> queryAllnewPage(@RequestParam(value = "page" ,defaultValue = "1")
                                                                         Integer page, @RequestParam(value = "rows" ,defaultValue = "5")
-                                                                Integer rows, @RequestParam(required = false,defaultValue = "0") Integer sendtype,
+                                                                Integer rows, @RequestParam(required = false,defaultValue = "1") Integer sendtype,
                                                                   @RequestParam(required = false) String messagetitle,
                                                                   @RequestParam(required = false) String sendName
                                                             ){

@@ -29,4 +29,8 @@ public interface SysDepartmentMapper extends BaseMapper<SysDepartment> {
 
     @Select(("SELECT s.departmentname  FROM sys_user u,sys_roles r,sys_department s WHERE u.`roleId`=r.`id` AND s.`id`=r.`departmentId` AND u.id=#{userId}"))
     String selectUserDepartment(Integer userId );
+
+    @Select("SELECT  s.name FROM sys_roles s WHERE s.id=( SELECT su.roleId  FROM sys_user su  WHERE su.id=#{userId})")
+    String judgeUserIsProductManager(@Param("userId") Integer userId);
+
 }
