@@ -33,7 +33,7 @@ public class UploadController {
                 httpServletResponse.reset();
                 httpServletResponse.setContentType("application/x-download");
                 httpServletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + file.getFileName() + "\"");
-                httpServletResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:9090");
+                httpServletResponse.setHeader("Access-Control-Allow-Origin", "http://114.115.204.56:9090");
                 httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
                 httpServletResponse.getOutputStream().write(file.getFilebyte());
                 //uploadService.updateDownloadCount(id);
