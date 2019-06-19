@@ -805,7 +805,7 @@ public class SysMenusService {
                 if (sysDepartments == null) {
                     return false;
                 }
-                if (sysDepartments.contains(departmentid) || departmentid==1) {
+                if (sysDepartments.stream().map(sysDepartment1 -> sysDepartment1.getId()).collect(Collectors.toList()).contains(departmentid) || departmentid==1) {
                     return true;
                 }else {
                     return false;
@@ -817,7 +817,7 @@ public class SysMenusService {
                 List<SysDepartment> sysDepartments = queryAllDepartmentBypid(deaprtmentByid.getId());
                 if (sysDepartments == null) {
                     return false;
-                } else if (sysDepartments.contains(departmentid) || departmentid==1 ) {
+                } else if (sysDepartments.stream().map(sysDepartment1 -> sysDepartment1.getId()).collect(Collectors.toList()).contains(departmentid) || departmentid==1 ) {
                     return true;
                 } else {
                     return false;
