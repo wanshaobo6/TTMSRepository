@@ -103,9 +103,10 @@ public class NotifyManageService implements INotifyManageService {
         if(messageclassname!=null) {
             criteria.andEqualTo("sendtype", messageclassname);
         }
-        if(sendName!=null){
+        if(messagetitle!=null){
             criteria.andLike("messagetitle", "%"+messagetitle+"%");
         }
+        criteria.andIsNull("toid");
         // 根据发布人姓名查询id
    /*     SysUser user = this.sysMenusService.getUserByUserName(sendName);
         if(user!=null){
@@ -115,6 +116,7 @@ public class NotifyManageService implements INotifyManageService {
         String userDepartment = this.sysMenusService.selectUserDepartment(curUser.getId());
         List<MesMessage> mesMessages = this.mesMessageMapper.selectByExample(example);
         for(MesMessage msg:mesMessages){
+         // if(msg.getToid()!=null) continue;
             msg.setSenderName(curUser.getUsername());
             msg.setUserDepartment(userDepartment);
         }
