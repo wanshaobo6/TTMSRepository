@@ -60,6 +60,9 @@ public class GroupService implements IGroupService {
         if (projectInDb == null) {
             throw new TTMSException(ExceptionEnum.PROJECT_NOT_EXIST);
         }
+        if(!projectInDb.getCreateuserid().equals(sysUser.getId())){
+            throw new TTMSException(ExceptionEnum.PWERMISSION_OPTERATION);
+        }
         proGroup.setProjectname(projectInDb.getProjectname());
         proGroup.setProjectid(belongProjectId);
         //获取该部门下所有人id

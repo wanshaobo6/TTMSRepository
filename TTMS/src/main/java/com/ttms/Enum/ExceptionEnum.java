@@ -104,7 +104,8 @@ public enum ExceptionEnum {
     TOURIST_SIGNUP_FAIL(500,"报名失败,请稍后重试"),
     TEMPROLE_NOT_FOUND(404,"不存在该角色"),
     FILE_DOWNLOAD_FAIL(404,"文件下载失败"),
-    MESSAGE_DID_NOT_EXIST(404,"没有最新消息")
+    MESSAGE_DID_NOT_EXIST(404,"没有最新消息"),
+    WARMING_USER_HAVE_LOGIN(555,"您已在别处登录，如果不是本人操作，请联系管理员"),
     ;
     private int status;
     private String message;

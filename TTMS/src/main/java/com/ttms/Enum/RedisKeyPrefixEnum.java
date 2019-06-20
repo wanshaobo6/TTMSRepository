@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
  */
 @AllArgsConstructor
 public enum RedisKeyPrefixEnum {
-    SYSMENUS_TREE("ttms:sysmenus:tree","保存SpringBoot启动时加载的MenusTree")
+    SYSMENUS_TREE("ttms:sysmenus:tree","保存SpringBoot启动时加载的MenusTree"),
+    USER_ONLINE_KEY("USER:ONLINE:LIST:","用户Id在线列表"),
     ;
     private String prefix;          //前缀
     private String description;   //该前缀的用途

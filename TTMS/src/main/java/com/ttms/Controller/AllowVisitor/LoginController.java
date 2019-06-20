@@ -1,8 +1,10 @@
 package com.ttms.Controller.AllowVisitor;
 
+import com.ttms.Config.DistributorLock;
 import com.ttms.Config.MyThreadLocal;
 import com.ttms.Entity.SysUser;
 import com.ttms.Enum.ExceptionEnum;
+import com.ttms.Enum.RedisKeyPrefixEnum;
 import com.ttms.Exception.TTMSException;
 import com.ttms.Vo.ModulesVo;
 import com.ttms.service.AllowVisitor.LoginService;
@@ -14,6 +16,7 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @Slf4j
@@ -30,6 +34,8 @@ public class LoginController {
     private MyThreadLocal myThreadLocal;
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private DistributorLock distributorLock;
     /**
      * 功能描述: <br>
      * 〈〉登陆逻辑
@@ -51,6 +57,11 @@ public class LoginController {
         //如果用户被禁用
         if(currUser.getValid() == 0){
             throw new TTMSException(ExceptionEnum.USER_HAVE_BEEN_LIMIT);
+        }
+        //如果该用户已经登录  获取该分布式锁
+        if(!distributorLock.setIfAbsent(RedisKeyPrefixEnum.USER_ONLINE_KEY.val()+
+                String.valueOf(currUser.getId()),String.valueOf(1),30)){
+            throw new TTMSException(ExceptionEnum.WARMING_USER_HAVE_LOGIN);
         }
         myThreadLocal.setTempUser(currUser);
         password = CodecUtils.md5Hex(password, currUser.getSalt());
@@ -85,6 +96,8 @@ public class LoginController {
     public ResponseEntity<Void> logout(){
         Subject subject = SecurityUtils.getSubject();
         SysUser user = (SysUser)subject.getPrincipal();
+        //Redis中退出
+        distributorLock.expireNow(RedisKeyPrefixEnum.USER_ONLINE_KEY.val()+String.valueOf(user.getId()));
         if (subject.isAuthenticated()) {
             subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存
               log.debug("用户" + user.getUsername() + "退出登录");
@@ -92,6 +105,25 @@ public class LoginController {
         return ResponseEntity.ok(null);
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈〉心跳机制
+     * @Param: []
+     * @Return: org.springframework.http.ResponseEntity<java.lang.Void>
+     * @Author: 万少波
+     * @Date: 2019/6/19 21:20
+     */
+    @GetMapping("/heartbeat")
+    public ResponseEntity<Boolean> heartbeat(){
+        SysUser user = (SysUser)SecurityUtils.getSubject().getPrincipal();
+        if (user != null) {
+            //心跳
+            distributorLock.expire(RedisKeyPrefixEnum.USER_ONLINE_KEY.val()+String.valueOf(user.getId()),30, TimeUnit.SECONDS);
+            return ResponseEntity.ok(true);
+        }else{
+            return ResponseEntity.ok(false);
+        }
+    }
     /**
      * 功能描述: <br>
      * 〈〉获取当前用户
