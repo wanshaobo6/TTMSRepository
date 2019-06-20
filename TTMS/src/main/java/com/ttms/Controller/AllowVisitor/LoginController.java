@@ -58,11 +58,6 @@ public class LoginController {
         if(currUser.getValid() == 0){
             throw new TTMSException(ExceptionEnum.USER_HAVE_BEEN_LIMIT);
         }
-        //如果该用户已经登录  获取该分布式锁
-        if(!distributorLock.setIfAbsent(RedisKeyPrefixEnum.USER_ONLINE_KEY.val()+
-                String.valueOf(currUser.getId()),String.valueOf(1),30)){
-            throw new TTMSException(ExceptionEnum.WARMING_USER_HAVE_LOGIN);
-        }
         myThreadLocal.setTempUser(currUser);
         password = CodecUtils.md5Hex(password, currUser.getSalt());
         //封装用户名和密码
@@ -70,6 +65,12 @@ public class LoginController {
         try {
             subject.login(usernamePasswordToken);
             //只要没有任何异常则表示登录成功
+            //如果该用户已经登录  获取该分布式锁
+            if(!distributorLock.setIfAbsent(RedisKeyPrefixEnum.USER_ONLINE_KEY.val()+
+                    String.valueOf(currUser.getId()),String.valueOf(1),30)){
+                subject.logout();
+                throw new TTMSException(ExceptionEnum.WARMING_USER_HAVE_LOGIN);
+            }
             log.debug("用户" + currUser.getUsername() + "登录");
             List<ModulesVo> result = loginService.getUserMenusVo();
             System.out.println("完成登录请求"+System.currentTimeMillis());
@@ -78,6 +79,8 @@ public class LoginController {
         }catch (LockedAccountException e) {
             //该账户已被锁定
             throw new TTMSException(ExceptionEnum.USER_ACCOUNT_LOCK);
+        }catch (TTMSException e){
+            throw e;
         }catch (Exception e) {
             //用户名不存在
             throw new TTMSException(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
